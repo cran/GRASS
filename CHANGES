@@ -1,0 +1,13 @@
+Added Burrough & McDonnell soil pollution data set for examples.
+
+Changed configure script 000705 RSB
+
+Added compiled interface 000629 RSB
+
+summary.grassmeta: 000329 RSB added projection output
+
+gmeta: 000329 RSB From g.region -g to g.region -p to get numbers of rows and columns directly
+
+sites.get: 000329 RSB Only expect eastings and northings, not id as before
+
+Origin 000329 RSB

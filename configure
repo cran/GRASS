@@ -1,0 +1,72 @@
+# basic configuration for finding GRASS libraries and header files
+# and putting files into the R and src directories
+#
+COMPILE="no"
+PATH="$PATH:/usr/local/bin"
+GMDEF="no"
+INTERP="no"
+while test -n "${1}" ; do
+   case ${1} in
+      --gmake5=*)
+         GM=`echo "${1}" | sed -e 's/[^=]*=//'`
+	 if test -r ${GM}
+	    then
+            GMDEF="yes"
+	 else
+	    echo "${GM}: no such file"
+	    exit 1
+	 fi ;;
+      --interp)
+         INTERP="yes";;
+      *)
+         echo "Invalid configure option: ${1}"
+         exit 1;;
+   esac
+   shift
+done
+if test ${GMDEF} = "no" -a ${INTERP} = "no"
+   then
+   GM=`which gmake5 2> /dev/null`
+   if test $? -eq 0
+      then
+      GMDEF="yes"
+   else
+      echo "Your gmake5 is not on your current PATH."
+      echo "Either add the directory it is in to your PATH,"
+      echo "or run \"R INSTALL --configure-args=--gmake5=/.../gmake5 GRASS\""
+      echo "giving the fully qualified path to and name of your gmake5."
+      echo "To install the interpreted interface, use:"
+      echo "\"R INSTALL --configure-args=--interp GRASS\""
+      exit 1
+   fi
+fi
+if test ${GMDEF} = "yes"
+   then
+   sh ./setup.sh $GM
+   if test $? -eq 0
+      then
+      COMPILE="yes"
+   fi
+fi
+if test $COMPILE = "no"
+   then
+   echo "GRASS source files not found - installing interpreted interface"
+   if test -d src
+      then
+      rm -f src/*
+      rmdir src
+   fi
+
+   exit 0
+fi
+
+echo "GRASS source files found - installing compiled interface"
+if test ! -d src
+   then
+   mkdir src
+fi
+cp orig/src/*.[ch] src
+cp orig/src/Makefile src
+cp orig/R/zzz.R R
+
+exit 0

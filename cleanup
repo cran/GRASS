@@ -1,0 +1,14 @@
+if test -d src
+   then
+   rm -f src/*
+   rmdir src
+fi
+if test -f orig/src/Makefile
+   then
+   rm -f orig/src/Makefile
+fi
+if test -f R/zzz.R
+   then
+   rm -f R/zzz.R
+fi
+

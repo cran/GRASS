@@ -1,0 +1,55 @@
+% Copyright 1999-2000 by Roger S. Bivand
+%
+\name{rast.put}
+\alias{rast.put}
+%- Also NEED an `\alias' for EACH other topic documented here.
+\title{Exports to GRASS raster data files}
+\description{
+ \code{rast.put()} moves a single numeric vector to GRASS, using the metadata from \code{gmeta()}. If the compiled function is loaded, ordered factors are assigned category labels from the factor levels.
+}
+\usage{
+rast.put(G, lname="", layer, title="", cat=FALSE, debug=FALSE, interp=FALSE)
+}
+%- maybe also `usage' for other objects documented here.
+\arguments{
+ \item{G}{GRASS metadata from \code{gmeta()}}
+ \item{lname}{Name for new GRASS raster data file}
+ \item{layer}{numeric vector for export with length of \code{G$Ncells} in GRASS order}
+ \item{title}{character string to describe new GRASS raster data file}
+ \item{cat}{if TRUE, the layer is read into GRASS as integer, for codes of category factors}
+ \item{debug}{if TRUE, the temporary ASCII file used for transfer is not deleted on exit from the function}
+ \item{interp}{if TRUE, the interpreted version of the function is used instead of the loaded compiled version}
+}
+\references{\url{http://www.geog.uni-hannover.de/grass/statsgrasslist.html}, \url{http://www.baylor.edu/~grass}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciencesi, 26, pp. 1043-1052.}
+\author{Roger S. Bivand, Department of Geography, Norwegian School of Economics and Business Administration, Breiviksveien 40, N-5045 Bergen, Norway; e-mail: \email{Roger.Bivand@nhh.no.}}
+
+\note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
+
+\seealso{\code{\link{rast.get}}}
+
+\examples{
+if(length(ls(pat="Zn.o"))==0){example(utm.maas)}
+if(length(ls(pat="G"))==0){example(gmeta)}
+inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) & (utm.maas$north >= G$s & utm.maas$north <= G$n)
+if(all(!inregion)) stop("None of the site locations are inside the current GRASS region")
+if(any(!inregion)) warning("Some site locations are outside the current GRASS region")
+require(akima)
+Zn.grid <- interp.new.G(G, utm.maas$east, utm.maas$north, utm.maas$Zn,
+    extrap=TRUE)*maasmask
+require(spatial)
+s3 <- trmat.G(surf.ls(3, utm.maas$east, utm.maas$north, utm.maas$Zn),
+    G)*maasmask
+Zn.grid.o <- as.ordered(cut(Zn.grid, labels=c("insignificant", "low",
+"medium", "high", "crisis"), breaks=c(-200, 200, 400, 700, 1000, 5000), include.lowest=T))
+nameR <- c("ex.Zn.grid.in", "ex.tr3.in", "ex.Zn.grid.o.in")
+namesG <- list.GRASS("rast")
+if(any(match(nameR, namesG, nomatch=0) > 0)){
+	for (i in 1:length(nameR)) if(match(nameR[i], namesG, nomatch=0) > 0)
+		system(paste("g.remove rast=", nameR[i], sep=""))
+}
+rast.put(G, lname=nameR[1], layer=Zn.grid, title="Akima spline interpolation")
+rast.put(G, lname=nameR[2], layer=s3, title="Cubic trend surface")
+rast.put(G, lname=nameR[3], layer=Zn.grid.o, cat=T, title="Interpolated surface categories")
+for (i in 1:3) system(paste("r.info map=", nameR[i], sep=""))
+}
+\keyword{GRASS, interface, spatial statistics}%-- one or more ...

@@ -1,0 +1,27 @@
+# Copyright 2000 by Roger S. Bivand
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+# east() is an access function to return the eastings coordinates
+# of raster cell centres from a grassmeta object
+#
+east <- function(G)
+{
+    if (class(G) != "grassmeta") stop("No GRASS metadata object")
+    if(is.loaded("eastG")) {
+	east <- .Call("eastG", G)
+    } else {
+        east <- as.numeric(c(matrix(G$xseq, length(G$xseq), length(G$ryseq))))
+    }
+    invisible(east)
+}
+
+
