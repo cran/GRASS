@@ -5,7 +5,7 @@
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Equal scale contour plots for GRASS raster and site data}
 \description{
-contour.G provides a simple interface between grass data objects and the \code{contour()} function}.
+contour.G provides a simple interface between grass data objects and the \code{contour()} function.}
 \usage{
 contour.G(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
 }
