@@ -14,7 +14,7 @@
 #
 # kde2d and bandwidth.nrd copyright 1994-9 W.N.Venables & B.D.Ripley
 #
-kde2d.G <- function (x, y, h, G, reverse=NULL, Z=NULL) 
+kde2d.G <- function (G, x, y, h, reverse=NULL, Z=NULL) 
 {
     bandwidth.nrd <- function (x) 
     {

@@ -26,8 +26,8 @@ interp.new.G(G, x, y, z, extrap=FALSE, duplicate="error", dupfun=NULL,
 \value{
   A vector of \code{G$Ncells} values is returned, with the results of interpolation ordered as a GRASS raster file. NAs are inserted outside the convex hull of the data points.
 }
-\references{\url{http://www.geog.uni-hannover.de/grass/statsgrasslist.html}, \url{http://www.baylor.edu/~grass}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
-\author{Original \code{interp.new()}: Albrecht Gebhardt as detailed in the akima package documentation; adapted by Roger S. Bivand, Department of Geography, Norwegian School of Economics and Business Administration, Breiviksveien 40, N-5045 Bergen, Norway; e-mail: \email{Roger.Bivand@nhh.no.}}
+\references{\url{http://grass.itc.it/statsgrass/index.html}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
+\author{Original \code{interp.new()}: Albrecht Gebhardt as detailed in the akima package documentation; adapted by Roger S. Bivand, \email{Roger.Bivand@nhh.no.}}
 \note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
 
 
@@ -68,10 +68,10 @@ if(any(match(nameR, namesG, nomatch=0) > 0)){
 rast.put(G, "ex.mask", as.factor(maasmask), cat=T)
 system("r.mapcalc 'invmask = isnull(ex.mask)'")
 system("r.grow input=invmask output=growmask")
-system("r.mapcalc 'bank = (growmask - invmask) * int(ex.mask)'")
-system("r.stats -1gn bank | s.in.ascii sites=bank")
+system("r.mapcalc 'bank0 = growmask - invmask'")
+system("r.mapcalc 'bank = if(bank0 == 0, null(), 1)'")
 system("r.mapcalc 'ten = 10'")
-system("r.cost input=ten output=d.river start_sites=bank")
+system("r.cost input=ten output=d.river start_rast=bank")
 bank <- rast.get(G, "d.river")
 new <- data.frame(elev=elev.grid*maasmask, d.river=(bank$d.river*maasmask)+5)
 pr.mod1 <- predict(mod1, new, se.fit=TRUE)

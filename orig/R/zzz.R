@@ -11,13 +11,14 @@
 #  GNU General Public License for more details.
 #
 
-hh <- system("if test -z $GISDBASE ; then echo 1 ; else echo 0 ; fi", 
+hh <- system("if test -z $GISBASE ; then echo 1 ; else echo 0 ; fi", 
 	intern=TRUE)
 
 if(hh == "0") {
 	.First.lib <- function(lib, pkg) {
 	  library.dynam("grassR", pkg, lib)
-	cat("Running in", system("echo $LOCATION", intern=T), "\n")
+	cat("Running in", paste(system("g.gisenv", intern=T),
+		collapse=" "), "\n")
 	}
 } else {
 	cat("No GRASS database defined - running in interpreted mode\n")

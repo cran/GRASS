@@ -3,7 +3,6 @@
 #
 COMPILE="no"
 PATH="$PATH:/usr/local/bin"
-GM="no"
 GR="no"
 GRDEF="no"
 INTERP="no"
@@ -17,7 +16,9 @@ while test -n "${1}" ; do
 	 else
 	    echo "${GR}: no such file"
 	    exit 1
-	 fi ;;
+	 fi
+         echo "GRASS5" $GR "from configure arguments"
+         ;;
       --zinclude=*)
          ZH=`echo "${1}" | sed -e 's/[^=]*=//'`
 	 if test -r ${ZH}/zlib.h
@@ -36,15 +37,6 @@ while test -n "${1}" ; do
             echo "${LZ}/libz.a: no such file"
             exit 1
          fi ;;
-      --gmake5=*)
-         GM=`echo "${1}" | sed -e 's/[^=]*=//'`
-	 if test -r ${GM}
-	    then
-            GMDEF="yes"
-	 else
-	    echo "${GM}: no such file"
-	    exit 1
-	 fi ;;
       --interp)
          INTERP="yes";;
       *)
@@ -62,9 +54,10 @@ if test ${INTERP} = "no"
       if test -r ${GR}
 	    then
             GRDEF="yes"
-      fi
+      fi 
    fi
-   echo $GR $GRDEF
+
+
    if test ${GRDEF} = "no"
       then
       echo "Your grass5 is not on your current PATH."
@@ -79,7 +72,7 @@ fi
 
 if test ${GRDEF} = "yes"
    then
-   sh ./setup.sh $GR $GM
+   sh ./setup.sh $GR
    if test $? -eq 0
       then
       COMPILE="yes"

@@ -14,7 +14,7 @@
 #
 # trmat copyright 1994-9 W.N.Venables & B.D.Ripley
 #
-trmat.G <- function (obj, G, east=NULL, north=NULL) 
+trmat.G <- function (G, obj, east=NULL, north=NULL) 
 {
     require(spatial)
     if (!inherits(obj, "trls")) 

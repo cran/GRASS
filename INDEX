@@ -1,18 +1,19 @@
-contour.G                Equal scale contour plots for GRASS raster and
-                         site data
-gmeta                    Reads GRASS metadata from the current LOCATION
-interp.new.G             Interpolation from sites to raster, Akima's new
-                         method
-kde2d.G                  Two-Dimensional Kernel Density Estimation on a
-                         GRASS Grid
-krige.G                  Kriging prediction for GRASS maps
-list.GRASS               Interface to GRASS g.list
-pcbs                     PCBs in an area of South Wales
-plot.grassmeta           Equal scale plots for GRASS raster and site data
-rast.get                 Import GRASS raster files
-rast.put                 Exports to GRASS raster data files
-sites.get                Import GRASS sites file
-sites.put                Export GRASS sites file
-summary.grassmeta        Display GRASS metadata
-trmat.G                  Evaluate Trend Surface over a GRASS Grid
-utm.maas                 Soil pollution data set
+contour.G               Equal scale contour plots for GRASS raster and
+                        site data
+gmeta                   Reads GRASS metadata from the current LOCATION
+interp.new.G            Interpolation from sites to raster, Akima's new
+                        method
+kde2d.G                 Two-Dimensional Kernel Density Estimation on a
+                        GRASS Grid
+krige.G                 Kriging prediction for GRASS maps
+list.GRASS              Interface to GRASS g.list
+pcbs                    PCBs in an area of South Wales
+plot.grassmeta          Equal scale plots for GRASS raster and site
+                        data
+rast.get                Import GRASS raster files
+rast.put                Exports to GRASS raster data files
+sites.get               Import GRASS sites file
+sites.put               Export GRASS sites file
+summary.grassmeta       Display GRASS metadata
+trmat.G                 Evaluate Trend Surface over a GRASS Grid
+utm.maas                Soil pollution data set

@@ -5,7 +5,7 @@
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Kriging prediction for GRASS maps}
 \description{
-  The function is a modified and simplified version of the sgeostat \code{krige()} function, using the current GRASS region to generate points for ordinary kriging prediction. Based in part on advice from Albrecht Gebhardt (for the implementation of which I am responsible!), it uses compiled code from the spatial library, and only supports exponential, gaussian, and spherical variogram models.
+  The function is a modified and simplified version of the sgeostat \code{krige()} function, using the current GRASS region to generate points for ordinary kriging prediction. Based in part on advice from Albrecht Gebhardt (for the implementation of which I am responsible!), it uses compiled code from the spatial library, and only supports exponential, gaussian, and spherical variogram models. The examples also illustrate the use of the contributed \code{fields} package.
 }
 \usage{
 krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
@@ -34,13 +34,13 @@ krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
   \item{sehat}{kriging standard errors}
   ...
 }
-\references{\url{http://www.geog.uni-hannover.de/grass/statsgrasslist.html}, \url{http://www.baylor.edu/~grass}, \url{http://www.gis.iastate.edu/SGeoStat/homepage.html}; Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
-\author{Original \code{krige()}: as detailed in the sgeostat package documentation and Albrecht Gephardt, the package's R maintainer; adapted by Roger S. Bivand, Department of Geography, Norwegian School of Economics and Business Administration, Breiviksveien 40, N-5045 Bergen, Norway; e-mail: \email{Roger.Bivand@nhh.no.}}
+\references{\url{http://grass.itc.it/statsgrass/index.html}, \url{http://www.gis.iastate.edu/SGeoStat/homepage.html}; Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
+\author{Original \code{krige()}: as detailed in the sgeostat package documentation and Albrecht Gephardt, the package's R maintainer; adapted by Roger S. Bivand, e-mail: \email{Roger.Bivand@nhh.no.}}
 
 \note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
 
 
-\seealso{\code{\link{krige}}, \code{\link{surf.gls}}, \code{\link{prmat}}, \code{\link{semat}}}
+\seealso{\code{\link{krige}}, \code{\link{surf.gls}}, \code{\link{prmat}}, \code{\link{semat}}, \code{\link{vgram}}, \code{\link{Krig}}, \code{\link{predict.Krig}}, \code{\link{predict.se.Krig}}}
 
 
 \examples{
@@ -72,23 +72,6 @@ legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
  legend=c(rev(legtext(round(seq(120,1660,length=9)))), "mask=NA"),
  fill=c(rev(grey(9:2/9)), "wheat"))
 title("Ordinary kriging predictions")
-ln.Zn <- data.frame(x=utm.maas$east, y=utm.maas$north, z=log(utm.maas$Zn))
-ln.Zn.pts <- point(ln.Zn)
-ln.Zn.evg <- est.variogram(ln.Zn.pts, maas.pairs, a1="z")
-plot(ln.Zn.evg)
-ln.Zn.fit.sph <- fit.spherical(ln.Zn.evg, c0=0.0536187, cs=0.581735,
-as=892.729, plot.it=T, iterations=0)
-cat("Using parameters from Gstat user's manual, p. 14\n")
-res.G2 <- krige.G(ln.Zn.pts, "z", ln.Zn.fit.sph, G, maasmask)
-summary(res.G2$zhat)
-summary(res.G2$sehat)
-plot(G, res.G2$zhat, breaks=c(0, seq(4.8,7.4,length=9)), col=c("yellow", grey(9:2/9)))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
-legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
- legend=c(rev(legtext(seq(4.8,7.4,length=9))), "< 4.8", "mask=NA"),
- fill=c(rev(grey(9:2/9)), "yellow", "wheat"))
-title("Ordinary kriging predictions ln(Zinc)")
-
 }
 \keyword{spatial}
 \keyword{IO}

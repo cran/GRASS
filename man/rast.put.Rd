@@ -27,8 +27,8 @@ rast.put(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE,
  \item{interp}{if TRUE, the interpreted version of the function is used instead of the loaded compiled version}
 }
 \details{If cat=TRUE, then the R factor layer is moved to the current GRASS location and mapset as a CELL layer, with labels taken from the factor levels; for this case breaks is disregarded (they are implicit in the factor), and col must be either NULL or a vector of colours equal in length to the number of levels. When col=NULL, grey() is used to generate the colours. If cat=FALSE, the R numeric layer is moved to GRASS as an FCELL or DCELL layer (depending on DCELL or the GRASS environmental variable \code{GRASS_FP_DOUBLE}. In this case breaks are used for quantization and colour assignment in connection with col. If breaks=NULL, pretty() is used to yield about 20 "nice" values for quantization, and their values are used to generate labels.}
-\references{\url{http://www.geog.uni-hannover.de/grass/statsgrasslist.html}, \url{http://www.baylor.edu/~grass}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciencesi, 26, pp. 1043-1052.}
-\author{Roger S. Bivand, Department of Geography, Norwegian School of Economics and Business Administration, Breiviksveien 40, N-5045 Bergen, Norway; e-mail: \email{Roger.Bivand@nhh.no.}}
+\references{\url{http://grass.itc.it/statsgrass/index.html}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciencesi, 26, pp. 1043-1052.}
+\author{Roger S. Bivand, e-mail: \email{Roger.Bivand@nhh.no.}}
 
 \note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
 
@@ -44,8 +44,8 @@ require(akima)
 Zn.grid <- interp.new.G(G, utm.maas$east, utm.maas$north, utm.maas$Zn,
     extrap=TRUE)*maasmask
 require(spatial)
-s3 <- trmat.G(surf.ls(3, utm.maas$east, utm.maas$north, utm.maas$Zn),
-    G)*maasmask
+s3 <- trmat.G(G, surf.ls(3, utm.maas$east, utm.maas$north,
+    utm.maas$Zn))*maasmask
 Zn.grid.o <- as.ordered(cut(Zn.grid, labels=c("insignificant", "low",
 "medium", "high", "crisis"), breaks=c(-300, 200, 400, 700, 1000, 5000), include.lowest=T))
 nameR <- c("ex.Zn.grid.in", "ex.tr3.in", "ex.Zn.grid.o.in")
