@@ -1,4 +1,4 @@
-# Copyright 1999-2000 by Roger S. Bivand
+# Copyright 1999-2004 by Roger S. Bivand
 #
 #
 # plot.grassmeta provides a simple interface between grass data
@@ -16,8 +16,16 @@ plot.grassmeta <- function(x, layer=NULL, xlab="", ylab="",
             ylab = ylab, type = "n")
     }
     if (!is.null(layer)) {
-	if (length(layer) != G$Ncells)
-	    stop("GRASS object metadata do not match layer length")
+	if (length(layer) != G$Ncells) {
+	    if ((length(layer) == 1) && (class(layer) == "list")) {
+		stop(paste(deparse(substitute(layer)), 
+		    "is a list of length 1 with member", names(layer), 
+		    "- try:", paste(deparse(substitute(layer)), "$", 
+		    names(layer), sep="")))
+	    } else if (class(layer) == "list") {
+		stop(paste(deparse(substitute(layer)), "is a list object"))
+	    } else stop("GRASS object metadata do not match layer length")
+	}
 	if (!is.null(breaks)) {
 	    if (any(is.na(breaks) | is.nan(breaks))) 
 		stop ("NAs found in breaks")

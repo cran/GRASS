@@ -64,7 +64,6 @@ title("Bicubic spline interpolation: local elevation")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
    legend=c(rev(leglabs(brks)), "mask=NA"),
    fill=c("red", rev(grey(11:2/11)), "yellow", "wheat"))
-require(modreg)
 ldist <- loess(d.river ~ east * north, data=utm.maas, span=0.2,
  control = loess.control(surface = "direct"))
 bank <- predict(ldist, newdata=data.frame(east=east(maas.metadata),
