@@ -12,11 +12,15 @@
 GRASS LOCATION metadata are read into a list in R, and processed to provide other functions with parameters and structures they require.
 }
 \usage{
-gmeta()
-east(grassmeta.object)
-north(grassmeta.object)
-obsno(grassmeta.object)
-reverse(grassmeta.object)
+gmeta(interp=FALSE)
+east(G)
+north(G)
+obsno(G)
+reverse(G)
+}
+\arguments{
+ \item{interp}{if interp is TRUE, the interface uses text transfer through \code{system()}}
+ \item{G}{a grassmeta object returned by \code{gmeta}}
 }
 %- maybe also `usage' for other objects documented here.
 \details{
@@ -52,4 +56,5 @@ The function retrieves metadata from the GRASS LOCATION from which R was started
 G <- gmeta()
 summary(G)
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}

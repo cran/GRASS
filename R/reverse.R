@@ -13,15 +13,17 @@
 # reverse() is an access function to return the reversed order of
 # raster cells for use with image()
 #
-reverse <- function(G, northG=north(G), eastG=east(G))
+reverse <- function(G)
 {
     if (class(G) != "grassmeta") stop("No GRASS metadata object")
     if(is.loaded("reverseG")) {
-	reverse <- .Call("reverseG", G)
+	reversed <- .Call("reverseG", G)
     } else {
-        reverse <- as.integer(order(northG, eastG))
+	eastG <- east(G)
+	northG <- north(G)
+        reversed <- as.integer(order(northG, eastG))
     }
-    invisible(reverse)
+    invisible(reversed)
 }
 
 

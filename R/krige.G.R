@@ -1,3 +1,19 @@
+# Copyright 2001 by Roger S. Bivand
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+# krige.G is a wrapper function to show how R geostatistics libraries
+# may be integrated with GRASS raster layers
+#
+
 krige.G <- function(point.obj, at, var.mod.obj, G, mask=NULL) 
 {
     require(sgeostat)

@@ -14,8 +14,8 @@
 #include "grassR.h"
 
 SEXP gmeta() {
-	SEXP ans, elnames, class, xynames;
-	int i, j, k, ii, proj;
+	SEXP ans, elnames, class;
+	int i, proj;
 	char chbuf[256];
 	struct Cell_head cellhd;
 	double start;

@@ -1,4 +1,4 @@
-# Copyright 2000 by Roger S. Bivand
+# Copyright 2001 by Roger S. Bivand
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

@@ -98,7 +98,5 @@ if test ! -r $GS/include/gisdefs.h
    echo "" >> orig/src/Makefile
 fi
 
-cat orig/src/Makefile.in >> orig/src/Makefile
-
 exit 0
 

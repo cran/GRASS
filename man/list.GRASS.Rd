@@ -32,4 +32,5 @@ list.GRASS(type="rast")
 if(length(ls(pat="nameQ"))==0){example(sites.put)}
 print(list.GRASS("sites"))
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}

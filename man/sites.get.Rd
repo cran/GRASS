@@ -34,4 +34,5 @@ mean(ex.Zn.log$var2 - log(utm.maas$Zn))
 ex.Zn.cat <- sites.get(G, slist="ex.Zncat.in")
 table(Zn.o, ex.Zn.cat$var2)
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}

@@ -53,4 +53,5 @@ par(oldpar)
 system("r.report ex.Zn.grid.o.in units=c,h")
 table(exget$ex.Zn.grid.o.in)
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}

@@ -15,14 +15,13 @@
 #include <unistd.h>
 #include "grassR.h"
 
-int G_get_raster_i(void *, struct Categories *, RASTER_MAP_TYPE);
+int G_get_raster_cat_i(void *, struct Categories *, RASTER_MAP_TYPE);
 
 
 
 SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    int GR_nrows;
    int GR_ncols;
-   int *is_fp=NULL;
    int *ncats=NULL;
 
    struct Categories *labels=NULL;
@@ -43,6 +42,9 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    struct Cell_head cellhd;
    CELL null_cell;
    RASTER_MAP_TYPE *map_type;
+
+   int ival;
+   double val;
 
 
    char *name="rastget()";
@@ -79,12 +81,11 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    GR_nrows = cellhd.rows; GR_ncols = cellhd.cols;
    ncells = GR_nrows * GR_ncols;
    fd = (int *) R_alloc ((long) nlayers, sizeof(int));
-   is_fp = (int *) R_alloc ((long) nlayers, sizeof(int));
    ncats = (int *) R_alloc ((long) nlayers, sizeof(int));
    labels = (struct Categories *) R_alloc ((long) nlayers, 
       sizeof(struct Categories));
-   rast = (void **) R_alloc ((long) nlayers, sizeof (void *));
-   rastp = (void **) R_alloc ((long) nlayers, sizeof (void *));
+   rast = (void **) R_alloc ((long) 1, sizeof (void *));
+   rastp = (void **) R_alloc ((long) 1, sizeof (void *));
    map_type = (RASTER_MAP_TYPE *) R_alloc ((long) nlayers, 
       sizeof( RASTER_MAP_TYPE));
 
@@ -93,30 +94,36 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
 
       mapset = G_find_cell(CHAR(STRING_ELT(layers, i)), "");
 
-      fd[i] = G_open_cell_old (CHAR(STRING_ELT(layers, i)), mapset);
-      if (fd[i] < 0) {
-         for (j=0; j<i; j++) G_close_cell(fd[j]);
-             sprintf(msg, "unable to open %s", 
-            CHAR(STRING_ELT(layers, i)));
-          error(msg);
+      map_type[i] = G_raster_map_type(CHAR(STRING_ELT(layers, i)), mapset);
+      if (map_type[i] < 0) {
+         for (j=0; j==i; j++) G_close_cell(fd[j]);
+         sprintf(msg, "layer %s of unknown type",
+           CHAR(STRING_ELT(layers, i)));
+         G_fatal_error(msg);
       }
-
-      is_fp[i] = G_raster_map_is_fp(CHAR(STRING_ELT(layers, i)), mapset);
       
         if (LOGICAL_POINTER(flayers)[i]) {
-         if (G_read_raster_cats (CHAR(STRING_ELT(layers, i)), 
-		mapset, &labels[i]) < 0)
-            G_init_raster_cats("", &labels[i]);
-	 ncats[i] = G_number_of_raster_cats(&labels[i]);
+         if (G_read_raster_cats(CHAR(STRING_ELT(layers, i)), 
+		mapset, &labels[i]) < 0) {
+            for (j=0; j==i; j++) G_close_cell(fd[j]);
+	    sprintf(msg, "category support for layer %s missing or invalid",
+	       CHAR(STRING_ELT(layers, i)));
+	    G_fatal_error(msg);
+	 }
+	 else ncats[i] = G_number_of_raster_cats(&labels[i]);
+      }
+
+      fd[i] = G_open_cell_old(CHAR(STRING_ELT(layers, i)), mapset);
+      if (fd[i] < 0) {
+            for (j=0; j<i; j++) G_close_cell(fd[j]);
+            sprintf(msg, "unable to open %s", 
+		CHAR(STRING_ELT(layers, i)));
+            G_fatal_error(msg);
       }
    }
 
    
-   for (i = 0; i < nlayers; i++) {
-      if(is_fp[i]) map_type[i] = DCELL_TYPE;
-      else    map_type[i] = CELL_TYPE;
-      rast[i] = (void *) R_alloc (cellhd.cols + 1, G_raster_size(map_type[i]));
-   }
+   rast[0] = (void *) R_alloc (cellhd.cols + 1, G_raster_size(map_type[i]));
 
    PROTECT(ans = NEW_LIST(nlayers));
    PROTECT(anslevels = NEW_LIST(nlayers));
@@ -149,17 +156,17 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
 
       for (row = 0; row < GR_nrows; row++) {
 
-         if(G_get_raster_row(fd[i], rast[i], row, map_type[i]) < 0) {
+         if(G_get_raster_row(fd[i], rast[0], row, map_type[i]) < 0) {
             for (j=0; j<nlayers; j++) G_close_cell(fd[j]);
             sprintf(msg, "read failure at row %d for layer %s", 
                row, CHAR(STRING_ELT(layers, i)));
             error(msg);
          }
-         rastp[i] = rast[i];
+         rastp[0] = rast[0];
 
          for (col = 0; col < GR_ncols; col++) {
 
-            if (G_is_null_value(rastp[i], map_type[i])) {
+            if (G_is_null_value(rastp[0], map_type[i])) {
                if (LOGICAL_POINTER(flayers)[i]) {
                   INTEGER_POINTER(VECTOR_ELT(ans, i))[icell] =
                      NA_INTEGER;
@@ -167,25 +174,16 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
                   NUMERIC_POINTER(VECTOR_ELT(ans, i))[icell] = NA_REAL;
                }
             }
-            else if(map_type[i] == CELL_TYPE) {
-               if (LOGICAL_POINTER(flayers)[i]) {
-                  INTEGER_POINTER(VECTOR_ELT(ans, i))[icell] =
-                     G_get_raster_i(rastp[i], &labels[i], map_type[i]);
-               } else {
-                  NUMERIC_POINTER(VECTOR_ELT(ans, i))[icell] =
-                     (double) *((CELL *) rastp[i]);
-               }
-            }
             else {
                if (LOGICAL_POINTER(flayers)[i]) {
-                  INTEGER_POINTER(VECTOR_ELT(ans, i))[icell] = 
-                     G_get_raster_i(rastp[i], &labels[i], map_type[i]);
+                  ival = G_get_raster_cat_i(rastp[0], &labels[i], map_type[i]);
+                  INTEGER_POINTER(VECTOR_ELT(ans, i))[icell] =  ival;
                } else {
-                  NUMERIC_POINTER(VECTOR_ELT(ans, i))[icell] = 
-                     *((DCELL *) rastp[i]);
+                  val = G_get_raster_value_d(rastp[0], map_type[i]);
+                  NUMERIC_POINTER(VECTOR_ELT(ans, i))[icell] =  val;
                }
             }
-            rastp[i] = G_incr_void_ptr(rastp[i], G_raster_size(map_type[i]));
+            rastp[0] = G_incr_void_ptr(rastp[0], G_raster_size(map_type[i]));
             icell++;
          }
       }

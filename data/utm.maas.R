@@ -1,2 +1,2 @@
 utm.maas <- read.table("utm.maas.txt", header=TRUE)
-maasmask <- scan("maasmask.txt", what=integer(0))
+maasmask <- scan(gzfile("maasmask.gz", "r"), what=integer(0))

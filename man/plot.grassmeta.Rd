@@ -50,4 +50,6 @@ legend=levels(Zn.o))
 title("Note equal east and north scales")
 example(kde2d.G)
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}
+\keyword{hplot}

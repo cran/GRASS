@@ -1,3 +1,18 @@
+# Copyright 2001 by Roger S. Bivand
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+# contour.G is a wrapper function for drawing contour maps from raster
+# layers.
+#
 \name{contour.G}
 \alias{contour.G}
 %- Also NEED an `\alias' for EACH other topic documented here.
@@ -46,4 +61,5 @@ legend(x=c(269800, 270500), y=c(5652300, 5653000), pch=c(1:5),
 legend=levels(Zn.o))
 title("Kernel density representation of soil Zn")
 }
-\keyword{ ~keyword }%-- one or more ...
+\keyword{spatial}
+\keyword{IO}

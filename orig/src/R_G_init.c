@@ -23,5 +23,6 @@ void R_G_init(char *name) {
 int R_handler(char *message, int fatal) {
 		if(fatal == 1) error(message);
 			else warning(message);
+		return(1);
 }
 

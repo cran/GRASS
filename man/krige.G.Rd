@@ -85,5 +85,5 @@ legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
 title("Ordinary kriging predictions ln(Zinc)")
 
 }
-\keyword{ ~keyword }%-- one or more ...
-\keyword{GRASS, interface, spatial statistics}
+\keyword{spatial}
+\keyword{IO}

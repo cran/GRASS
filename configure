@@ -17,6 +17,24 @@ while test -n "${1}" ; do
 	    echo "${GR}: no such file"
 	    exit 1
 	 fi ;;
+      --zinclude=*)
+         ZH=`echo "${1}" | sed -e 's/[^=]*=//'`
+	 if test -r ${ZH}/zlib.h
+	    then
+            ZHDEF="yes"
+	 else
+	    echo "${ZH}/zlib.h: no such file"
+	    exit 1
+	 fi ;;
+      --zlib=*)
+         LZ=`echo "${1}" | sed -e 's/[^=]*=//'`
+         if test -r ${LZ}/libz.a
+            then
+            LZDEF="yes"
+         else
+            echo "${LZ}/libz.a: no such file"
+            exit 1
+         fi ;;
       --gmake5=*)
          GM=`echo "${1}" | sed -e 's/[^=]*=//'`
 	 if test -r ${GM}
@@ -37,7 +55,7 @@ done
 
 if test ${INTERP} = "no"
    then
-   GR=`which grass5 2> /dev/null`
+   GR=`sh G_which.sh grass5 2> /dev/null`
    if test $? -eq 0
       then
       GRDEF="yes"
@@ -78,6 +96,7 @@ if test ! -d src
    mkdir src
 fi
 cp orig/src/*.[ch] src
+cat orig/src/Makefile.in >> orig/src/Makefile
 cp orig/src/Makefile src
 cp orig/R/zzz.R R
 

@@ -43,4 +43,5 @@ sites.put(G, lname=nameQ[2], east=utm.maas$east, north=utm.maas$north, var=log(u
 sites.put(G, lname=nameQ[3], east=utm.maas$east, north=utm.maas$north, var=Zn.o)
 for (i in 1:3) system(paste("s.info sites=", nameQ[i], sep=""))
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}

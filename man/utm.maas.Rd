@@ -51,7 +51,6 @@ Burrough, P. & McDonnell, R. (1998) \emph{Principles of geographical information
 
 \examples{
 data(utm.maas)
-data(maasmask)
 Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
 "medium", "high", "crisis"), breaks=c(100, 200, 400, 700, 1000, 2000), 
 include.lowest=T))

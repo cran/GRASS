@@ -50,4 +50,5 @@ rug(utm.maas$north, side=2, ticksize=0.02)
 title(main="Kernel density weighted average, Zn ppm",
   xlab="(Bailey & Gatrell, pp. 159-161")
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}

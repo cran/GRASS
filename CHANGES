@@ -1,3 +1,9 @@
+Modifications to rastput.c and rast.put() to give category, range and colour
+assignment, and quantization for numeric layers. Wrappers for trmat.G()
+changed to account for transfer of *trls* generic functions to spatial in
+VR 6.2-6 and later. Error trapping from GRASS more or less complete. 010630
+RSB
+
 Major modifications to compiled interface because of R 1.2.0 memory
 model changes 010103 RSB
 

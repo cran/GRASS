@@ -25,4 +25,5 @@ summary.grassmeta(G)
 G <- gmeta()
 summary(G)
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}

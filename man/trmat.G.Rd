@@ -2,36 +2,12 @@
 %
 \name{trmat.G}
 \alias{trmat.G}
-\alias{fitted.trls}
-\alias{residuals.trls}
-\alias{deviance.trls}
-\alias{extractAIC.trls}
-\alias{df.residual.trls}
-\alias{anova.trls}
-\alias{anovalist.trls}
-\alias{summary.trls}
-\alias{trls.influence}
-\alias{circles}
-\alias{plot.trls}
-%- Also NEED an `\alias' for EACH other topic documented here.
 \title{Evaluate Trend Surface over a GRASS Grid}
 \description{
- A wrapper for \code{trmat()} from the \code{spatial} package in the VR bundle, using the metadata of the underlying GRASS LOCATION, together with helper functions for trend surface least squares objects.
+ A wrapper for \code{trmat()} from the \code{spatial} package in the VR bundle, using the metadata of the underlying GRASS LOCATION.
 }
 \usage{
 trmat.G(obj, G, east=NULL, north=NULL)
-fitted.trls(obj)
-residuals.trls(obj)
-deviance.trls(obj)
-extractAIC.trls(obj, scale=0, k=2)
-df.residual.trls(obj)
-anova.trls(obj, ...)
-anovalist.trls(obj, ...)
-summary.trls(obj, digits = max(3, getOption("digits") - 3))
-trls.influence(obj)
-circles(x, y, radius, col=NA, border=par("fg"))
-plot.trls(obj, border="black", col=NA, pch=4, cex=0.6,
-    add=FALSE, div=8)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
@@ -40,7 +16,7 @@ plot.trls(obj, border="black", col=NA, pch=4, cex=0.6,
  \item{east}{see \code{help(east)}}
  \item{north}{see \code{help(north)}}
 }
-\details{The \code{trls} object helper functions return the same or similar values to their \code{lm} equivalents; \code{summary} does not report coefficient estimates, while \code{plot} plots red circles on a (possibly existing - add=TRUE) point map of the data coordinate positions, proportional in size to Cook's distance (radius scale can be adjusted by changing the \code{div} argument. The \code{circles} function is used for this, (x,y) being the central coordinate, radius the circle radius, col the fill colour, and border the edge colour.}
+
 \value{
   A vector of \code{G$Ncells} values is returned, with the results of interpolation ordered as a GRASS raster file.
 }
@@ -91,4 +67,5 @@ plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
 plot(s4, add=T)
 par(oldpar)
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}

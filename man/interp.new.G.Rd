@@ -64,7 +64,7 @@ if(any(match(nameR, namesG, nomatch=0) > 0)){
 	for (i in 1:length(nameR)) if(match(nameR[i], namesG, nomatch=0) > 0)
 		system(paste("g.remove rast=", nameR[i], sep=""))
 }
-rast.put(G, "ex.mask", maasmask)
+rast.put(G, "ex.mask", as.factor(maasmask), cat=T)
 system("r.mapcalc 'invmask = isnull(ex.mask)'")
 system("r.grow input=invmask output=growmask")
 system("r.mapcalc 'bank = (growmask - invmask) * int(ex.mask)'")
@@ -118,4 +118,5 @@ legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
    legend=c("> 1994", rev(legtext(round(seq(15,1994,length=9)))), "< 15",
    "mask=NA"), fill=c("red", rev(grey(9:2/9)), "yellow", "wheat"))
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{spatial}
+\keyword{IO}
