@@ -28,7 +28,8 @@ interp.new.G(G, x, y, z, extrap=FALSE, duplicate="error", dupfun=NULL,
 }
 \references{\url{http://grass.itc.it/statsgrass/index.html}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
 \author{Original \code{interp.new()}: Albrecht Gebhardt as detailed in the akima package documentation; adapted by Roger S. Bivand, \email{Roger.Bivand@nhh.no.}}
-\note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
+
+\note{The functions in this package are intended to work with the GRASS geographical information system. The examples for wrapper functions will will work whether or not R is running in GRASS, and whether or not the current location is that of the data set used for the examples. Examples of interface functions will however (from version 0.2-2) only work outside GRASS, to avoid possible overwriting of GRASS database locations and/or files.}
 
 
 \seealso{\code{\link{interp.new}}}
@@ -38,7 +39,7 @@ data(utm.maas)
 Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
 "medium", "high", "crisis"), breaks=c(100, 200, 400, 700, 1000, 2000), 
 include.lowest=TRUE))
-G <- gmeta()
+G <- maas.metadata
 pdata <- cbind(utm.maas$elev, utm.maas$d.river, log(utm.maas$d.river),
     utm.maas$Zn, log(utm.maas$Zn))
 colnames(pdata) <- c("Elevation", "Distance", "Ln(Distance)", "Zinc",
@@ -62,21 +63,21 @@ title("Bicubic spline interpolation: local elevation")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
    legend=c("> 10.6", rev(legtext(seq(5.4, 10.6, 0.52))), "< 5.4", "mask=NA"),
    fill=c("red", rev(grey(11:2/11)), "yellow", "wheat"))
-nameR <- c("ex.mask")
-namesG <- list.GRASS("rast")
-if(any(match(nameR, namesG, nomatch=0) > 0)){
-	for (i in 1:length(nameR)) if(match(nameR[i], namesG, nomatch=0) > 0)
-		system(paste("g.remove rast=", nameR[i], sep=""))
-}
-rast.put(G, "ex.mask", as.factor(maasmask), cat=TRUE)
-system("r.mapcalc 'invmask = isnull(ex.mask)'")
-system("r.grow input=invmask output=growmask")
-system("r.mapcalc 'bank0 = growmask - invmask'")
-system("r.mapcalc 'bank = if(bank0 == 0, null(), 1)'")
-system("r.mapcalc 'ten = 10'")
-system("r.cost input=ten output=d.river start_rast=bank")
-bank <- rast.get(G, "d.river")
-new <- data.frame(elev=elev.grid*maasmask, d.river=(bank$d.river*maasmask)+5)
+require(modreg)
+ldist <- loess(d.river ~ east * north, data=utm.maas, span=0.2,
+ control = loess.control(surface = "direct"))
+bank <- predict.loess(ldist, newdata=data.frame(east=east(maas.metadata),
+ north=north(maas.metadata)))
+b1 <- bank*maasmask
+b1[b1 < 5] <- 5
+plot(maas.metadata, b1, breaks=c(-10000, seq(0, 1600, 200),
+  10000), col=c("yellow", grey(9:2/9), "red"))
+plot(maas.metadata, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
+title("Loess predictions of distance from river bank")
+legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
+   legend=c("> 1600", rev(legtext(seq(0, 1600, 200))),
+   "mask=NA"), fill=c("red", rev(grey(9:2/9)), "wheat"))
+new <- data.frame(elev=elev.grid*maasmask, d.river=b1)
 pr.mod1 <- predict(mod1, new, se.fit=TRUE)
 rm(new, elev.grid, bank)
 v.pr <- rep(NA, G$Ncells)
@@ -104,16 +105,10 @@ title(xlab="B&McD p. 118", main="Bicubic spline interpolation: Zn ppm")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
    legend=c("> 1994", rev(legtext(round(seq(15,1994,length=9)))), "< 15",
    "mask=NA"), fill=c("red", rev(grey(9:2/9)), "yellow", "wheat"))
-nameQ <- c("ex.Zn.in")
-namesG <- list.GRASS("sites")
-if(any(match(nameQ, namesG, nomatch=0) > 0)){
-   for (i in 1:length(nameQ))
-     if(match(nameQ[i], namesG, nomatch=0) > 0)
-     system(paste("g.remove sites=", nameQ[i], sep=""))
-}
-sites.put(G, lname=nameQ[1], east=utm.maas$east, north=utm.maas$north,
-   var=utm.maas$Zn)
-system("s.surf.idw input=ex.Zn.in output=Zn.idw npoints=98")
+\dontrun{
+sites.put2(G, utm.maas, dims=c("east", "north", "elev"),
+  lname="ex.utm.maas1", check=FALSE)
+system("s.surf.idw input=ex.utm.maas1 output=Zn.idw npoints=98 field=7")
 idw <- rast.get(G, "Zn.idw")
 plot(G, idw$Zn.idw*maasmask, breaks=c(-100, round(seq(15,1994,length=9)), 3000),
   col=c("yellow", grey(9:2/9), "red"))
@@ -123,6 +118,7 @@ title(xlab="B&McD p. 118",
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
   legend=c("> 1994", rev(legtext(round(seq(15,1994,length=9)))), "< 15",
   "mask=NA"), fill=c("red", rev(grey(9:2/9)), "yellow", "wheat"))
+}
 }
 \keyword{spatial}
 \keyword{IO}

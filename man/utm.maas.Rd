@@ -4,6 +4,7 @@
 \name{utm.maas}
 \alias{utm.maas}
 \alias{maasmask}
+\alias{maas.metadata}
 \non_function{}
 \title{Soil pollution data set}
 \usage{data(utm.maas)}
@@ -48,7 +49,8 @@ on WGS84 ellipsoid. A GRASS LOCATION has to be defined with following
 parameters: projection UTM, ellipsoid WGS84, zone 32, north 5652930, south
 5650610, west 269870, east 272460, nsres 10, ewres 10, rows 232, cols 259.
 The pre-defined location including the data stored column-wise in sites
-lists can be downloaded from the GRASS web site.
+lists can be downloaded from the GRASS web site, and is also contained in
+the "grassmeta" object \code{maas.metadata}.
 
 Maas  river bank dat GRASS LOCATION,
 \url{http://grass.itc.it/statsgrass/maas_grass_location.tar.gz}
@@ -56,27 +58,14 @@ Maas  river bank dat GRASS LOCATION,
 
 }
 \source{
- Burrough, P. & McDonnell, R. (1998) \emph{Principles of geographical information systems}, New York: Oxford, pp. 309--311; Rikken, M.G.J., Van Rijn, R.P.G., 1993. Soil pollution with heavy metals --
+ Burrough, P. & McDonnell, R. (1998) \emph{Principles of geographical information systems}, New York: Oxford, pp. 309--311; Rikken, M.G.J., Van Rijn, R.P.G., 1993. Soil pollution with heavy metals ---
 An Inquiry into Spatial Variation, Cost of Mapping and the Risk evaluation
 of Copper, Cadmium, Lead and Zinc in the Floodplains of the Meuse West of
 Stein, The Netherlands.  Doctoraalveldwerkverslag, Dept. of Physical
 Geography, Utrecht University.
 }
-\note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata are as follows. The actual data may be accessed from R: \code{data(utm.maas)}.
-  \describe{
-    \item{projection}{UTM}
-    \item{ellipsoid}{WGS84}
-    \item{zone}{32}
-    \item{north}{5652930}
-    \item{south}{5650610}
-    \item{west}{269870}
-    \item{east}{272460}
-    \item{nsres}{10}
-    \item{ewres}{10}
-    \item{rows}{232}
-    \item{cols}{259}
-  }
-}
+
+\note{The functions in this package are intended to work with the GRASS geographical information system. The examples for wrapper functions will will work whether or not R is running in GRASS, and whether or not the current location is that of the data set used for the examples. Examples of interface functions will however (from version 0.2-2) only work outside GRASS, to avoid possible overwriting of GRASS database locations and/or files.}
 
 \examples{
 data(utm.maas)

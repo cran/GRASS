@@ -1,5 +1,5 @@
 Package: GRASS
-Version: 0.1-11
+Version: 0.2-2
 Author: Interface functions by Roger Bivand <Roger.Bivand@nhh.no>, wrapper
 	and helper functions modified from various originals by interface 
 	author.
@@ -9,7 +9,36 @@ Description: Interface between GRASS geographical information system and R,
 	LOCATION and MAPSET. Wrapper and helper functions are provided for 
 	a range of R functions to match the interface metadata structures. 
 
-Note:	(0.1-10/11) Changes made to accommodate changes in R with respect to
+Note:	(0.2-2) simplified installation to eliminate dependence on GRASS
+	installed tree, by making compilation self-contained. Files from
+	grass*/src/libes/gis and header files, as well as header files from
+	the R src/extra directories (for zlib and xdr) included. libgis files
+	modified where necessary to accommodate MinGW differences.
+
+When the library is loaded, a check is run using the environment variable
+GISRC. Under Unix and Windows, it points to the file using the full path
+name, but under CygWin it may lack a prefix to the CygWin root, defined
+in cygpath --mixed form, such as "c:/cygwin". In this case, a warning will
+be issued, the string should be set using set.cygwinstring(<your cygwin root>),
+and GRASS.connect() re-run to ensure that the file named in GISRC is found
+correctly.
+
+> library(GRASS)
+No GRASS environment found
+If GRASS.connect() fails in this way and you are running under CygWin,
+please set the CygWin root file system prefix using: set.cygwinstring()
+Warning message:
+Failure opening GISRC file
+> set.cygwinstring("c:/cygwin")
+[1] "c:/cygwin"
+> GRASS.connect()
+GRASS environment variables in: c:/cygwin/home/rsb/.grassrc5
+> 
+
+	(0.2.1) provided compiled interface for sites; corrected interpreted
+	gmeta for lat/lon coordinates.
+
+	(0.1-10/11) Changes made to accommodate changes in R with respect to
 	function namespaces, and changes in which shell variables are set
 	in GRASS. Changes were also made to the install scripts.
 

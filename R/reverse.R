@@ -16,8 +16,8 @@
 reverse <- function(G)
 {
     if (class(G) != "grassmeta") stop("No GRASS metadata object")
-    if(is.loaded("reverseG", PACKAGE="grassR")) {
-	reversed <- .Call("reverseG", G, PACKAGE="grassR")
+    if(is.loaded("reverseG", PACKAGE="GRASS")) {
+	reversed <- .Call("reverseG", G, PACKAGE="GRASS")
     } else {
 	eastG <- east(G)
 	northG <- north(G)

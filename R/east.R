@@ -6,8 +6,8 @@
 east <- function(G)
 {
     if (class(G) != "grassmeta") stop("No GRASS metadata object")
-    if(is.loaded("eastG", PACKAGE="grassR")) {
-	east <- .Call("eastG", G, PACKAGE="grassR")
+    if(is.loaded("eastG", PACKAGE="GRASS")) {
+	east <- .Call("eastG", G, PACKAGE="GRASS")
     } else {
         east <- as.numeric(c(matrix(G$xseq, length(G$xseq), length(G$ryseq))))
     }

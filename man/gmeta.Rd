@@ -1,4 +1,4 @@
-% Copyright 1999-2002 by Roger S. Bivand
+% Copyright 1999-2003 by Roger S. Bivand
 %
 \name{gmeta}
 \alias{gmeta}
@@ -6,7 +6,17 @@
 \alias{north}
 \alias{obsno}
 \alias{reverse}
-\alias{hh}
+\alias{get.LOCATION}
+\alias{set.LOCATION}
+\alias{get.MAPSET}
+\alias{set.MAPSET}
+\alias{get.GISDBASE}
+\alias{set.GISDBASE}
+\alias{get.cygwinstring}
+\alias{set.cygwinstring}
+\alias{get.GRASSChkGISRC}
+\alias{GRASS.connect}
+\alias{make.maas.location}
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Reads GRASS metadata from the current LOCATION}
 \description{
@@ -18,10 +28,27 @@ east(G)
 north(G)
 obsno(G)
 reverse(G)
+get.LOCATION()
+set.LOCATION(loc)
+get.MAPSET()
+set.MAPSET(mapset)
+get.GISDBASE()
+set.GISDBASE(gisdbase)
+get.cygwinstring()
+set.cygwinstring(cygwin)
+get.GRASSChkGISRC()
+GRASS.connect()
+make.maas.location()
+
 }
 \arguments{
  \item{interp}{if interp is TRUE, the interface uses text transfer through \code{system()}}
  \item{G}{a grassmeta object returned by \code{gmeta}}
+ \item{loc}{string: location name}
+ \item{mapset}{string: mapset name}
+ \item{gisdbase}{string: full path name to GISDBASE}
+ \item{cygwin}{string: CygWin prefix for prepending to GISRC and GISDBASE
+values}
 }
 %- maybe also `usage' for other objects documented here.
 \details{
@@ -31,12 +58,12 @@ The function retrieves metadata from the GRASS LOCATION from which R was started
   \item{LOCATION}{GRASS LOCATION name}
   \item{MAPSET}{GRASS MAPSET within the LOCATION}
   \item{proj}{GRASS projection description}
-  \item{n}{Northern edge}
-  \item{s}{Southern edge}
-  \item{w}{Western edge}
-  \item{e}{Eastern edge}
-  \item{nsres}{North-South resolution in measurement units, typically metres}
-  \item{ewres}{East-West resolution in measurement units, typically metres}
+  \item{n}{Northern edge: numeric}
+  \item{s}{Southern edge: numeric}
+  \item{w}{Western edge: numeric}
+  \item{e}{Eastern edge: numeric}
+  \item{nsres}{North-South resolution in measurement units, typically metres or decimal degrees}
+  \item{ewres}{East-West resolution in measurement units, typically metres or decimal degrees}
   \item{Nrow}{Number of rows of raster cells}
   \item{Ncol}{Number of columns of raster cells}
   \item{Ncells}{Number of raster cells}
@@ -45,15 +72,18 @@ The function retrieves metadata from the GRASS LOCATION from which R was started
   \item{xseq}{Sequence of raster cell East-West midpoint coordinates}
   \item{yseq}{Sequence of raster cell North-Soutb midpoint coordinates}
   \item{ryseq}{Reversed sequence of raster cell North-Soutb midpoint coordinates}
+
+In addition, a number of internal GRASS environment variables are exposed for reading and manipulation - these are at present visible but should be used only with caution, and signal the future deprecation of the gmeta() mechanism for handling metadata.
 }
 \references{\url{http://grass.itc.it/statsgrass/index.html}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
 \author{Roger S. Bivand, e-mail: \email{Roger.Bivand@nhh.no.}}
 
-\note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
+\note{The functions in this package are intended to work with the GRASS geographical information system. The examples for wrapper functions will will work whether or not R is running in GRASS, and whether or not the current location is that of the data set used for the examples. Examples of interface functions will however (from version 0.2-2) only work outside GRASS, to avoid possible overwriting of GRASS database locations and/or files.}
 
 \seealso{\code{\link{summary.grassmeta}}, \code{\link{east}}, \code{\link{north}}, \code{\link{obsno}}, \code{\link{reverse}}}
 
 \examples{
+if(!get("maas.loc", env = .GRASS.meta)) make.maas.location()
 G <- gmeta()
 summary(G)
 }

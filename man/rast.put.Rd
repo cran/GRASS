@@ -8,8 +8,8 @@
  \code{rast.put()} moves a single numeric vector to GRASS, using the metadata from \code{gmeta()}. If the compiled function is loaded, ordered factors are assigned category labels from the factor levels.
 }
 \usage{
-rast.put(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE,
-  breaks=NULL, col=NULL, nullcol=NULL, defcol=NULL, debug=FALSE, interp=FALSE)
+rast.put(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE, breaks=NULL,
+ col=NULL, nullcol=NULL, defcol=NULL, debug=FALSE, interp=FALSE, check=TRUE)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
@@ -25,16 +25,18 @@ rast.put(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE,
  \item{defcol}{Default colour to be used where no other is defined - "pale turquoise"}
  \item{debug}{if TRUE, the temporary ASCII file used for transfer in interpreted mode is not deleted on exit from the function}
  \item{interp}{if TRUE, the interpreted version of the function is used instead of the loaded compiled version}
+ \item{check}{if TRUE, existing raster layers will not be overwritten}
 }
 \details{If cat=TRUE, then the R factor layer is moved to the current GRASS location and mapset as a CELL layer, with labels taken from the factor levels; for this case breaks is disregarded (they are implicit in the factor), and col must be either NULL or a vector of colours equal in length to the number of levels. When col=NULL, grey() is used to generate the colours. If cat=FALSE, the R numeric layer is moved to GRASS as an FCELL or DCELL layer (depending on DCELL or the GRASS environmental variable \code{GRASS_FP_DOUBLE}. In this case breaks are used for quantization and colour assignment in connection with col. If breaks=NULL, pretty() is used to yield about 20 "nice" values for quantization, and their values are used to generate labels.}
 \references{\url{http://grass.itc.it/statsgrass/index.html}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciencesi, 26, pp. 1043-1052.}
 \author{Roger S. Bivand, e-mail: \email{Roger.Bivand@nhh.no.}}
 
-\note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
+\note{The functions in this package are intended to work with the GRASS geographical information system. The examples for wrapper functions will will work whether or not R is running in GRASS, and whether or not the current location is that of the data set used for the examples. Examples of interface functions will however (from version 0.2-2) only work outside GRASS, to avoid possible overwriting of GRASS database locations and/or files.}
 
 \seealso{\code{\link{rast.get}}}
 
 \examples{
+if(!get("maas.loc", env = .GRASS.meta)) make.maas.location()
 data(utm.maas)
 G <- gmeta()
 inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) & (utm.maas$north >= G$s & utm.maas$north <= G$n)
@@ -49,16 +51,12 @@ s3 <- trmat.G(G, surf.ls(3, utm.maas$east, utm.maas$north,
 Zn.grid.o <- as.ordered(cut(Zn.grid, labels=c("insignificant", "low",
 "medium", "high", "crisis"), breaks=c(-300, 200, 400, 700, 1000, 5000), include.lowest=TRUE))
 nameR <- c("ex.Zn.grid.in", "ex.tr3.in", "ex.Zn.grid.o.in")
-namesG <- list.GRASS("rast")
-if(any(match(nameR, namesG, nomatch=0) > 0)){
-	for (i in 1:length(nameR)) if(match(nameR[i], namesG, nomatch=0) > 0)
-		system(paste("g.remove rast=", nameR[i], sep=""))
-}
-rast.put(G, lname=nameR[1], layer=Zn.grid, title="Akima spline interpolation")
-rast.put(G, lname=nameR[2], layer=s3, title="Cubic trend surface")
+rast.put(G, lname=nameR[1], layer=Zn.grid, title="Akima spline interpolation",
+ check=FALSE)
+rast.put(G, lname=nameR[2], layer=s3, title="Cubic trend surface",
+ check=FALSE)
 rast.put(G, lname=nameR[3], layer=Zn.grid.o, cat=TRUE, 
-  title="Interpolated surface categories")
-for (i in 1:3) system(paste("r.info map=", nameR[i], sep=""))
+  title="Interpolated surface categories", check=FALSE)
 }
 \keyword{spatial}
 \keyword{IO}

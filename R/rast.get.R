@@ -17,9 +17,9 @@ rast.get <- function(G, rlist, catlabels=NULL, debug=FALSE, interp=FALSE)
 	    stop("catlabels should be same length as rlist")
     } else catlabels <- rep(FALSE, length(rlist))
     
-    if(is.loaded("rastget", PACKAGE="grassR") && (interp == FALSE)) {
+    if(is.loaded("rastget", PACKAGE="GRASS") && (interp == FALSE)) {
 	data <- .Call("rastget", G=G, layers=rlist, flayers=catlabels,
-		PACKAGE="grassR")
+		PACKAGE="GRASS")
     } else {
 	G.list <- list.GRASS(type="rast")
 	res <- rlist %in% G.list

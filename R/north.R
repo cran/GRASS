@@ -6,8 +6,8 @@
 north <- function(G)
 {
     if (class(G) != "grassmeta") stop("No GRASS metadata object")
-    if(is.loaded("northG", PACKAGE="grassR")) {
-	north <- .Call("northG", G, PACKAGE="grassR")
+    if(is.loaded("northG", PACKAGE="GRASS")) {
+	north <- .Call("northG", G, PACKAGE="GRASS")
     } else {
         north <- as.numeric(c(matrix(G$ryseq, length(G$xseq), length(G$ryseq),
             byrow=TRUE)))

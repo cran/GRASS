@@ -4,14 +4,17 @@
 # rast.put moves a single numeric vector to GRASS, using the metadata
 # retrieved by gmeta() from the GRASS data base.
 #
-rast.put <- function(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE, breaks=NULL, col=NULL, nullcol=NULL, defcol=NULL, debug=FALSE, interp=FALSE) 
+rast.put <- function(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE,
+	breaks=NULL, col=NULL, nullcol=NULL, defcol=NULL, debug=FALSE,
+	interp=FALSE, check=TRUE) 
     {
     if (class(G) != "grassmeta") stop("Data not a grass object")
     if (length(lname) != 1)
 	stop("Single new GRASS data base file name required")
     if (!(is.numeric(layer) || is.factor(layer)))
 	stop("layer is neither numeric nor factor")
-    if(is.loaded("rastput", PACKAGE="grassR") && (interp == FALSE)) {
+    if(is.loaded("rastput", PACKAGE="GRASS") && (interp == FALSE)) {
+	if(!is.logical(check)) stop("check must be logical")
 	if(is.null(nullcol)) nullcol <- "honeydew"
 	if(is.null(defcol)) defcol <- "pale turquoise"
 	nullcolor <- as.integer(col2rgb(nullcol[1]))
@@ -26,11 +29,11 @@ rast.put <- function(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE, break
 	    color <- as.integer(col2rgb(col))
 	    layer.range <- range(na.omit(codes(layer)))
 	        x <- .Call("rastput", G=G, layer=as.integer(codes(layer)),
-		isfactor=TRUE, DCELL=FALSE, levels=levels(layer),
-		output=lname, title=title, breaks=NULL,
+		isfactor=TRUE, DCELL=FALSE, check=as.logical(check), 
+		levels=levels(layer), output=lname, title=title, breaks=NULL,
 		color=as.integer(color), nullcolor=as.integer(nullcolor),
 		as.integer(defcolor), range=as.integer(layer.range),
-		PACKAGE="grassR")
+		PACKAGE="GRASS")
 	} else {
 	    if(is.null(breaks)) {
 		breaks <- pretty(as.double(na.omit(layer)), n=20, min.n=10)
@@ -50,10 +53,11 @@ rast.put <- function(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE, break
 	    col <- as.integer(col2rgb(col))
 	    layer.range <- range(breaks)
 	    x <- .Call("rastput", G=G, layer=as.double(layer), isfactor=FALSE, 
-		DCELL=FALSE, levels=layer.levels, output=lname, title=title,
-		breaks=as.double(breaks), color=as.integer(col),
-		nullcolor=as.integer(nullcolor), as.integer(defcolor),
-		range=as.double(layer.range), PACKAGE="grassR")
+		DCELL=FALSE, check=as.logical(check), levels=layer.levels, 
+		output=lname, title=title, breaks=as.double(breaks), 
+		color=as.integer(col), nullcolor=as.integer(nullcolor), 
+		defcolor=as.integer(defcolor),	range=as.double(layer.range),
+		PACKAGE="GRASS")
 	}
     } else {
 	G.list <- list.GRASS(type="rast")

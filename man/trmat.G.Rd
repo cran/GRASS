@@ -23,13 +23,13 @@ trmat.G(G, obj, east=NULL, north=NULL)
 \references{\url{http://grass.itc.it/statsgrass/index.html}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. \emph{Computers and Geosciences}, 26, pp. 1043-1052; Unwin, D. J., Wrigley, N. (1987) Towards a general-theory of control point distribution effects in trend surface models. \emph{Computers and Geosciences}, 13, pp. 351-355.}
 \author{Original \code{trmat()}: Brian D. Ripley and Bill Venables as detailed in the spatial package documentation; adapted by Roger S. Bivand, e-mail: \email{Roger.Bivand@nhh.no.}}
 
-\note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
+\note{The functions in this package are intended to work with the GRASS geographical information system. The examples for wrapper functions will will work whether or not R is running in GRASS, and whether or not the current location is that of the data set used for the examples. Examples of interface functions will however (from version 0.2-2) only work outside GRASS, to avoid possible overwriting of GRASS database locations and/or files.}
 
 \seealso{\code{\link{trmat}}}
 
 \examples{
 data(utm.maas)
-G <- gmeta()
+G <- maas.metadata
 if(G$Ncells != length(maasmask))
     stop("example not running in Maas GRASS location")
 require(spatial)

@@ -37,7 +37,7 @@ krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
 \references{\url{http://grass.itc.it/statsgrass/index.html}, \url{http://www.gis.iastate.edu/SGeoStat/homepage.html}; Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
 \author{Original \code{krige()}: as detailed in the sgeostat package documentation and Albrecht Gephardt, the package's R maintainer; adapted by Roger S. Bivand, e-mail: \email{Roger.Bivand@nhh.no.}}
 
-\note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
+\note{The functions in this package are intended to work with the GRASS geographical information system. The examples for wrapper functions will will work whether or not R is running in GRASS, and whether or not the current location is that of the data set used for the examples. Examples of interface functions will however (from version 0.2-2) only work outside GRASS, to avoid possible overwriting of GRASS database locations and/or files.}
 
 
 \seealso{\code{\link{krige}}, \code{\link{surf.gls}}, \code{\link{prmat}}, \code{\link{semat}}, \code{\link{vgram}}, \code{\link{Krig}}, \code{\link{predict.Krig}}, \code{\link{predict.se.Krig}}}
@@ -45,7 +45,7 @@ krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
 
 \examples{
 data(utm.maas)
-G <- gmeta()
+G <- maas.metadata
 inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) &
  (utm.maas$north >= G$s & utm.maas$north <= G$n)
 if(all(!inregion))

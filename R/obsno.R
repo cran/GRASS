@@ -7,8 +7,8 @@
 obsno <- function(G)
 {
     if (class(G) != "grassmeta") stop("No GRASS metadata object")
-    if(is.loaded("obsnoG", PACKAGE="grassR")) {
-	obsno <- .Call("obsnoG", G, PACKAGE="grassR")
+    if(is.loaded("obsnoG", PACKAGE="GRASS")) {
+	obsno <- .Call("obsnoG", G, PACKAGE="GRASS")
     } else {
         obsno <- as.integer(1:G$Ncells)
     }
