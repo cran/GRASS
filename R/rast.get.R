@@ -5,7 +5,8 @@
 # the filled object. Setting catlabels to TRUE imports category labels 
 # instead of codes, and requires more memory.
 #
-rast.get <- function(G, rlist, catlabels=NULL, debug=FALSE, interp=FALSE) 
+rast.get <- function(G, rlist, catlabels=NULL, drop.unused.levels=FALSE, 
+	make.ordered=TRUE, debug=FALSE, interp=FALSE) 
 {
     if (class(G) != "grassmeta") stop("No GRASS metadata object")
     if (! is.character(rlist))
@@ -64,5 +65,13 @@ rast.get <- function(G, rlist, catlabels=NULL, debug=FALSE, interp=FALSE)
     }
     ndata <- names(data)
     names(data) <- make.names(names=ndata, unique=TRUE)
+    if (!is.null(catlabels)) {
+	for (i in 1:length(data)) {
+	    if (catlabels[i]) {
+		if (drop.unused.levels) data[[i]] <- data[[i]][, drop=TRUE]
+		if (!make.ordered) class(data[[i]]) <- "factor"
+	    }
+	}
+    }
     invisible(data)
 }

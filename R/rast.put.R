@@ -11,6 +11,8 @@ rast.put <- function(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE,
     if (class(G) != "grassmeta") stop("Data not a grass object")
     if (length(lname) != 1)
 	stop("Single new GRASS data base file name required")
+    if (length(layer) != G$Ncells)
+	stop("GRASS object metadata do not match layer length")
     if (!(is.numeric(layer) || is.factor(layer)))
 	stop("layer is neither numeric nor factor")
     if(is.loaded("rastput", PACKAGE="GRASS") && (interp == FALSE)) {
@@ -35,6 +37,7 @@ rast.put <- function(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE,
 		as.integer(defcolor), range=as.integer(layer.range),
 		PACKAGE="GRASS")
 	} else {
+# check col/breaks José Agustín García García 12/12-03
 	    if(is.null(breaks)) {
 		breaks <- pretty(as.double(na.omit(layer)), n=20, min.n=10)
 	    } else {

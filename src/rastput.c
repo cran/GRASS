@@ -70,6 +70,8 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
 
     GR_nrows = cellhd.rows; GR_ncols = cellhd.cols;
     ncells = GR_nrows * GR_ncols;
+    if (ncells != GET_LENGTH(layer))
+	G_fatal_error("Input layer of wrong length");
     rast_ptr = G_allocate_raster_buf(data_type);
     rast = rast_ptr;
     if (G_legal_filename(CHAR(STRING_ELT(output, 0))) < 0)

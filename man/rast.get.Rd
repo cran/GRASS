@@ -8,7 +8,8 @@
 \code{rast.get()} moves one or more GRASS 5.0 raster files to a list, returning the filled object. Setting \code{catlabels} elements, corresponding to the files named in rlist, to TRUE, imports category labels instead of codes yielding an ordered factor rather than a numeric vector, and requires more memory.
 }
 \usage{
-rast.get(G, rlist="", catlabels=NULL, debug=FALSE, interp=FALSE)
+rast.get(G, rlist="", catlabels=NULL, drop.unused.levels=FALSE, 
+	make.ordered=TRUE, debug=FALSE, interp=FALSE)
 }
 \details{
 \code{rast.get()} assumes firstly that the region of the GRASS LOCATION has not been changed since gmeta() was last run, secondly that resolutions of the requested map layers and the GRASS LOCATION are in accord, and thirdly that the data cover the selected region. If the second or third assumptions are not met for the interpreted version, the GRASS program \code{r.stats} run through \code{system()} will read from the underlying map layers according to the new region setting, yielding cell values at the current resolution, and inserting NAs in areas for which there are no data. For the compiled version, the user is required to work within a given map region at the same resolution.
@@ -18,6 +19,8 @@ rast.get(G, rlist="", catlabels=NULL, debug=FALSE, interp=FALSE)
  \item{G}{GRASS metadata from \code{gmeta()}}
  \item{rlist}{character vector of GRASS raster file names}
  \item{catlabels}{logical vector of length \code{length(rlist)}: if TRUE, GRASS category raster layers are imported as ordered factors, if FALSE, as numeric only}
+ \item{drop.unused.levels}{default FALSE, if TRUE, drop unused levels from factor. Beware: some levels may be absent from a region of a location but should be retained, use TRUE with caution. The argument will be applied to all layers read during a single call to \code{read.get()}.}
+ \item{make.ordered}{The default behaviour has been to treat all GRASS categorical rasters as ordered factors. This can be modified by setting to FALSE, when the \code{"ordered"} class tag will be removed. The argument will be applied to all layers read during a single call to \code{read.get()}.}
  \item{debug}{if TRUE, the temporary ASCII file used for transfer is not deleted on exit from the function}
  \item{interp}{if TRUE, the interpreted version of the function is used instead of the loaded compiled version}
 }
