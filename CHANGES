@@ -1,4 +1,7 @@
-Added Burrough & McDonnell soil pollution data set for examples.
+Major modifications to compiled interface because of R 1.2.0 memory
+model changes 010103 RSB
+
+Added Burrough & McDonnell soil pollution data set for examples 001121 RSB
 
 Changed configure script 000705 RSB
 

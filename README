@@ -1,14 +1,20 @@
 Package: GRASS
-Version: 0.1-5
+Version: 0.1-6
 Author: Interface functions by Roger Bivand <Roger.Bivand@nhh.no>, wrapper
-	and helper functions modified from various originals by interface author.
+	and helper functions modified from various originals by interface 
+	author.
+	
 Description: Interface between GRASS geographical information system and R,
 	based on starting R from within the GRASS environment and chosen 
 	LOCATION and MAPSET. Wrapper and helper functions are provided for 
 	a range of R functions to match the interface metadata structures. 
 
+Note:	(0.1-6) Incompatibility between R 1.1.1 and 1.2.0 in compiled 
+	interface code - changes in memory management in R made changes in 
+	source code necessary. The configure script will also look for the 
+	include and library files in the GRASS install directory.
 
-Note:	Major modification to examples now using Burrough & McDonnell
+	(0.1-5) Major modification to examples now using Burrough & McDonnell
 	Maas bank soil pollution data. Minor changes to interface functions
 	to catch infelicities. From version 0.1-5, this means that you
 	need to run R CMD check GRASS as:

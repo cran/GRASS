@@ -3,10 +3,20 @@
 #
 COMPILE="no"
 PATH="$PATH:/usr/local/bin"
-GMDEF="no"
+GM=""
+GRDEF="no"
 INTERP="no"
 while test -n "${1}" ; do
    case ${1} in
+      --grass5=*)
+         GR=`echo "${1}" | sed -e 's/[^=]*=//'`
+	 if test -r ${GR}
+	    then
+            GRDEF="yes"
+	 else
+	    echo "${GR}: no such file"
+	    exit 1
+	 fi ;;
       --gmake5=*)
          GM=`echo "${1}" | sed -e 's/[^=]*=//'`
 	 if test -r ${GM}
@@ -24,25 +34,27 @@ while test -n "${1}" ; do
    esac
    shift
 done
-if test ${GMDEF} = "no" -a ${INTERP} = "no"
+
+if test ${INTERP} = "no"
    then
-   GM=`which gmake5 2> /dev/null`
+   GR=`which grass5 2> /dev/null`
    if test $? -eq 0
       then
-      GMDEF="yes"
+      GRDEF="yes"
    else
-      echo "Your gmake5 is not on your current PATH."
+      echo "Your grass5 is not on your current PATH."
       echo "Either add the directory it is in to your PATH,"
-      echo "or run \"R INSTALL --configure-args=--gmake5=/.../gmake5 GRASS\""
-      echo "giving the fully qualified path to and name of your gmake5."
+      echo "or run \"R INSTALL --configure-args=--grass5=/.../grass5 GRASS\""
+      echo "giving the fully qualified path to and name of your grass5."
       echo "To install the interpreted interface, use:"
       echo "\"R INSTALL --configure-args=--interp GRASS\""
       exit 1
    fi
 fi
-if test ${GMDEF} = "yes"
+
+if test ${GRDEF} = "yes"
    then
-   sh ./setup.sh $GM
+   sh ./setup.sh $GR $GM
    if test $? -eq 0
       then
       COMPILE="yes"

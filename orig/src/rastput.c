@@ -42,21 +42,21 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP levels, SEXP output, SEXP t
    G_get_window(&cellhd);
 
 
-   if (NUMERIC_POINTER(LIST_POINTER(G)[3])[0] != cellhd.north)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 3))[0] != cellhd.north)
 	error("Current GRASS region changed: north");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[4])[0] != cellhd.south)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 4))[0] != cellhd.south)
 	error("Current GRASS region changed: south");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[5])[0] != cellhd.west)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 5))[0] != cellhd.west)
 	error("Current GRASS region changed: west");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[6])[0] != cellhd.east)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 6))[0] != cellhd.east)
 	error("Current GRASS region changed: east");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[7])[0] != cellhd.ns_res)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 7))[0] != cellhd.ns_res)
 	error("Current GRASS region changed: ns_res");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[8])[0] != cellhd.ew_res)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 8))[0] != cellhd.ew_res)
 	error("Current GRASS region changed: ew_res");
-   if (INTEGER_POINTER(LIST_POINTER(G)[9])[0] != cellhd.rows)
+   if (INTEGER_POINTER(VECTOR_ELT(G, 9))[0] != cellhd.rows)
 	error("Current GRASS region changed: rows");
-   if (INTEGER_POINTER(LIST_POINTER(G)[10])[0] != cellhd.cols)
+   if (INTEGER_POINTER(VECTOR_ELT(G, 10))[0] != cellhd.cols)
 	error("Current GRASS region changed: cols");
 
    if((mapset = G_find_cell(CHAR(STRING_ELT(output, 0)), G_mapset())) != NULL)

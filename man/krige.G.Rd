@@ -1,10 +1,11 @@
 \name{krige.G}
 \alias{krige.G}
-\alias{do.krige.G}
+\alias{prmat2.G}
+\alias{semat2.G}
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Kriging prediction for GRASS maps}
 \description{
-  The function is a modified and simplified version of the sgeostat \code{krige()} function, using the current GRASS region to generate points for ordinary kriging prediction. It runs very slowly, and does not allow for kriging only in the local neighbourhood.
+  The function is a modified and simplified version of the sgeostat \code{krige()} function, using the current GRASS region to generate points for ordinary kriging prediction. Based in part on advice from Albrecht Gebhardt (for the implementation of which I am responsible!), it uses compiled code from the spatial library, and only supports exponential, gaussian, and spherical variogram models.
 }
 \usage{
 krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
@@ -18,20 +19,14 @@ krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
   \item{mask}{A vector of length \code{east(G)} with NA's in locations for which no prediction is needed}
 }
 \details{
-  The function appears to correspond to Gstat (\url{http://www.geog.uu.nl/gstat}) ordinary kriging predictions for point locations, and the example below - which runs for a long time - agrees with the following Gstat command file:
-
-data(zinc): 'bMcd.eas', x=1, y=2, v=3;\cr
-variogram(zinc): 33254 Nug(0) + 151996 Exp(394);\cr
-data(): 'loc.eas', x=1, y=2;\cr
-set output = 'zinc.big.out';\cr
-
-for the parameter values returned by \code{fit.exponential()}.
+  The function appears to correspond to Gstat (\url{http://www.geog.uu.nl/gstat}) ordinary kriging predictions for point locations. The specific links between the sgeostat variogram models and the spatial \code{surf.gls} covariance arguments are: \code{se=sqrt(nugget+sill)}, \code{alpha=nugget/(nugget+sill)}, and \code{d=range}.
 
 }
 \value{
-  The function returns a list of two components:
+  The function returns a list of three components:
+  \item{kr}{trgls object returned by surf.gls}
   \item{zhat}{kriging predictions}
-  \item{sigma2hat}{variance}
+  \item{sehat}{kriging standard errors}
   ...
 }
 \references{\url{http://www.geog.uni-hannover.de/grass/statsgrasslist.html}, \url{http://www.baylor.edu/~grass}, \url{http://www.gis.iastate.edu/SGeoStat/homepage.html}; Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
@@ -40,7 +35,7 @@ for the parameter values returned by \code{fit.exponential()}.
 \note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
 
 
-\seealso{\code{\link{krige}}}
+\seealso{\code{\link{krige}}, \code{\link{surf.gls}}, \code{\link{prmat}}, \code{\link{semat}}}
 
 
 \examples{
@@ -60,19 +55,34 @@ plot(maas.evg)
 text(maas.evg$bins, maas.evg$classic/2, labels=maas.evg$n, pos=1)
 abline(h=25000)
 abline(h=170000)
-maas.fit.exp <- fit.exponential(maas.evg, c0=25000, ce=170000-25000,
- ae=400, plot.it=T)
-cat("Prediction starting: take a break ...\n")
+maas.fit.exp <- fit.exponential(maas.evg, c0=24803.4, ce=158232,
+ ae=361.604, plot.it=T, iterations=0)
+cat("Using parameters from B&McD, p. 142 without fitting.\n")
 res.G1 <- krige.G(maas.pts, "Zn", maas.fit.exp, G, maasmask)
 summary(res.G1$zhat)
-summary(res.G1$sigma2hat)
-summary(sqrt(res.G1$sigma2hat))
+summary(res.G1$sehat)
 plot(G, res.G1$zhat, breaks=round(seq(120,1660,length=9)), col=grey(9:2/9))
 plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
  legend=c(rev(legtext(round(seq(120,1660,length=9)))), "mask=NA"),
  fill=c(rev(grey(9:2/9)), "wheat"))
 title("Ordinary kriging predictions")
+ln.Zn <- data.frame(x=utm.maas$east, y=utm.maas$north, z=log(utm.maas$Zn))
+ln.Zn.pts <- point(ln.Zn)
+ln.Zn.evg <- est.variogram(ln.Zn.pts, maas.pairs, a1="z")
+plot(ln.Zn.evg)
+ln.Zn.fit.sph <- fit.spherical(ln.Zn.evg, c0=0.0536187, cs=0.581735,
+as=892.729, plot.it=T, iterations=0)
+cat("Using parameters from Gstat user's manual, p. 14\n")
+res.G2 <- krige.G(ln.Zn.pts, "z", ln.Zn.fit.sph, G, maasmask)
+summary(res.G2$zhat)
+summary(res.G2$sehat)
+plot(G, res.G2$zhat, breaks=c(0, seq(4.8,7.4,length=9)), col=c("yellow", grey(9:2/9)))
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
+legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
+ legend=c(rev(legtext(seq(4.8,7.4,length=9))), "< 4.8", "mask=NA"),
+ fill=c(rev(grey(9:2/9)), "yellow", "wheat"))
+title("Ordinary kriging predictions ln(Zinc)")
 
 }
 \keyword{ ~keyword }%-- one or more ...

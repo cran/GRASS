@@ -1,4 +1,4 @@
-/* Copyright 2000 by Roger S. Bivand. 
+/* Copyright 2000-2001 by Roger S. Bivand. 
  * *
  * * This program is free software; you can redistribute it and/or modify
  * * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,13 @@ SEXP eastG(SEXP G) {
 	SEXP ans;
 	int i, j, k;
 
-	PROTECT(ans = NEW_NUMERIC(INTEGER_POINTER(LIST_POINTER(G)[11])[0]));
+	PROTECT(ans = NEW_NUMERIC(INTEGER_POINTER(VECTOR_ELT(G, 11))[0]));
 	
-	for (j = 0; j < INTEGER_POINTER(LIST_POINTER(G)[9])[0]; j++) {
-	    for (i = 0; i < INTEGER_POINTER(LIST_POINTER(G)[10])[0]; i++) {
-		k = (j * INTEGER_POINTER(LIST_POINTER(G)[10])[0]) + i;
+	for (j = 0; j < INTEGER_POINTER(VECTOR_ELT(G, 9))[0]; j++) {
+	    for (i = 0; i < INTEGER_POINTER(VECTOR_ELT(G, 10))[0]; i++) {
+		k = (j * INTEGER_POINTER(VECTOR_ELT(G, 10))[0]) + i;
 		NUMERIC_POINTER(ans)[k] = 
-			NUMERIC_POINTER(LIST_POINTER(G)[14])[i];
+			NUMERIC_POINTER(VECTOR_ELT(G, 14))[i];
 	    }
 	}
 
@@ -37,13 +37,13 @@ SEXP northG(SEXP G) {
 	SEXP ans;
 	int i, j, k;
 
-	PROTECT(ans = NEW_NUMERIC(INTEGER_POINTER(LIST_POINTER(G)[11])[0]));
+	PROTECT(ans = NEW_NUMERIC(INTEGER_POINTER(VECTOR_ELT(G, 11))[0]));
 	
-	for (j = 0; j < INTEGER_POINTER(LIST_POINTER(G)[9])[0]; j++) {
-	    for (i = 0; i < INTEGER_POINTER(LIST_POINTER(G)[10])[0]; i++) {
-		k = (j * INTEGER_POINTER(LIST_POINTER(G)[10])[0]) + i;
+	for (j = 0; j < INTEGER_POINTER(VECTOR_ELT(G, 9))[0]; j++) {
+	    for (i = 0; i < INTEGER_POINTER(VECTOR_ELT(G, 10))[0]; i++) {
+		k = (j * INTEGER_POINTER(VECTOR_ELT(G,10))[0]) + i;
 		NUMERIC_POINTER(ans)[k] = 
-			NUMERIC_POINTER(LIST_POINTER(G)[16])[j];
+			NUMERIC_POINTER(VECTOR_ELT(G, 16))[j];
 	    }
 	}
 
@@ -56,9 +56,9 @@ SEXP obsnoG(SEXP G) {
 	SEXP ans;
 	int i;
 
-	PROTECT(ans = NEW_INTEGER(INTEGER_POINTER(LIST_POINTER(G)[11])[0]));
+	PROTECT(ans = NEW_INTEGER(INTEGER_POINTER(VECTOR_ELT(G, 11))[0]));
 	
-	for (i = 0; i < INTEGER_POINTER(LIST_POINTER(G)[11])[0]; i++)
+	for (i = 0; i < INTEGER_POINTER(VECTOR_ELT(G, 11))[0]; i++)
 	    	INTEGER_POINTER(ans)[i] = i+1;
 
 	UNPROTECT(1);
@@ -72,12 +72,12 @@ SEXP reverseG(SEXP G) {
 
 	PROTECT(obs = obsnoG(G));
 
-	PROTECT(ans = NEW_INTEGER(INTEGER_POINTER(LIST_POINTER(G)[11])[0]));
+	PROTECT(ans = NEW_INTEGER(INTEGER_POINTER(VECTOR_ELT(G, 11))[0]));
 	
-	for (j = INTEGER_POINTER(LIST_POINTER(G)[9])[0]-1, ii = 0;
+	for (j = INTEGER_POINTER(VECTOR_ELT(G, 9))[0]-1, ii = 0;
 	    j > -1; j--) {
-	    for (i = 0; i < INTEGER_POINTER(LIST_POINTER(G)[10])[0]; i++) {
-		k = (j * INTEGER_POINTER(LIST_POINTER(G)[10])[0]) + i;
+	    for (i = 0; i < INTEGER_POINTER(VECTOR_ELT(G, 10))[0]; i++) {
+		k = (j * INTEGER_POINTER(VECTOR_ELT(G, 10))[0]) + i;
 		INTEGER_POINTER(ans)[ii++] = INTEGER_POINTER(obs)[k];
 	    }
 	}

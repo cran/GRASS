@@ -1,43 +1,18 @@
-GM=$1
-GS=`grep SRC $GM | cut -f2 -d"="`
+GR=$1
+GS=`grep "^GISBASE" $GR | cut -f2 -d"="`
 if test -z $GS
    then
-   echo "GRASS sources not found"
+   echo "GRASS HOME directory not found"
    exit 1
 fi
-CMD=`grep "^CMD=" $GM | cut -f2 -d"="`
-if test -z $CMD
+if test ! -d $GS/lib
    then
-   echo "GRASS CMD not found"
+   echo "$GS/lib: not found"
    exit 1
 fi
-HEADER=`grep HEADER $GM | cut -f2 -d"="`
-if test -z $HEADER
+if test ! -r $GS/lib/libgis.a
    then
-   echo "GRASS HEADER not found"
-   exit 1
-fi
-HEAD=$CMD/head/$HEADER
-if test ! -r $HEAD
-   then
-   echo "$HEAD not readable"
-   exit 1
-fi
-ARCH="`sed 's/=/ /' $HEAD | awk '$1 ~ /^ARCH$/ {if(NF>1)print $2}'`"
-if test -z $ARCH
-   then
-   echo "GRASS architecture not found"
-   exit 1
-fi
-LIB=LIB.$ARCH
-if test ! -d $GS/libes/$LIB
-   then
-   echo "$GS/libes/$LIB: not found"
-   exit 1
-fi
-if test ! -r $GS/libes/$LIB/libgis.a
-   then
-   echo "$GS/libes/$LIB/libgis.a: not found"
+   echo "$GS/lib/libgis.a: not found"
 
    exit 1
 fi
@@ -51,13 +26,78 @@ if test ! -r $GS/include/gis.h
    echo "$GS/include/gis.h: not found"
    exit 1
 fi
-echo "GRASS source directory: $GS"
-echo "GRASS library directory: $LIB"
 
-echo "GRASS_SRCDIR=$GS" > orig/src/Makefile
+echo "GRASS HOME directory: $GS"
+echo "GRASS_HOME_DIR=$GS" > orig/src/Makefile
 echo "" >> orig/src/Makefile
-echo "GRASS_OBJ=$LIB" >> orig/src/Makefile
-echo "" >> orig/src/Makefile
+
+if test ! -r $GS/include/gisdefs.h
+   then
+   echo "$GS/include/gisdefs.h: not found, looking for source directory ..."
+   if test -z $GM
+      then
+      GM=`which gmake5 2> /dev/null`
+      if test $? -eq 0
+         then
+         GMDEF="yes"
+      else
+         echo "Your gmake5 is not on your current PATH."
+         echo "Either add the directory it is in to your PATH,"
+         echo "or run \"R INSTALL --configure-args=--gmake5=/.../gmake5 GRASS\""
+         echo "giving the fully qualified path to and name of your gmake5."
+         echo "To install the interpreted interface, use:"
+         echo "\"R INSTALL --configure-args=--interp GRASS\""
+         exit 1
+      fi
+   fi
+   if test ! -r $GM
+      then
+      echo "$GM not readable"
+      exit 1
+   fi
+   GSRC=`grep "^SRC" $GM | cut -f2 -d"="`
+   if test -z $GSRC
+      then
+      echo "GRASS source directory not found"
+      exit 1
+   fi
+   if test ! -d $GSRC/include
+      then
+      echo "$GSRC/include: not found"
+      exit 1
+   fi
+   if test ! -r $GSRC/include/gisdefs.h
+      then
+      echo "$GSRC/include/gisdefs.h: not found"
+      exit 1
+   fi
+   if test ! -r $GSRC/include/site.h
+      then
+      echo "$GSRC/include/site.h: not found"
+      exit 1
+   fi
+   if test ! -r $GSRC/include/P_site.h
+      then
+      echo "$GSRC/include/P_site.h: not found"
+      exit 1
+   fi
+   if test ! -r $GSRC/include/datetime.h
+      then
+      echo "$GSRC/include/datetime.h: not found"
+      exit 1
+   fi
+   if test ! -r $GSRC/include/P_datetime.h
+      then
+      echo "$GSRC/include/P_datetime.h: not found"
+      exit 1
+   fi
+
+   echo "GRASS SRC directory: $GSRC"
+
+   echo "GRASS_SRC_INC_DIR=$GSRC/include" >> orig/src/Makefile
+   echo "" >> orig/src/Makefile
+fi
+
 cat orig/src/Makefile.in >> orig/src/Makefile
 
 exit 0

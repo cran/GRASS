@@ -1,34 +1,25 @@
-% Copyright 1999-2000 by Roger S. Bivand
-%
-\name{plot.grassmeta}
-\alias{plot.grassmeta}
-\alias{legtext}
+\name{contour.G}
+\alias{contour.G}
 %- Also NEED an `\alias' for EACH other topic documented here.
-\title{Equal scale plots for GRASS raster and site data}
+\title{Equal scale contour plots for GRASS raster and site data}
 \description{
-plot.grassmeta provides a simple interface between grass data objects and the \code{image()} function; category layers may be plotted by taking \code{codes()} of the layer, and setting zlim to non-default values. If layer is not set, a blank base map is plotted, for instance for use with \code{points()}.
-}
+contour.G provides a simple interface between grass data objects and the \code{contour()} function}.
 \usage{
-plot.grassmeta(G, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
-legtext(x)
+contour.G(G, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
 }
-
 %- maybe also `usage' for other objects documented here.
 \arguments{
  \item{G}{GRASS metadata from \code{gmeta()}}
- \item{layer}{GRASS-ordered raster layer passed on to \code{image()}}
+ \item{layer}{GRASS-ordered raster layer passed on to \code{contour()}}
  \item{xlab}{a title for the x axis, passed to \code{plot()}}
  \item{ylab}{a title for the y axis, passed to \code{plot()}}
  \item{reverse}{see \code{help(reverse)}}
  \item{add}{FALSE for new plot, TRUE to overlay layer on prior plot}
- \item{\dots}{parameters passed through to \code{image()}}
-}
+ \item{\dots}{parameters passed through to \code{contour()}}}
 \details{
  The function uses \code{asp=1} from the \code{plot.window()} function to
 ensure that the scales chosen to be equal on both axes, that is 1cm represents
-the same units on each. The \code{legtext} function is a small helper to aid
-in converting image break levels into legend texts, taking a numeric argument
-as \code{image(break=)}, and returning a character vector.
+the same units on each. 
 }
 \value{
   none
@@ -38,16 +29,21 @@ as \code{image(break=)}, and returning a character vector.
 
 \note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata may be found by: \code{help(utm.maas)}. All of the examples in this package may be run from this location in batch by \code{R CMD check GRASS}, to check for correct installation. The actual data may be accessed from R: \code{data(utm.maas)}.}
 
-\seealso{\code{\link{plot.window}}, \code{\link{image}}}
+\seealso{\code{\link{plot.window}}, \code{\link{contour}}, \code{\link{plot.grassmeta}}}
+
 
 \examples{
 if(length(ls(pat="Zn.o"))==0){example(utm.maas)}
 if(length(ls(pat="G"))==0){example(gmeta)}
-plot(G)
+contour.G(G)
 points(utm.maas$east, utm.maas$north, pch=codes(Zn.o))
 legend(x=c(269800, 270500), y=c(5652300, 5653000), pch=c(1:5),
 legend=levels(Zn.o))
 title("Note equal east and north scales")
-example(kde2d.G)
+contour.G(G, kde2d.G(utm.maas$east, utm.maas$north, h=c(300,300), G=G, Z=utm.maas$Zn)*maasmask)
+points(utm.maas$east, utm.maas$north, pch=codes(Zn.o))
+legend(x=c(269800, 270500), y=c(5652300, 5653000), pch=c(1:5),
+legend=levels(Zn.o))
+title("Kernel density representation of soil Zn")
 }
-\keyword{GRASS, interface, spatial statistics}%-- one or more ...
+\keyword{ ~keyword }%-- one or more ...

@@ -11,11 +11,11 @@
 #  GNU General Public License for more details.
 #
 
-GRASS_INCLUDEDIR = $(GRASS_SRCDIR)/include
+GRASS_INCLUDEDIR = $(GRASS_HOME_DIR)/include 
 
-PKG_CPPFLAGS = -I$(GRASS_INCLUDEDIR)
+PKG_CPPFLAGS = -I$(GRASS_INCLUDEDIR) -I$(GRASS_SRC_INC_DIR)
 
-GRASS_LIBESDIR = $(GRASS_SRCDIR)/libes/$(GRASS_OBJ)
+GRASS_LIBESDIR = $(GRASS_HOME_DIR)/lib
 
 LDFLAGS = -L$(GRASS_LIBESDIR)
 
@@ -33,7 +33,7 @@ SHLIB = grassR.so
 
 
 $(SHLIB): $(OBJS)
-	$(SHLIBLD) $(SHLIBLDFLAGS) -o $(SHLIB) $(OBJS) $(LDFLAGS) $(ALL_LIBS)
+	$(SHLIB_LINK) -o $@ $(OBJS) $(ALL_LIBS)
 
 gmeta.o: gmeta.c $(HEADERS)
 gmeta.access.o: gmeta.access.c $(HEADERS)

@@ -51,21 +51,21 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    G_get_window(&cellhd);
 
 
-   if (NUMERIC_POINTER(LIST_POINTER(G)[3])[0] != cellhd.north)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 3))[0] != cellhd.north)
       error("Current GRASS region changed: north");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[4])[0] != cellhd.south)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 4))[0] != cellhd.south)
       error("Current GRASS region changed: south");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[5])[0] != cellhd.west)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 5))[0] != cellhd.west)
       error("Current GRASS region changed: west");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[6])[0] != cellhd.east)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 6))[0] != cellhd.east)
       error("Current GRASS region changed: east");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[7])[0] != cellhd.ns_res)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 7))[0] != cellhd.ns_res)
       error("Current GRASS region changed: ns_res");
-   if (NUMERIC_POINTER(LIST_POINTER(G)[8])[0] != cellhd.ew_res)
+   if (NUMERIC_POINTER(VECTOR_ELT(G, 8))[0] != cellhd.ew_res)
       error("Current GRASS region changed: ew_res");
-   if (INTEGER_POINTER(LIST_POINTER(G)[9])[0] != cellhd.rows)
+   if (INTEGER_POINTER(VECTOR_ELT(G, 9))[0] != cellhd.rows)
       error("Current GRASS region changed: rows");
-   if (INTEGER_POINTER(LIST_POINTER(G)[10])[0] != cellhd.cols)
+   if (INTEGER_POINTER(VECTOR_ELT(G, 10))[0] != cellhd.cols)
       error("Current GRASS region changed: cols");
 
    
@@ -122,8 +122,8 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    PROTECT(anslevels = NEW_LIST(nlayers));
    PROTECT(ansnames = NEW_CHARACTER(nlayers));
    PROTECT(class = NEW_CHARACTER(2));
-   CHARACTER_POINTER(class)[0] = COPY_TO_USER_STRING("ordered");
-   CHARACTER_POINTER(class)[1] = COPY_TO_USER_STRING("factor");
+   SET_STRING_ELT(class, 0, COPY_TO_USER_STRING("ordered"));
+   SET_STRING_ELT(class, 1, COPY_TO_USER_STRING("factor"));
 
    G_set_c_null_value(&null_cell, 1);
 
@@ -132,19 +132,19 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
       icell = 0;
 
       if(LOGICAL_POINTER(flayers)[i]) {
-	 LIST_POINTER(ans)[i] = NEW_INTEGER(ncells);
-	 LIST_POINTER(anslevels)[i] = NEW_CHARACTER(ncats[i]);
+	 SET_VECTOR_ELT(ans, i, NEW_INTEGER(ncells));
+	 SET_VECTOR_ELT(anslevels, i, NEW_CHARACTER(ncats[i]));
 	 sprintf(tmp, "%s.f", CHAR(STRING_ELT(layers, i)));
-	 CHARACTER_POINTER(ansnames)[i] = COPY_TO_USER_STRING(tmp);
+	 SET_VECTOR_ELT(ansnames, i, COPY_TO_USER_STRING(tmp));
 	 for (j=0; j<ncats[i]; j++) {
-	   CHARACTER_POINTER(LIST_POINTER(anslevels)[i])[j] = 
+	   SET_VECTOR_ELT(VECTOR_ELT(anslevels, i), j, 
 	      COPY_TO_USER_STRING(G_get_ith_raster_cat(&labels[i], j, 
-		&rast1, &rast2, map_type[i]));
+		&rast1, &rast2, map_type[i])));
 	 }
       }
       else {
-	 LIST_POINTER(ans)[i] = NEW_NUMERIC(ncells);
-	 CHARACTER_POINTER(ansnames)[i] = CHARACTER_POINTER(layers)[i];
+	 SET_VECTOR_ELT(ans, i, NEW_NUMERIC(ncells));
+	 SET_VECTOR_ELT(ansnames, i, VECTOR_ELT(layers, i));
       }
 
       for (row = 0; row < GR_nrows; row++) {
@@ -161,27 +161,27 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
 
             if (G_is_null_value(rastp[i], map_type[i])) {
                if (LOGICAL_POINTER(flayers)[i]) {
-                  INTEGER_POINTER(LIST_POINTER(ans)[i])[icell] =
+                  INTEGER_POINTER(VECTOR_ELT(ans, i))[icell] =
                      NA_INTEGER;
                } else {
-                  NUMERIC_POINTER(LIST_POINTER(ans)[i])[icell] = NA_REAL;
+                  NUMERIC_POINTER(VECTOR_ELT(ans, i))[icell] = NA_REAL;
                }
             }
             else if(map_type[i] == CELL_TYPE) {
                if (LOGICAL_POINTER(flayers)[i]) {
-                  INTEGER_POINTER(LIST_POINTER(ans)[i])[icell] =
+                  INTEGER_POINTER(VECTOR_ELT(ans, i))[icell] =
                      G_get_raster_i(rastp[i], &labels[i], map_type[i]);
                } else {
-                  NUMERIC_POINTER(LIST_POINTER(ans)[i])[icell] =
+                  NUMERIC_POINTER(VECTOR_ELT(ans, i))[icell] =
                      (double) *((CELL *) rastp[i]);
                }
             }
             else {
                if (LOGICAL_POINTER(flayers)[i]) {
-                  INTEGER_POINTER(LIST_POINTER(ans)[i])[icell] = 
+                  INTEGER_POINTER(VECTOR_ELT(ans, i))[icell] = 
                      G_get_raster_i(rastp[i], &labels[i], map_type[i]);
                } else {
-                  NUMERIC_POINTER(LIST_POINTER(ans)[i])[icell] = 
+                  NUMERIC_POINTER(VECTOR_ELT(ans, i))[icell] = 
                      *((DCELL *) rastp[i]);
                }
             }
@@ -190,9 +190,9 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
          }
       }
       if(LOGICAL_POINTER(flayers)[i]) {
-	 setAttrib(LIST_POINTER(ans)[i], R_LevelsSymbol, 
-	    LIST_POINTER(anslevels)[i]);
-	 setAttrib(LIST_POINTER(ans)[i], R_ClassSymbol, class);
+	 setAttrib(VECTOR_ELT(ans, i), R_LevelsSymbol, 
+	    VECTOR_ELT(anslevels, i));
+	 setAttrib(VECTOR_ELT(ans, i), R_ClassSymbol, class);
       }
    }
    for (i=0; i<nlayers; i++) G_close_cell(fd[i]);
