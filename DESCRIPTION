@@ -1,6 +1,6 @@
 Package: GRASS
-Version: 0.2-8
-Date: 2003/03/31
+Version: 0.2-9
+Date: 2003/06/05
 Title: Interface between GRASS 5.0 geographical information system and R
 Author: Interface functions by Roger Bivand <Roger.Bivand@nhh.no>, wrapper
 	and helper functions modified from various originals by interface
