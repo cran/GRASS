@@ -34,7 +34,8 @@ kde2d.G(x, y, h, G, reverse=NULL, Z=NULL)
 \examples{
 if(length(ls(pat="Zn.o"))==0){example(utm.maas)}
 if(length(ls(pat="G"))==0){example(gmeta)}
-inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) & (utm.maas$north >= G$s & utm.maas$north <= G$n)
+inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) &
+  (utm.maas$north >= G$s & utm.maas$north <= G$n)
 if(all(!inregion)) stop("None of the site locations are inside the current GRASS region")
 if(any(!inregion)) warning("Some site locations are outside the current GRASS region")
 plot(G, kde2d.G(utm.maas$east, utm.maas$north, h=c(300,300), G=G)*maasmask)

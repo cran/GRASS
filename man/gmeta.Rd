@@ -6,6 +6,7 @@
 \alias{north}
 \alias{obsno}
 \alias{reverse}
+\alias{hh}
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Reads GRASS metadata from the current LOCATION}
 \description{

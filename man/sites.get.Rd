@@ -8,12 +8,13 @@
  \code{sites.get} moves one GRASS 5.0 sites file to a data frame, returning the filled object.
 }
 \usage{
-sites.get(G, slist="", debug=FALSE)
+sites.get(G, slist="", all.sites=FALSE, debug=FALSE)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
  \item{G}{GRASS metadata from \code{gmeta()}}
  \item{slist}{GRASS sites file name}
+ \item{all.sites}{set the -a flag in s.out.ascii, default=FALSE}
  \item{debug}{if TRUE, the temporary ASCII file used for transfer is not deleted on exit from the function}
 }
 \value{

@@ -1,18 +1,5 @@
-# Copyright 2001 by Roger S. Bivand
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-# contour.G is a wrapper function for drawing contour maps from raster
-# layers.
-#
+% Copyright 2001 by Roger S. Bivand
+
 \name{contour.G}
 \alias{contour.G}
 %- Also NEED an `\alias' for EACH other topic documented here.
@@ -20,11 +7,11 @@
 \description{
 contour.G provides a simple interface between grass data objects and the \code{contour()} function}.
 \usage{
-contour.G(G, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
+contour.G(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
- \item{G}{GRASS metadata from \code{gmeta()}}
+ \item{x}{GRASS metadata from \code{gmeta()}}
  \item{layer}{GRASS-ordered raster layer passed on to \code{contour()}}
  \item{xlab}{a title for the x axis, passed to \code{plot()}}
  \item{ylab}{a title for the y axis, passed to \code{plot()}}

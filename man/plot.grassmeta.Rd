@@ -9,19 +9,20 @@
 plot.grassmeta provides a simple interface between grass data objects and the \code{image()} function; category layers may be plotted by taking \code{codes()} of the layer, and setting zlim to non-default values. If layer is not set, a blank base map is plotted, for instance for use with \code{points()}.
 }
 \usage{
-plot.grassmeta(G, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
-legtext(x)
+plot.grassmeta(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
+legtext(break.levels)
 }
 
 %- maybe also `usage' for other objects documented here.
 \arguments{
- \item{G}{GRASS metadata from \code{gmeta()}}
+ \item{x}{GRASS metadata from \code{gmeta()}}
  \item{layer}{GRASS-ordered raster layer passed on to \code{image()}}
  \item{xlab}{a title for the x axis, passed to \code{plot()}}
  \item{ylab}{a title for the y axis, passed to \code{plot()}}
  \item{reverse}{see \code{help(reverse)}}
  \item{add}{FALSE for new plot, TRUE to overlay layer on prior plot}
  \item{\dots}{parameters passed through to \code{image()}}
+ \item{break.levels}{vector of image break levels}
 }
 \details{
  The function uses \code{asp=1} from the \code{plot.window()} function to

@@ -19,8 +19,9 @@
 # If layer is not set, a blank base map is plotted, for instance for use
 # with points().
 #
-plot.grassmeta <- function(G, layer=NULL, xlab="", ylab="",
+plot.grassmeta <- function(x, layer=NULL, xlab="", ylab="",
     reverse=NULL, add=FALSE, ...) {
+    G <- x
     if (class(G) != "grassmeta") stop("Data not a grass object")
     if (!add) {
         plot(G$xlim, G$ylim, xlim=G$xlim, ylim=G$ylim, asp=1, xlab = xlab,
@@ -35,8 +36,9 @@ plot.grassmeta <- function(G, layer=NULL, xlab="", ylab="",
 	}
 }
 
-legtext <- function(x)
+legtext <- function(break.levels)
 {
+    x <- break.levels
     n <- length(x)
     cx <- as.character(x)
     legend <- character(length=(n-1))

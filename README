@@ -1,5 +1,5 @@
 Package: GRASS
-Version: 0.1-6
+Version: 0.1-8
 Author: Interface functions by Roger Bivand <Roger.Bivand@nhh.no>, wrapper
 	and helper functions modified from various originals by interface 
 	author.
@@ -9,7 +9,27 @@ Description: Interface between GRASS geographical information system and R,
 	LOCATION and MAPSET. Wrapper and helper functions are provided for 
 	a range of R functions to match the interface metadata structures. 
 
-Note:	(0.1-6) Incompatibility between R 1.1.1 and 1.2.0 in compiled 
+Note:	(0.1-7/8) (release 8 tidies up minor incompatibilities with R 1.4.0)
+	These releases add quantization and colours support to the raster
+	interface from R to GRASS (rast.put()).
+
+	Remarks below about the use of "R CMD check" should be ignored -
+	the "check" script is now only intended for package writers and
+	maintainers - not users.
+
+	Installing continues to be done with R INSTALL GRASS_0.1-8.tar.gz.
+	There are a number of configure flags that may be used to help
+	the R install script find the GRASS libraries: they are
+
+	--configure-args=--grass5= (full path to your grass5 script)
+	--configure-args=--gmake5= (full path to your gmake5 script)
+	--configure-args=--zinclude= (full path to directory with zlib.h)
+	--configure-args=--zlib= (full path to directory with libz.a)
+	--configure-args=--interp (don't build compiled interface)
+
+--------------------------------------------------------------------
+
+	(0.1-6) Incompatibility between R 1.1.1 and 1.2.0 in compiled 
 	interface code - changes in memory management in R made changes in 
 	source code necessary. The configure script will also look for the 
 	include and library files in the GRASS install directory.

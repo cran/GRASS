@@ -19,7 +19,12 @@ krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
   \item{mask}{A vector of length \code{east(G)} with NA's in locations for which no prediction is needed}
 }
 \details{
-  The function appears to correspond to Gstat (\url{http://www.geog.uu.nl/gstat}) ordinary kriging predictions for point locations. The specific links between the sgeostat variogram models and the spatial \code{surf.gls} covariance arguments are: \code{se=sqrt(nugget+sill)}, \code{alpha=nugget/(nugget+sill)}, and \code{d=range}.
+  The function appears to correspond to Gstat
+  (\url{http://www.geog.uu.nl/gstat}) ordinary kriging predictions for
+  point locations. The specific links between the sgeostat variogram
+  models and the spatial \code{surf.gls} covariance arguments are:
+  \code{se=sqrt(nugget+sill)}, \code{alpha=nugget/(nugget+sill)},
+  and \code{d=range}.
 
 }
 \value{

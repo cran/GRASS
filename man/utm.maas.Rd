@@ -5,47 +5,48 @@
 \alias{maasmask}
 \non_function{}
 \title{Soil pollution data set}
+\usage{data(utm.maas)}
 \description{
 The \code{utm.maas} data frame has 98 rows and 13 columns.
 It records contamination of the environment by selected metals along the Dutch bank of the River Maas just north of Maastricht.
 }
 \format{
-This data frame contains the following columns:
-  \tabular{rlll}{
-    [,1]  \tab east  \tab numeric  \tab UTM zone 32 eastings coordinates m\cr
-    [,2]  \tab north   \tab numeric  \tab UTM zone 32 northings coordinates m\cr
-    [,3]  \tab x   \tab numeric  \tab local coordinates m\cr
-    [,4]  \tab y   \tab numeric  \tab coordinates m\cr
-    [,5]  \tab elev   \tab numeric  \tab local elevation m\cr
-    [,6]  \tab d.river   \tab numeric  \tab distance from main River Maas channel m\cr
-    [,7]  \tab Cd   \tab numeric  \tab ppm\cr
-    [,8]  \tab Cu   \tab numeric  \tab ppm\cr
-    [,9]  \tab Pb   \tab numeric  \tab ppm\cr
-    [,10]  \tab Zn   \tab numeric  \tab ppm\cr
-    [,11]  \tab LOI   \tab numeric  \tab percentage organic matter loss on ignition\cr
-    [,12]  \tab Flfd   \tab numeric  \tab flood frequency class\cr
-    [,13]  \tab Soil   \tab numeric  \tab soil type\cr
+  This data frame contains the following columns:
+  \describe{
+    \item{east}{a numeric vector - UTM zone 32 eastings coordinates m}
+    \item{north}{a numeric vector - UTM zone 32 northings coordinates m}
+    \item{x}{a numeric vector - local coordinates m}
+    \item{y}{a numeric vector - local coordinates m}
+    \item{elev}{a numeric vector - local elevation m}
+    \item{d.river}{a numeric vector - distance from main River Maas channel m}
+    \item{Cd}{a numeric vector - ppm}
+    \item{Cu}{a numeric vector - ppm}
+    \item{Pb}{a numeric vector - ppm}
+    \item{Zn}{a numeric vector - ppm}
+    \item{LOI}{a numeric vector - percentage organic matter loss on ignition}
+    \item{Fldf}{a numeric vector - flood frequency class}
+    \item{Soil}{a numeric vector - soil type}
   }
 }
 \details{
-The original data were positioned in relation to local coordinates (TDN coordinates offset by x-178600, y-329700; TDN are stereographic projection, Bessel ellipsoid, origin at 5.387638889E, 52.156160556N, false origin x=155000, y=463000), and have been reprojected to UTM zone 32, using the WGS84 ellipsoid.
+ The original data were positioned in relation to local coordinates (TDN coordinates offset by x-178600, y-329700; TDN are stereographic projection, Bessel ellipsoid, origin at 5.387638889E, 52.156160556N, false origin x=155000, y=463000), and have been reprojected to UTM zone 32, using the WGS84 ellipsoid.
 }
 \source{
-Burrough, P. & McDonnell, R. (1998) \emph{Principles of geographical information systems}, New York: Oxford, pp. 309--311.
+ Burrough, P. & McDonnell, R. (1998) \emph{Principles of geographical information systems}, New York: Oxford, pp. 309--311.
 }
 \note{The functions in this package are intended to work with the GRASS geographical information system. The examples will only work if R is started from inside GRASS, choosing the location for the Maas bank soil pollution data. GRASS installations differ in permissions needed to establish a new location, and system administrator privileges may be needed to create the Maas location. Information about the necessary metadata are as follows. The actual data may be accessed from R: \code{data(utm.maas)}.
-  \tabular{rl}{
-    projection  \tab UTM\cr
-    ellipsoid  \tab WGS84\cr
-    zone  \tab 32\cr
-    north  \tab 5652930\cr
-    south  \tab 5650610\cr
-    west  \tab 269870\cr
-    east  \tab 272460,\cr
-    nsres  \tab 10\cr
-    ewres  \tab 10\cr
-    rows  \tab 232\cr
-    cols  \tab 259\cr
+  \describe{
+    \item{projection}{UTM}
+    \item{ellipsoid}{WGS84}
+    \item{zone}{32}
+    \item{north}{5652930}
+    \item{south}{5650610}
+    \item{west}{269870}
+    \item{east}{272460}
+    \item{nsres}{10}
+    \item{ewres}{10}
+    \item{rows}{232}
+    \item{cols}{259}
   }
 }
 
@@ -74,4 +75,4 @@ summary(lm(Zn ~ as.factor(Fldf), data=utm.maas))
 anova(lm(log(Zn) ~ as.factor(Fldf), data=utm.maas))
 summary(lm(log(Zn) ~ as.factor(Fldf), data=utm.maas))
 }
-\keyword(datasets)
+\keyword{datasets}

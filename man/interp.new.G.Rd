@@ -44,7 +44,8 @@ pairs(data)
 mod1 <- lm(log(Zn) ~ elev + log(d.river), data=utm.maas)
 summary(mod1)
 anova(mod1)
-inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) & (utm.maas$north >= G$s & utm.maas$north <= G$n)
+inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) &
+  (utm.maas$north >= G$s & utm.maas$north <= G$n)
 if(all(!inregion)) stop("None of the site locations are inside the current GRASS region")
 if(any(!inregion))
     warning("Some site locations are outside the current GRASS region")
@@ -103,10 +104,12 @@ legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
 nameQ <- c("ex.Zn.in")
 namesG <- list.GRASS("sites")
 if(any(match(nameQ, namesG, nomatch=0) > 0)){
-	for (i in 1:length(nameQ)) if(match(nameQ[i], namesG, nomatch=0) > 0)
-		system(paste("g.remove sites=", nameQ[i], sep=""))
+   for (i in 1:length(nameQ))
+     if(match(nameQ[i], namesG, nomatch=0) > 0)
+     system(paste("g.remove sites=", nameQ[i], sep=""))
 }
-sites.put(G, lname=nameQ[1], east=utm.maas$east, north=utm.maas$north, var=utm.maas$Zn)
+sites.put(G, lname=nameQ[1], east=utm.maas$east, north=utm.maas$north,
+   var=utm.maas$Zn)
 system("s.surf.idw input=ex.Zn.in output=Zn.idw npoints=98")
 idw <- rast.get(G, "Zn.idw")
 plot(G, idw$Zn.idw*maasmask, breaks=c(-100, round(seq(15,1994,length=9)), 3000),
@@ -115,8 +118,8 @@ plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
 title(xlab="B&McD p. 118",
   main="Inverse squared distance interpolation: Zn ppm")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
-   legend=c("> 1994", rev(legtext(round(seq(15,1994,length=9)))), "< 15",
-   "mask=NA"), fill=c("red", rev(grey(9:2/9)), "yellow", "wheat"))
+  legend=c("> 1994", rev(legtext(round(seq(15,1994,length=9)))), "< 15",
+  "mask=NA"), fill=c("red", rev(grey(9:2/9)), "yellow", "wheat"))
 }
 \keyword{spatial}
 \keyword{IO}

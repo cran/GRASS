@@ -8,11 +8,12 @@
  \code{summary.grassmeta()} displays the metadata collected by gmeta().
 }
 \usage{
-summary.grassmeta(G)
+summary.grassmeta(object, ...)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
- \item{G}{GRASS metadata from \code{gmeta()}}
+ \item{object}{GRASS metadata from \code{gmeta()}}
+ \item{...}{other generic arguments}
 }
 \references{\url{http://www.geog.uni-hannover.de/grass/statsgrasslist.html}, \url{http://www.baylor.edu/~grass}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
 \author{Roger S. Bivand, Department of Geography, Norwegian School of Economics and Business Administration, Breiviksveien 40, N-5045 Bergen, Norway; e-mail: \email{Roger.Bivand@nhh.no.}}

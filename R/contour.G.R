@@ -11,9 +11,10 @@
 #  GNU General Public License for more details.
 #
 # contour.G is a wrapper 
-contour.G <- function (G, layer = NULL, xlab = "", ylab = "",
+contour.G <- function (x, layer = NULL, xlab = "", ylab = "",
     reverse = NULL, add = FALSE, ...) 
 {
+    G <- x
     if (class(G) != "grassmeta") 
         stop("Data not a grass object")
     if (!add) {

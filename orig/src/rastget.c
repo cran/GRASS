@@ -123,7 +123,6 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    }
 
    
-   rast[0] = (void *) R_alloc (cellhd.cols + 1, G_raster_size(map_type[i]));
 
    PROTECT(ans = NEW_LIST(nlayers));
    PROTECT(anslevels = NEW_LIST(nlayers));
@@ -135,6 +134,13 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    G_set_c_null_value(&null_cell, 1);
 
    for (i = 0; i < nlayers; i++) {
+      
+      rast[0] = (void *) malloc ((cellhd.cols + 1) *
+		      G_raster_size(map_type[i]));
+      if (rast[0] == NULL) {
+	      for (j=0; j<i; j++) G_close_cell(fd[j]);
+	      error("memory allocation error");
+      }
 
       icell = 0;
 
@@ -187,6 +193,7 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
             icell++;
          }
       }
+      free(rast[0]);
       if(LOGICAL_POINTER(flayers)[i]) {
 	 setAttrib(VECTOR_ELT(ans, i), R_LevelsSymbol, 
 	    VECTOR_ELT(anslevels, i));
