@@ -4,7 +4,6 @@
 \alias{plot.grassmeta}
 \alias{legtext}
 \alias{leglabs}
-\alias{findInterval2}
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Equal scale plots for GRASS raster and site data}
 \description{
@@ -15,7 +14,7 @@ plot.grassmeta(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE,
  breaks=NULL, ...)
 legtext(break.levels)
 leglabs(x1, under="under", over="over", between="-")
-findInterval2(x2, vec, rightmost.closed = FALSE, all.inside = TRUE)}
+}
 
 %- maybe also `usage' for other objects documented here.
 \arguments{
@@ -32,10 +31,6 @@ findInterval2(x2, vec, rightmost.closed = FALSE, all.inside = TRUE)}
  \item{under}{character value to denote under}
  \item{over}{character value to denote over}
  \item{between}{character value to denote between}
- \item{x2}{see findInterval()}
- \item{vec}{in findInterval2(), a vector of breaks}
- \item{rightmost.closed}{see findInterval()}
- \item{all.inside}{see findInterval()}
 }
 \details{
  The function uses \code{asp=1} from the \code{plot.window()} function to

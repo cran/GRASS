@@ -59,19 +59,19 @@ leglabs <- function(x1, under="under", over="over", between="-") {
 	res
 }
 
-findInterval2 <- function (x2, vec, rightmost.closed = FALSE,
- all.inside = TRUE) {
-    x <- x2
-    nx <- length(x)
-    if (any(is.na(vec) | is.nan(vec))) stop ("NAs found in vec")
-    if (is.unsorted(vec)) 
-        stop("`vec' must be sorted non-decreasingly")
-    if (vec[1] == -Inf) vec[1] <- -(.Machine$double.xmax)
-    if (vec[length(vec)] == Inf) 
-	vec[length(vec)] <- .Machine$double.xmax
-    .C("find_interv_vec", xt = as.double(vec), n = length(vec), 
-        x = as.double(x), nx = nx, as.logical(rightmost.closed), 
-        as.logical(all.inside), index = integer(nx), DUP = FALSE,
-	PACKAGE = "base")$index
-}
+#findInterval2 <- function (x2, vec, rightmost.closed = FALSE,
+# all.inside = TRUE) {
+#    x <- x2
+#    nx <- length(x)
+#    if (any(is.na(vec) | is.nan(vec))) stop ("NAs found in vec")
+#    if (is.unsorted(vec)) 
+#        stop("`vec' must be sorted non-decreasingly")
+#    if (vec[1] == -Inf) vec[1] <- -(.Machine$double.xmax)
+#    if (vec[length(vec)] == Inf) 
+#	vec[length(vec)] <- .Machine$double.xmax
+#    .C("find_interv_vec", xt = as.double(vec), n = length(vec), 
+#        x = as.double(x), nx = nx, as.logical(rightmost.closed), 
+#        as.logical(all.inside), index = integer(nx), DUP = FALSE,
+#	PACKAGE = "base")$index
+#}
 
