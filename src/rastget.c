@@ -26,7 +26,7 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    int *fd;
    int ncells, icell;
    int row, col;
-   char *mapset;
+   char *mapset, *mname;
    char msg[255], tmp[255];
    void **rast, **rastp;
    void *rast1, *rast2;
@@ -61,13 +61,17 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    if (INTEGER_POINTER(VECTOR_ELT(G, 10))[0] != cellhd.cols)
       error("Current GRASS region changed: cols");
 
-   
+   mname = Calloc(1, char);
    for (i = 0; i < nlayers; i++) {
-      if((mapset = G_find_cell(CHAR(STRING_ELT(layers, i)), "")) == NULL) { 
-         sprintf(msg, "raster map: %s not found", CHAR(STRING_ELT(layers, i)));
+	mname = Realloc(mname, strlen(CHAR(STRING_ELT(layers, i))), char);
+	mname = strcpy(mname, CHAR(STRING_ELT(layers, i)));
+	mapset = G_find_cell(mname, "");
+      if(( mapset ) == NULL) { 
+         Free(mname);  
+	 sprintf(msg, "raster map: %s not found", CHAR(STRING_ELT(layers, i)));
          error(msg);
       }
-   }   
+   } 
 
    GR_nrows = cellhd.rows; GR_ncols = cellhd.cols;
    ncells = GR_nrows * GR_ncols;
@@ -83,35 +87,41 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
 
    for (i = 0; i < nlayers; i++) {
 
-      mapset = G_find_cell(CHAR(STRING_ELT(layers, i)), "");
-
-      map_type[i] = G_raster_map_type(CHAR(STRING_ELT(layers, i)), mapset);
+      mname = Realloc(mname, strlen(CHAR(STRING_ELT(layers, i))), char);
+      mname = strcpy(mname, CHAR(STRING_ELT(layers, i)));
+      mapset = G_find_cell(mname, "");
+	
+      map_type[i] = G_raster_map_type(mname, mapset);
       if (map_type[i] < 0) {
          for (j=0; j==i; j++) G_close_cell(fd[j]);
          sprintf(msg, "layer %s of unknown type",
            CHAR(STRING_ELT(layers, i)));
-         G_fatal_error(msg);
+         Free(mname);  
+	 G_fatal_error(msg);
       }
       
         if (LOGICAL_POINTER(flayers)[i]) {
-         if (G_read_raster_cats(CHAR(STRING_ELT(layers, i)), 
+         if (G_read_raster_cats(mname, 
 		mapset, &labels[i]) < 0) {
             for (j=0; j==i; j++) G_close_cell(fd[j]);
 	    sprintf(msg, "category support for layer %s missing or invalid",
 	       CHAR(STRING_ELT(layers, i)));
+	    Free(mname);  
 	    G_fatal_error(msg);
 	 }
 	 else ncats[i] = G_number_of_raster_cats(&labels[i]);
       }
 
-      fd[i] = G_open_cell_old(CHAR(STRING_ELT(layers, i)), mapset);
+      fd[i] = G_open_cell_old(mname, mapset);
       if (fd[i] < 0) {
             for (j=0; j<i; j++) G_close_cell(fd[j]);
-            sprintf(msg, "unable to open %s", 
+            Free(mname);  
+	    sprintf(msg, "unable to open %s", 
 		CHAR(STRING_ELT(layers, i)));
             G_fatal_error(msg);
       }
    }
+   Free(mname);  
 
    
 

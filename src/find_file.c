@@ -48,6 +48,7 @@ static char *G__find_file (
  * if name is in the fully qualified format, split it into
  * name, mapset (overrides what was in mapset)
  */
+
     if (G__name_is_fully_qualified(name, xname, xmapset))
     {
 	pname = xname;

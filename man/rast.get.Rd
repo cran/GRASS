@@ -1,4 +1,4 @@
-% Copyright 1999-2000 by Roger S. Bivand
+% Copyright 1999-2004 by Roger S. Bivand
 %
 \name{rast.get}
 \alias{rast.get}
@@ -17,7 +17,7 @@ rast.get(G, rlist="", catlabels=NULL, drop.unused.levels=FALSE,
 %- maybe also `usage' for other objects documented here.
 \arguments{
  \item{G}{GRASS metadata from \code{gmeta()}}
- \item{rlist}{character vector of GRASS raster file names}
+ \item{rlist}{character vector of GRASS raster file names; may include mapset qualifiers}
  \item{catlabels}{logical vector of length \code{length(rlist)}: if TRUE, GRASS category raster layers are imported as ordered factors, if FALSE, as numeric only}
  \item{drop.unused.levels}{default FALSE, if TRUE, drop unused levels from factor. Beware: some levels may be absent from a region of a location but should be retained, use TRUE with caution. The argument will be applied to all layers read during a single call to \code{read.get()}.}
  \item{make.ordered}{The default behaviour has been to treat all GRASS categorical rasters as ordered factors. This can be modified by setting to FALSE, when the \code{"ordered"} class tag will be removed. The argument will be applied to all layers read during a single call to \code{read.get()}.}
