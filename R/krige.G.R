@@ -70,7 +70,7 @@ prmat2.G <- function (obj, s)
         alph <- c(alph[1], obj$covmod(seq(0, mm, alph[1])))
     }
     .C("VR_alset", as.double(alph), as.integer(length(alph)), PACKAGE="spatial")
-    z <-  .trval(obj, s[,1], s[,2]) + predval(obj, s[,1], s[,2])
+    z <-  predict.trls(obj, s[,1], s[,2]) + predval(obj, s[,1], s[,2])
     invisible(z)
 }
 semat2.G <- function (obj, s, se) 
