@@ -183,12 +183,22 @@ int G_window_cols ()
     return WINDOW_NCOLS;
 }
 
+/* RSB 20050117 */
+
 int G__init_window ()
 {
+    char *errs;
     if (!G__.window_set)
     {
         G__.window_set = 1;
+#if defined R_GRASS_INTERFACE
+        if((errs = (G__get_window (&G__.window,"","WIND",G_mapset())))) {
+            G_free (errs);
+            G_fatal_error ("Bad or no region for current mapset");
+        }
+#else
         G_get_window (&G__.window);
+#endif /* R_GRASS_INTERFACE */
     }
 
     return 0;

@@ -291,6 +291,7 @@ case OPEN_NEW_RANDOM: fprintf (stderr, "close %s random\n",FCB.name); break;
 /* write header file */
         G_put_cellhd (FCB.name, &FCB.cellhd);
 
+
 /* if map is floating point write the quant rules, otherwise remove f_quant */
         if(FCB.map_type != CELL_TYPE) {
 	/* DEFAULT RANGE QUANT

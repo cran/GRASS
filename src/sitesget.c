@@ -26,13 +26,18 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
    long fpos;
    int i, k, kk, prot=0;
    double val;
+   char *errs;
 
    char *pname="sitesget()";
    R_G_init(pname);
    
    if (!LOGICAL_POINTER(all)[0]) {
    
-      G_get_window(&cellhd);
+    /* G_get_window(&cellhd); calls G_fatal_error internally */
+      if((errs = (G__get_window (&cellhd,"","WIND",G_mapset())))) {
+        G_free (errs);
+        G_fatal_error ("Bad or no region for current mapset");
+      }
 
       if (NUMERIC_POINTER(VECTOR_ELT(G, 3))[0] != cellhd.north)
          G_fatal_error("Current GRASS region changed: north");

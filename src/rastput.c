@@ -28,6 +28,7 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
    struct Quant *q=NULL;
    RASTER_MAP_TYPE data_type=CELL_TYPE;
    DCELL x, b1, b2;
+   char *errs;
 
    char *name="rastput()";
    R_G_init(name);
@@ -43,7 +44,11 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
     }
     else error("Invalid data type");
    
-    G_get_window(&cellhd); /* calls G_fatal_error internally */
+    /* G_get_window(&cellhd); calls G_fatal_error internally */
+    if((errs = (G__get_window (&cellhd,"","WIND",G_mapset())))) {
+        G_free (errs);
+        G_fatal_error ("Bad or no region for current mapset");
+    }
 
 
     if (NUMERIC_POINTER(VECTOR_ELT(G, 3))[0] != cellhd.north)

@@ -44,6 +44,7 @@ SEXP sitesput(SEXP outlist) {
    struct Cell_head cellhd;
    char *mapset;
    SEXP ans;
+   char *errs;
 
    char *name="sitesput()";
    R_G_init(name);
@@ -56,7 +57,11 @@ SEXP sitesput(SEXP outlist) {
 
    if (!LOGICAL_POINTER(VECTOR_ELT(outlist, 3))[0]) {
 
-      G_get_window(&cellhd); /* calls G_fatal_error internally */
+    /* G_get_window(&cellhd); calls G_fatal_error internally */
+      if((errs = (G__get_window (&cellhd,"","WIND",G_mapset())))) {
+        G_free (errs);
+        G_fatal_error ("Bad or no region for current mapset");
+      }
 
 
       if (NUMERIC_POINTER(VECTOR_ELT(VECTOR_ELT(outlist, 0), 3))[0] 
