@@ -8,13 +8,14 @@
  \code{sites.get} moves one GRASS 5.0 sites file to a data frame, returning the filled object.
 }
 \usage{
-sites.get(G, slist="", all.sites=FALSE, debug=FALSE, interp=FALSE)
+sites.get(G, slist="", all.sites=FALSE, collapse.labels=TRUE, debug=FALSE, interp=FALSE)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
  \item{G}{GRASS metadata from \code{gmeta()}}
  \item{slist}{GRASS sites file name}
  \item{all.sites}{if FALSE, retreive only sites in current GRASS region, if TRUE, retreive all sites}
+ \item{collapse.labels}{If the sites file is old-style or malformed (d.sites.pg map=), collapse label strings to single string per point}
  \item{debug}{if TRUE, the temporary ASCII file used for transfer in interpreted mode is not deleted on exit from the function}
  \item{interp}{if TRUE, the interpreted version of the function is used instead of the loaded compiled version}
 }

@@ -3,8 +3,8 @@
 # sites.get moves one GRASS 5.0 sites file to a data frame, returning
 # the filled object. 
 #
-sites.get <- function(G, slist = "", all.sites=FALSE, debug=FALSE,
-	interp=FALSE) {
+sites.get <- function(G, slist = "", all.sites=FALSE, collapse.labels=TRUE, 
+	debug=FALSE, interp=FALSE) {
 	if (class(G) != "grassmeta") stop("No GRASS metadata object")
 	if (! is.character(slist))
 		stop("character GRASS data base file name required")
@@ -28,6 +28,7 @@ sites.get <- function(G, slist = "", all.sites=FALSE, debug=FALSE,
 		if (!debug) unlink(FILE)
 	} else {
 		res <- .Call("sitesget", G, slist, all.sites, PACKAGE="GRASS")
+		nncols <- attr(res, "nncols")
 		if (length(res) == 1) {
 			data <- as.data.frame(res)
 			names(data) <- c("east", "north")
@@ -40,15 +41,25 @@ sites.get <- function(G, slist = "", all.sites=FALSE, debug=FALSE,
 			}
 			data <- cbind(data, as.data.frame(res[[2]]))
 			nlist <- c(nlist, "id")
-			if (attr(res, "nncols")[3] > 0) {
+			if (nncols[3] > 0) {
 				data <- cbind(data, as.data.frame(res[[3]]))
 				for (i in 1:length(res[[3]])) nlist <- c(nlist, 
 					paste("num", i, sep=""))
 			}
-			if (attr(res, "nncols")[4] > 0) {
-				data <- cbind(data, as.data.frame(res[[4]]))
-				for (i in 1:length(res[[4]])) nlist <- c(nlist, 
-					paste("str", i, sep=""))
+			if (nncols[4] > 0) {
+# changes 2003/3/28 to accept old-style labels
+				if (nncols[2] < 0 &&
+				    collapse.labels) {
+				    oldatt <- res[[4]][[1]]
+				    for (i in 2:length(res[[4]]))
+					oldatt <- paste(oldatt, res[[4]][[i]])
+				    data <- cbind(data, as.data.frame(oldatt))
+				    nlist <- c(nlist, paste("str1", sep=""))
+				} else {
+				    data <- cbind(data, as.data.frame(res[[4]]))
+				    for (i in 1:length(res[[4]])) nlist <- 
+					c(nlist, paste("str", i, sep=""))
+				}
 			}
 			if (!is.null(attr(res, "labels"))) {
 				labs <- unlist(strsplit(attr(res, 
@@ -63,5 +74,6 @@ sites.get <- function(G, slist = "", all.sites=FALSE, debug=FALSE,
 			}
 		}
 	}
+	attr(data, "nncols") <- nncols
 	invisible(data)
 }

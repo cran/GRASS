@@ -1,5 +1,9 @@
 /* Copyright 2003 by Roger S. Bivand. 
 *
+* Changes 27 March 2003 - moved k++ inside loop (bug)
+*                       - permitted attributes for old-style
+*                       sites lists with kk used to create integer
+*                       id values (checks on cattype)
 **/
 
 #include <string.h>
@@ -20,7 +24,7 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
    RASTER_MAP_TYPE cattype=-1;
    char msg[255];
    long fpos;
-   int i, k, prot=0;
+   int i, k, kk, prot=0;
    double val;
 
    char *pname="sitesget()";
@@ -57,17 +61,17 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
 
    if (G_site_describe (fd, &dims, &cattype, &str_att, &dbl_att)!=0)
       G_fatal_error("failed to guess format");
-   if (cattype < 0) {
-      G_warning("Old style sites file, no attributes returned");
-      PROTECT(ans = NEW_LIST(1));
+   if (cattype < 0) /*{*/
+      G_warning("Old style sites file");
+/*      PROTECT(ans = NEW_LIST(1));
       SET_VECTOR_ELT(ans, 0, NEW_LIST(dims));
-   } else {
+   } else { */
       PROTECT(ans = NEW_LIST(4));
       SET_VECTOR_ELT(ans, 0, NEW_LIST(dims));
       SET_VECTOR_ELT(ans, 1, NEW_LIST(1));
       SET_VECTOR_ELT(ans, 2, NEW_LIST(dbl_att));
       SET_VECTOR_ELT(ans, 3, NEW_LIST(str_att));
-   }
+/*   }*/
    prot++;
 
    PROTECT(nncols = NEW_INTEGER(4));
@@ -131,8 +135,8 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
    for (i=0; i < dims; i++) {
       SET_VECTOR_ELT(VECTOR_ELT(ans, 0), i, NEW_NUMERIC(counter));
    }
-   if (cattype >= 0) {
-      if (cattype == 0) {
+   /*if (cattype >= 0) {*/
+      if (cattype <= 0) {
          SET_VECTOR_ELT(VECTOR_ELT(ans, 1), 0, NEW_INTEGER(counter));
       } else {
          SET_VECTOR_ELT(VECTOR_ELT(ans, 1), 0, NEW_NUMERIC(counter));
@@ -143,14 +147,16 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
       for (i=0; i < str_att; i++) {
          SET_VECTOR_ELT(VECTOR_ELT(ans, 3), i, NEW_CHARACTER(counter));
       }
-   }
+   /*}*/
    
    if (fseek(fd, fpos, SEEK_SET) != 0)
       G_fatal_error("File rewind failed");
    
    k=0;
+   kk=1;
    while (G_site_get (fd, site) == 0) {
-      if ((LOGICAL_POINTER(all)[0]) || (G_site_in_region (site, &cellhd) == 1)) {
+      if ((LOGICAL_POINTER(all)[0]) || 
+		      (G_site_in_region (site, &cellhd) == 1)) {
 	    NUMERIC_POINTER(VECTOR_ELT(VECTOR_ELT(ans, 0), 0))[k] = site->east;
 	    NUMERIC_POINTER(VECTOR_ELT(VECTOR_ELT(ans, 0), 1))[k] = site->north;
 	    if (dims != site->dim_alloc+2) {
@@ -161,10 +167,13 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
 	       NUMERIC_POINTER(VECTOR_ELT(VECTOR_ELT(ans, 0), (i+2)))[k] = 
 	       site->dim[i];
 	    }
-	    if (cattype >= 0) {
+/*	    if (cattype >= 0) { */
 	       if (cattype == 0) {
 	          INTEGER_POINTER(VECTOR_ELT(VECTOR_ELT(ans, 1), 0))[k] = 
 	             site->ccat;
+	       }
+	       else if (cattype < 0) {
+		   INTEGER_POINTER(VECTOR_ELT(VECTOR_ELT(ans, 1), 0))[k] = kk;
 	       }
 	       else {
 	          if (cattype == 1) val = (double) site->fcat;
@@ -187,9 +196,10 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
 	          SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(ans, 3), i), k, 
 		         COPY_TO_USER_STRING(site->str_att[i]));
 	       }
-	     }
+	 /*  } */
+           k++;
       }
-      k++;
+      kk++;
    }
 
 
