@@ -44,8 +44,8 @@ krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
 
 
 \examples{
-if(length(ls(pat="Zn.o"))==0){example(utm.maas)}
-if(length(ls(pat="G"))==0){example(gmeta)}
+data(utm.maas)
+G <- gmeta()
 inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) &
  (utm.maas$north >= G$s & utm.maas$north <= G$n)
 if(all(!inregion))
@@ -61,13 +61,13 @@ text(maas.evg$bins, maas.evg$classic/2, labels=maas.evg$n, pos=1)
 abline(h=25000)
 abline(h=170000)
 maas.fit.exp <- fit.exponential(maas.evg, c0=24803.4, ce=158232,
- ae=361.604, plot.it=T, iterations=0)
+ ae=361.604, plot.it=TRUE, iterations=0)
 cat("Using parameters from B&McD, p. 142 without fitting.\n")
 res.G1 <- krige.G(maas.pts, "Zn", maas.fit.exp, G, maasmask)
 summary(res.G1$zhat)
 summary(res.G1$sehat)
 plot(G, res.G1$zhat, breaks=round(seq(120,1660,length=9)), col=grey(9:2/9))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
  legend=c(rev(legtext(round(seq(120,1660,length=9)))), "mask=NA"),
  fill=c(rev(grey(9:2/9)), "wheat"))

@@ -1,18 +1,5 @@
 # Copyright 2001 by Roger S. Bivand
 #
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-# krige.G is a wrapper function to show how R geostatistics libraries
-# may be integrated with GRASS raster layers
-#
 
 krige.G <- function(point.obj, at, var.mod.obj, G, mask=NULL) 
 {
@@ -69,20 +56,20 @@ prmat2.G <- function (obj, s)
         npt <- length(xp)
         .C("VR_krpred", z = double(npt), as.double(xp), as.double(yp), 
             as.double(obj$x), as.double(obj$y), as.integer(npt), 
-            as.integer(length(obj$x)), as.double(obj$yy))$z
+            as.integer(length(obj$x)), as.double(obj$yy), PACKAGE="spatial")$z
     }
     require(spatial)
     if (!inherits(obj, "trgls")) 
         stop("object not from kriging")
     .C("VR_frset", as.double(obj$rx[1]), as.double(obj$rx[2]), 
-        as.double(obj$ry[1]), as.double(obj$ry[2]))
+        as.double(obj$ry[1]), as.double(obj$ry[2]), PACKAGE="spatial")
     alph <- obj$alph
     if (length(alph) <= 1) {
         mm <- 1.5 * sqrt((obj$rx[2] - obj$rx[1])^2 + (obj$ry[2] - 
             obj$ry[1])^2)
         alph <- c(alph[1], obj$covmod(seq(0, mm, alph[1])))
     }
-    .C("VR_alset", as.double(alph), as.integer(length(alph)))
+    .C("VR_alset", as.double(alph), as.integer(length(alph)), PACKAGE="spatial")
     z <-  .trval(obj, s[,1], s[,2]) + predval(obj, s[,1], s[,2])
     invisible(z)
 }
@@ -95,20 +82,21 @@ semat2.G <- function (obj, s, se)
         .C("VR_prvar", z = double(npt), as.double(xp), as.double(yp), 
             as.integer(npt), as.double(obj$x), as.double(obj$y), 
             as.double(obj$l), as.double(obj$r), as.integer(length(obj$x)), 
-            as.integer(np), as.integer(npar), as.double(obj$l1f))$z
+            as.integer(np), as.integer(npar), as.double(obj$l1f), 
+	    PACKAGE="spatial")$z
     }
     require(spatial)
     if (!inherits(obj, "trgls")) 
         stop("object not from kriging")
     .C("VR_frset", as.double(obj$rx[1]), as.double(obj$rx[2]), 
-        as.double(obj$ry[1]), as.double(obj$ry[2]))
+        as.double(obj$ry[1]), as.double(obj$ry[2]), PACKAGE="spatial")
     alph <- obj$alph
     if (length(alph) <= 1) {
         mm <- 1.5 * sqrt((obj$rx[2] - obj$rx[1])^2 + (obj$ry[2] - 
             obj$ry[1])^2)
         alph <- c(alph[1], obj$covmod(seq(0, mm, alph[1])))
     }
-    .C("VR_alset", as.double(alph), as.integer(length(alph)))
+    .C("VR_alset", as.double(alph), as.integer(length(alph)), PACKAGE="spatial")
     np <- obj$np
     npar <- ((np + 1) * (np + 2))/2
     if (missing(se)) 

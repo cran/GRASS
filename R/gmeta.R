@@ -1,16 +1,4 @@
-# Copyright 1999-2001 by Roger S. Bivand
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#
+# Copyright 1999-2002 by Roger S. Bivand
 #
 # gmeta is a function that returns GRASS LOCATION metadata in a grassmeta object.
 #
@@ -25,11 +13,10 @@
 
 gmeta <- function(interp=FALSE) {
     if (system("which g.gisenv 2> /dev/null 1> /dev/null") != 0) {
-	help(pcbs)
 	stop("No GRASS environment detected - start GRASS before entering R")
     }
-    if(is.loaded("gmeta") && (interp == FALSE)) {
-	G <- .Call("gmeta")
+    if(is.loaded("gmeta", PACKAGE="grassR") && (interp == FALSE)) {
+	G <- .Call("gmeta", PACKAGE="grassR")
     } else {
 	G <- vector(mode="list")
 	G$LOCATION <- system("g.gisenv LOCATION_NAME", intern=TRUE)
@@ -51,11 +38,6 @@ gmeta <- function(interp=FALSE) {
 	G$xseq <- seq(from=G$w + (G$ewres/2), to=G$e - (G$ewres/2), by=G$ewres)
 	G$yseq <- seq(from=G$s + (G$nsres/2), to=G$n - (G$nsres/2), by=G$nsres)
 	G$ryseq <- rev(G$yseq)
-#	G$xy <- list(east=c(matrix(G$xseq, length(G$xseq), length(G$ryseq))),
-#    		north=c(matrix(G$ryseq, length(G$xseq), length(G$ryseq),
-#		 byrow=T)))
-#	G$obsno <- 1:length(G$xy$east)
-#	G$reverse <- order(G$xy$north, G$xy$east)
 	class(G) <- "grassmeta"
     }
     invisible(G)

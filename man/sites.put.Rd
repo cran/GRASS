@@ -30,7 +30,10 @@ sites.put(G, lname="", east, north, var, debug=FALSE)
 \seealso{\code{\link{sites.get}}}
 
 \examples{
-if(length(ls(pat="Zn.o"))==0){example(utm.maas)}
+data(utm.maas)
+Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
+"medium", "high", "crisis"), breaks=c(100, 200, 400, 700, 1000, 2000), 
+include.lowest=TRUE))
 G <- gmeta()
 nameQ <- c("ex.Zn.in", "ex.Znlog.in", "ex.Zncat.in")
 namesG <- list.GRASS("sites")

@@ -28,8 +28,8 @@ trmat.G(G, obj, east=NULL, north=NULL)
 \seealso{\code{\link{trmat}}}
 
 \examples{
-if(length(ls(pat="Zn.o"))==0){example(utm.maas)}
-if(length(ls(pat="G"))==0){example(gmeta)}
+data(utm.maas)
+G <- gmeta()
 if(G$Ncells != length(maasmask))
     stop("example not running in Maas GRASS location")
 require(spatial)
@@ -43,28 +43,28 @@ summary(s4)
 anova(s2,s3,s4)
 plot(G, trmat.G(G, s3)*maasmask, breaks=c(-10000, seq(-100, 1500, 200),
   10000), col=c("yellow", grey(8:1/8), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
-plot(s3, add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
+plot(s3, add=TRUE)
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
   legend=c("> 1500", rev(legtext(seq(-100,1500,200))), "< -100", "mask=NA"),
   fill=c("red", rev(grey(8:1/8)), "yellow", "wheat"))
 oldpar <- par(mfrow=c(2,2))
 plot(G, trmat.G(G, s1)*maasmask, breaks=c(-10000, seq(-100, 1500, 200),
   10000), col=c("yellow", grey(8:1/8), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
-plot(s1, add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
+plot(s1, add=TRUE)
 plot(G, trmat.G(G, s2)*maasmask, breaks=c(-10000, seq(-100, 1500, 200),
   10000), col=c("yellow", grey(8:1/8), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
-plot(s2, add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
+plot(s2, add=TRUE)
 plot(G, trmat.G(G, s3)*maasmask, breaks=c(-10000, seq(-100, 1500, 200),
   10000), col=c("yellow", grey(8:1/8), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
-plot(s3, add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
+plot(s3, add=TRUE)
 plot(G, trmat.G(G, s4)*maasmask, breaks=c(-10000, seq(-100, 1500, 200),
   10000), col=c("yellow", grey(8:1/8), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
-plot(s4, add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
+plot(s4, add=TRUE)
 par(oldpar)
 }
 \keyword{spatial}

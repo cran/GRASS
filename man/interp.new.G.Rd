@@ -34,13 +34,16 @@ interp.new.G(G, x, y, z, extrap=FALSE, duplicate="error", dupfun=NULL,
 \seealso{\code{\link{interp.new}}}
 
 \examples{
-if(length(ls(pat="Zn.o"))==0){example(utm.maas)}
-if(length(ls(pat="G"))==0){example(gmeta)}
-data <- cbind(utm.maas$elev, utm.maas$d.river, log(utm.maas$d.river),
+data(utm.maas)
+Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
+"medium", "high", "crisis"), breaks=c(100, 200, 400, 700, 1000, 2000), 
+include.lowest=TRUE))
+G <- gmeta()
+pdata <- cbind(utm.maas$elev, utm.maas$d.river, log(utm.maas$d.river),
     utm.maas$Zn, log(utm.maas$Zn))
-colnames(data) <- c("Elevation", "Distance", "Ln(Distance)", "Zinc",
+colnames(pdata) <- c("Elevation", "Distance", "Ln(Distance)", "Zinc",
     "Ln(Zinc)")
-pairs(data)
+pairs(pdata)
 mod1 <- lm(log(Zn) ~ elev + log(d.river), data=utm.maas)
 summary(mod1)
 anova(mod1)
@@ -54,7 +57,7 @@ elev.grid <- interp.new.G(G, utm.maas$east, utm.maas$north, utm.maas$elev,
     extrap=TRUE)
 plot(G, elev.grid*maasmask, breaks=c(-10, seq(5.4, 10.6, 0.52), 100),
   col=c("yellow", grey(11:2/11), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
 title("Bicubic spline interpolation: local elevation")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
    legend=c("> 10.6", rev(legtext(seq(5.4, 10.6, 0.52))), "< 5.4", "mask=NA"),
@@ -65,7 +68,7 @@ if(any(match(nameR, namesG, nomatch=0) > 0)){
 	for (i in 1:length(nameR)) if(match(nameR[i], namesG, nomatch=0) > 0)
 		system(paste("g.remove rast=", nameR[i], sep=""))
 }
-rast.put(G, "ex.mask", as.factor(maasmask), cat=T)
+rast.put(G, "ex.mask", as.factor(maasmask), cat=TRUE)
 system("r.mapcalc 'invmask = isnull(ex.mask)'")
 system("r.grow input=invmask output=growmask")
 system("r.mapcalc 'bank0 = growmask - invmask'")
@@ -82,21 +85,21 @@ summary(v.pr)
 summary(exp(v.pr))
 plot(G, exp(v.pr), breaks=c(-200, round(seq(142, 1154, length=9)), 5000),
   col=c("yellow", grey(9:2/9), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
 title("Regression predictions of Zn levels, (B&McD p. 113)")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
    legend=c("> 1154", rev(legtext(round(seq(142, 1154, length=9)))), "< 142",
    "mask=NA"), fill=c("red", rev(grey(9:2/9)), "yellow", "wheat"))
 v.pr[as.integer(names(pr.mod1$se.fit))] <- pr.mod1$se.fit
 plot(G, exp(v.pr), col=grey(16:2/16))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
 points(utm.maas$east, utm.maas$north, pch=18)
 title("Standard error of predictions")
 Zn.grid <- interp.new.G(G, utm.maas$east, utm.maas$north, utm.maas$Zn,
     extrap=TRUE)
 plot(G, Zn.grid*maasmask, breaks=c(-500, round(seq(15,1994,length=9)), 3000),
   col=c("yellow", grey(9:2/9), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
 title(xlab="B&McD p. 118", main="Bicubic spline interpolation: Zn ppm")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
    legend=c("> 1994", rev(legtext(round(seq(15,1994,length=9)))), "< 15",
@@ -114,7 +117,7 @@ system("s.surf.idw input=ex.Zn.in output=Zn.idw npoints=98")
 idw <- rast.get(G, "Zn.idw")
 plot(G, idw$Zn.idw*maasmask, breaks=c(-100, round(seq(15,1994,length=9)), 3000),
   col=c("yellow", grey(9:2/9), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=T)
+plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
 title(xlab="B&McD p. 118",
   main="Inverse squared distance interpolation: Zn ppm")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",

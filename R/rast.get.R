@@ -1,17 +1,5 @@
 # Copyright 1999-2001 by Roger S. Bivand
 #
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-
-#
 #
 # rast.get moves one or more GRASS 5.0 raster files to a list, returning
 # the filled object. Setting catlabels to TRUE imports category labels 
@@ -29,8 +17,9 @@ rast.get <- function(G, rlist, catlabels=NULL, debug=FALSE, interp=FALSE)
 	    stop("catlabels should be same length as rlist")
     } else catlabels <- rep(FALSE, length(rlist))
     
-    if(is.loaded("rastget") && (interp == FALSE)) {
-	data <- .Call("rastget", G=G, layers=rlist, flayers=catlabels)
+    if(is.loaded("rastget", PACKAGE="grassR") && (interp == FALSE)) {
+	data <- .Call("rastget", G=G, layers=rlist, flayers=catlabels,
+		PACKAGE="grassR")
     } else {
 	G.list <- list.GRASS(type="rast")
 	res <- rlist %in% G.list
@@ -72,5 +61,7 @@ rast.get <- function(G, rlist, catlabels=NULL, debug=FALSE, interp=FALSE)
 	}
 	names(data) <- ndata
     }
+    ndata <- names(data)
+    names(data) <- make.names(names=ndata, unique=TRUE)
     invisible(data)
 }

@@ -28,7 +28,7 @@ sites.get(G, slist="", all.sites=FALSE, debug=FALSE)
 \seealso{\code{\link{sites.put}}}
 
 \examples{
-if(length(ls(pat="G"))==0){example(gmeta)}
+G <- gmeta()
 if(length(ls(pat="nameQ"))==0){example(sites.put)}
 ex.Zn.log <- sites.get(G, slist="ex.Znlog.in")
 mean(ex.Zn.log$var2 - log(utm.maas$Zn))

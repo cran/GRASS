@@ -32,8 +32,8 @@ kde2d.G(G, x, y, h, reverse=NULL, Z=NULL)
 \seealso{\code{\link{kde2d}}}
 
 \examples{
-if(length(ls(pat="Zn.o"))==0){example(utm.maas)}
-if(length(ls(pat="G"))==0){example(gmeta)}
+data(utm.maas)
+G <- gmeta()
 inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) &
   (utm.maas$north >= G$s & utm.maas$north <= G$n)
 if(all(!inregion)) stop("None of the site locations are inside the current GRASS region")

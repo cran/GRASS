@@ -32,13 +32,17 @@ rast.get(G, rlist="", catlabels=NULL, debug=FALSE, interp=FALSE)
 \seealso{\code{\link{rast.put}}}
 
 \examples{
-if(length(ls(pat="Zn.o"))==0){example(utm.maas)}
-if(length(ls(pat="G"))==0){example(gmeta)}
+data(utm.maas)
+Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
+"medium", "high", "crisis"), breaks=c(100, 200, 400, 700, 1000, 2000), 
+include.lowest=TRUE))
+G <- gmeta()
 if(length(ls(pat="nameQ"))==0){example(sites.put)}
 if(length(ls(pat="nameR"))==0){example(rast.put)}
 system("s.surf.rst input=ex.Zn.in elev=ex.Zn.rst tension=100 smooth=0.0 segmax=700")
 exget <- rast.get(G, rlist=c("ex.Zn.grid.in", "ex.tr3.in",
-  "ex.Zn.grid.o.in", "ex.Zn.rst"), catlabels=as.logical(c(F,F,T,F)))
+  "ex.Zn.grid.o.in", "ex.Zn.rst"), catlabels=as.logical(c(FALSE, FALSE, 
+  TRUE, FALSE)))
 oldpar <- par(mfrow=c(2,2))
 plot(G, exget$ex.Zn.grid.in)
 points(utm.maas$east, utm.maas$north, pch=18)
