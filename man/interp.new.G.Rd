@@ -66,7 +66,7 @@ legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
 require(modreg)
 ldist <- loess(d.river ~ east * north, data=utm.maas, span=0.2,
  control = loess.control(surface = "direct"))
-bank <- predict.loess(ldist, newdata=data.frame(east=east(maas.metadata),
+bank <- predict(ldist, newdata=data.frame(east=east(maas.metadata),
  north=north(maas.metadata)))
 b1 <- bank*maasmask
 b1[b1 < 5] <- 5
