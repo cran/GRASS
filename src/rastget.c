@@ -21,13 +21,14 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    SEXP ansnames;
    SEXP anslevels;
    SEXP class;
+   SEXP mname;
    int nlayers = GET_LENGTH(layers);
    int i, j;
    int *fd;
    int ncells, icell;
    int row, col;
-   char *mapset, *mname;
-   char msg[255], tmp[255];
+   char *mapset;
+   char msg[255], tmp[255], mname1[255];
    void **rast, **rastp;
    void *rast1, *rast2;
    struct Cell_head cellhd;
@@ -61,13 +62,12 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    if (INTEGER_POINTER(VECTOR_ELT(G, 10))[0] != cellhd.cols)
       error("Current GRASS region changed: cols");
 
-   mname = Calloc(1, char);
+   PROTECT(mname = NEW_CHARACTER(1));
+
    for (i = 0; i < nlayers; i++) {
-	mname = Realloc(mname, strlen(CHAR(STRING_ELT(layers, i))), char);
-	mname = strcpy(mname, CHAR(STRING_ELT(layers, i)));
-	mapset = G_find_cell(mname, "");
+      SET_VECTOR_ELT(mname, 0, VECTOR_ELT(layers, i));
+      mapset = G_find_cell2(CHAR(STRING_ELT(mname, 0)), "");
       if(( mapset ) == NULL) { 
-         Free(mname);  
 	 sprintf(msg, "raster map: %s not found", CHAR(STRING_ELT(layers, i)));
          error(msg);
       }
@@ -87,41 +87,37 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
 
    for (i = 0; i < nlayers; i++) {
 
-      mname = Realloc(mname, strlen(CHAR(STRING_ELT(layers, i))), char);
-      mname = strcpy(mname, CHAR(STRING_ELT(layers, i)));
-      mapset = G_find_cell(mname, "");
+      SET_STRING_ELT(mname, 0, 
+         COPY_TO_USER_STRING(CHAR(STRING_ELT(layers, i))));
+      mapset = G_find_cell(CHAR(STRING_ELT(mname, 0)), "");
 	
-      map_type[i] = G_raster_map_type(mname, mapset);
+      map_type[i] = G_raster_map_type(CHAR(STRING_ELT(mname, 0)), mapset);
       if (map_type[i] < 0) {
          for (j=0; j==i; j++) G_close_cell(fd[j]);
          sprintf(msg, "layer %s of unknown type",
            CHAR(STRING_ELT(layers, i)));
-         Free(mname);  
 	 G_fatal_error(msg);
       }
       
         if (LOGICAL_POINTER(flayers)[i]) {
-         if (G_read_raster_cats(mname, 
+           if (G_read_raster_cats(CHAR(STRING_ELT(mname, 0)),
 		mapset, &labels[i]) < 0) {
             for (j=0; j==i; j++) G_close_cell(fd[j]);
 	    sprintf(msg, "category support for layer %s missing or invalid",
 	       CHAR(STRING_ELT(layers, i)));
-	    Free(mname);  
 	    G_fatal_error(msg);
 	 }
 	 else ncats[i] = G_number_of_raster_cats(&labels[i]);
       }
 
-      fd[i] = G_open_cell_old(mname, mapset);
+      fd[i] = G_open_cell_old(CHAR(STRING_ELT(mname, 0)), mapset);
       if (fd[i] < 0) {
             for (j=0; j<i; j++) G_close_cell(fd[j]);
-            Free(mname);  
 	    sprintf(msg, "unable to open %s", 
 		CHAR(STRING_ELT(layers, i)));
             G_fatal_error(msg);
       }
    }
-   Free(mname);  
 
    
 
@@ -145,10 +141,18 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
 
       icell = 0;
 
+      SET_STRING_ELT(mname, 0, 
+         COPY_TO_USER_STRING(CHAR(STRING_ELT(layers, i))));
+      sprintf(tmp, "%s", CHAR(STRING_ELT(mname, 0)));
+      for (j=0; j<strlen(tmp); j++)
+         if (tmp[j] == '@') mname1[j] = '_';
+         else mname1[j] = tmp[j];
+      mname1[strlen(tmp)] = '\0';
+
       if(LOGICAL_POINTER(flayers)[i]) {
 	 SET_VECTOR_ELT(ans, i, NEW_INTEGER(ncells));
 	 SET_VECTOR_ELT(anslevels, i, NEW_CHARACTER(ncats[i]));
-	 sprintf(tmp, "%s.f", CHAR(STRING_ELT(layers, i)));
+	 sprintf(tmp, "%s.f", mname1);
 	 SET_VECTOR_ELT(ansnames, i, COPY_TO_USER_STRING(tmp));
 	 for (j=0; j<ncats[i]; j++) {
 	   SET_VECTOR_ELT(VECTOR_ELT(anslevels, i), j, 
@@ -158,7 +162,7 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
       }
       else {
 	 SET_VECTOR_ELT(ans, i, NEW_NUMERIC(ncells));
-	 SET_VECTOR_ELT(ansnames, i, VECTOR_ELT(layers, i));
+	 SET_VECTOR_ELT(ansnames, i, COPY_TO_USER_STRING(mname1));
       }
 
       for (row = 0; row < GR_nrows; row++) {
@@ -207,7 +211,7 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
          G_free_raster_cats(&labels[i]);
    setAttrib(ans, R_NamesSymbol, ansnames);
    
-   UNPROTECT(4);
+   UNPROTECT(5);
    return (ans); 
 }
 

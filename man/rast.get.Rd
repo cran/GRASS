@@ -25,7 +25,7 @@ rast.get(G, rlist="", catlabels=NULL, drop.unused.levels=FALSE,
  \item{interp}{if TRUE, the interpreted version of the function is used instead of the loaded compiled version}
 }
 \value{
-  A list is returned with \code{length(rlist)} vectors and \code{G$Ncells} values in each vector; the columns are named using the names of the imported GRASS raster files. Those imported with category labels are ordered factors, and their names are suffixed with \code{.f}
+  A list is returned with \code{length(rlist)} vectors and \code{G$Ncells} values in each vector; the columns are named using the names of the imported GRASS raster files. If the names of the GRASS raster files are qualified by mapset, the name of the mapset will be appended after an underscore. Those imported with category labels are ordered factors, and their names are suffixed with \code{.f}
 }
 \references{\url{http://grass.itc.it/statsgrass/index.html}, Bivand, R. S., (2000) Using the R statistical data analysis language on GRASS 5.0 GIS data base files. Computers and Geosciences, 26, pp. 1043-1052.}
 \author{Roger S. Bivand, e-mail: \email{Roger.Bivand@nhh.no.}}
