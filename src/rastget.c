@@ -63,7 +63,7 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
 
    
    for (i = 0; i < nlayers; i++) {
-      if((mapset = G_find_cell(CHAR(STRING_ELT(layers, i)), "")) == NULL) {
+      if((mapset = G_find_cell(CHAR(STRING_ELT(layers, i)), "")) == NULL) { 
          sprintf(msg, "raster map: %s not found", CHAR(STRING_ELT(layers, i)));
          error(msg);
       }

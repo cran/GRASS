@@ -10,6 +10,7 @@
 
 int R_handler(char *message, int fatal);
 void R_G_init(char *name);
+int G__get_nmapset();
 
 #if defined R_GRASS_INTERFACE && defined __MINGW32_VERSION
 char *G_get_cygwinstring();

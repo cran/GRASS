@@ -40,7 +40,7 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
          G_fatal_error("Current GRASS region changed: east");
    }
 
-   mapset = G_find_file("site_lists", CHAR(STRING_ELT(sitefile, 0)), "");
+   mapset = G_find_file("site_lists", CHAR(STRING_ELT(sitefile, 0)), "");  
    if (mapset == NULL) {
       sprintf(msg, "sites file: %s not found", CHAR(STRING_ELT(sitefile, 0)));
       G_fatal_error(msg);

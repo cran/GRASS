@@ -243,4 +243,19 @@ SEXP R_G_make_maas(SEXP metadata) {
 }
 
 
+SEXP R_G_get_mapsets() {
+	SEXP ans;
+	int i, n;
+	n = G__get_nmapset();
+	PROTECT(ans=NEW_CHARACTER(n));
+	for (i=0; i<n; i++) {
+		SET_STRING_ELT(ans, i, COPY_TO_USER_STRING(G__mapset_name(i)));
+	}
+      	UNPROTECT(1);
+      	return(ans);
+}
 
+SEXP R_G_refresh_mapsets() {
+	G_reset_mapsets();
+	return(R_G_get_mapsets());
+}

@@ -65,8 +65,9 @@ static char *G__find_file (
     if (G_legal_filename (pname) == -1)
 	    return NULL;
 
-    if (pmapset && *pmapset && G_legal_filename (pmapset) == -1)
+    if (pmapset && *pmapset && G_legal_filename (pmapset) == -1) {
 	    return NULL;
+    }
 
 /*
 * if no specific mapset is to be searched
@@ -74,9 +75,12 @@ static char *G__find_file (
 */
     if (pmapset == NULL || *pmapset == 0)
     {
-	for (n = 0; (pmapset = G__mapset_name(n)); n++)
-	    if (access(G__file_name (path, element, pname, pmapset), 0) == 0)
+	for (n = 0; (pmapset = G__mapset_name(n)); n++) {
+	    if (access(G__file_name (path, element, pname, pmapset), 0) == 0) {
+
 		    return pmapset;
+	    }
+	}
     }
 /*
  * otherwise just look for the file in the specified mapset.
@@ -86,8 +90,9 @@ static char *G__find_file (
  */
     else
     {
-	if (access(G__file_name (path, element, pname, pmapset),0) == 0)
-		return G_store (pmapset);
+	if (access(G__file_name (path, element, pname, pmapset),0) == 0) {
+                return G_store (pmapset);
+	}
     }
     return NULL;
 }

@@ -32,7 +32,7 @@ char *G__mapset_name (int n)
  * first call will detect no mapsets in list
  * and go look up the list
  */
-    if (nmapset == 0)
+    	if (nmapset == 0)
 	get_list_of_mapsets();
 /*
  * must not run off the bounds of the list
@@ -127,3 +127,16 @@ int G_reset_mapsets()
 
     return 0;
 }
+
+#if defined R_GRASS_INTERFACE
+
+int G__get_nmapset()
+{
+    	if (nmapset == 0)
+	get_list_of_mapsets();
+
+	return(nmapset);
+}
+
+#endif /* R_GRASS_INTERFACE */
+

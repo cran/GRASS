@@ -2,6 +2,7 @@ GRASS.connect           Access to underlying environment variables
                         within GRASS
 contour.G               Equal scale contour plots for GRASS raster and
                         site data
+get.mapsets             Access GRASS readable mapsets search path
 gmeta                   Reads GRASS metadata from the current LOCATION
 interp.new.G            Interpolation from sites to raster, Akima's new
                         method
