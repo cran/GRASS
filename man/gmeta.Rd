@@ -24,11 +24,6 @@ make.maas.location()
 \arguments{
  \item{interp}{if interp is TRUE, the interface uses text transfer through \code{system()}}
  \item{G}{a grassmeta object returned by \code{gmeta}}
- \item{loc}{string: location name}
- \item{mapset}{string: mapset name}
- \item{gisdbase}{string: full path name to GISDBASE}
- \item{cygwin}{string: CygWin prefix for prepending to GISRC and GISDBASE
-values}
 }
 %- maybe also `usage' for other objects documented here.
 \details{

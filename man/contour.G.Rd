@@ -41,12 +41,12 @@ Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
 include.lowest=TRUE))
 G <- maas.metadata
 contour.G(G)
-points(utm.maas$east, utm.maas$north, pch=codes(Zn.o))
+points(utm.maas$east, utm.maas$north, pch=unclass(Zn.o))
 legend(x=c(269800, 270500), y=c(5652300, 5653000), pch=c(1:5),
 legend=levels(Zn.o))
 title("Note equal east and north scales")
 contour.G(G, kde2d.G(utm.maas$east, utm.maas$north, h=c(300,300), G=G, Z=utm.maas$Zn)*maasmask)
-points(utm.maas$east, utm.maas$north, pch=codes(Zn.o))
+points(utm.maas$east, utm.maas$north, pch=unclass(Zn.o))
 legend(x=c(269800, 270500), y=c(5652300, 5653000), pch=c(1:5),
 legend=levels(Zn.o))
 title("Kernel density representation of soil Zn")

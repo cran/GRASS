@@ -121,8 +121,8 @@ GRASS environment variables in: c:/cygwin/home/rsb/.grassrc5
 	point to level array elements, which begin at 1, not 0 as in C (and
 	thus in the GRASS Categories structure. Running table() on the
 	ordered factor imported with interp=[FT] in rast.get(), or on
-	the codes() of the imported ordered factors will show which pointers
-	were assigned. The mapping is still one-to-one, but the codes differ
+	the unclass() of the imported ordered factors will show which pointers
+	were assigned. The mapping is still one-to-one, but the values differ
 	from those in the original GRASS layer.
 
 	Further, the compiled interfaces, although protected by ad hoc checks, 

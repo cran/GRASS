@@ -2,7 +2,7 @@
 %
 \name{pcbs}
 \alias{pcbs}
-\non_function{}
+\docType{data}
 \title{PCBs in an area of South Wales}
 \usage{data(pcbs)}
 \description{
@@ -45,7 +45,7 @@ pcbs.o <- as.ordered(cut(pcbs$pcbs, labels=c("insignificant", "low",
 "medium", "high", "crisis"), breaks=c(1,20,100,500,1000,5000),
 include.lowest=TRUE))
 table(pcbs.o)
-plot(pcbs$east, pcbs$north, pch=codes(pcbs.o), xlab="", ylab="", asp=1)
+plot(pcbs$east, pcbs$north, pch=unclass(pcbs.o), xlab="", ylab="", asp=1)
 legend(x=c(67980, 68480), y=c(74710, 75180), pch=c(1:5), legend=levels(pcbs.o))
 
 }

@@ -9,6 +9,7 @@ interp.new.G            Interpolation from sites to raster, Akima's
 kde2d.G                 Two-Dimensional Kernel Density Estimation on a
                         GRASS Grid
 krige.G                 Kriging prediction for GRASS maps
+list.grass              List GRASS database elements
 pcbs                    PCBs in an area of South Wales
 plot.grassmeta          Equal scale plots for GRASS raster and site
                         data

@@ -44,7 +44,13 @@ SEXP gmeta() {
 		COPY_TO_USER_STRING(chbuf));
 	}
 
-	G_get_window(&cellhd);
+/*	G_get_window(&cellhd); */
+	char *errs;
+	if((errs = (G__get_window (&cellhd,"","WIND",G_mapset())))) {
+	    G_free (errs);
+	    G_fatal_error ("Bad or no region for current mapset");
+	}
+
 	NUMERIC_POINTER(VECTOR_ELT(ans, 3))[0] = cellhd.north;
 	NUMERIC_POINTER(VECTOR_ELT(ans, 4))[0] = cellhd.south;
 	NUMERIC_POINTER(VECTOR_ELT(ans, 5))[0] = cellhd.west;

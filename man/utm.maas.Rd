@@ -5,7 +5,7 @@
 \alias{utm.maas}
 \alias{maasmask}
 \alias{maas.metadata}
-\non_function{}
+\docType{data}
 \title{Soil pollution data set}
 \usage{data(utm.maas)}
 \description{
@@ -73,7 +73,7 @@ Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
 "medium", "high", "crisis"), breaks=c(100, 200, 400, 700, 1000, 2000), 
 include.lowest=TRUE))
 table(Zn.o)
-plot(utm.maas$east, utm.maas$north, pch=codes(Zn.o), xlab="", ylab="", asp=1)
+plot(utm.maas$east, utm.maas$north, pch=unclass(Zn.o), xlab="", ylab="", asp=1)
 legend(x=c(269900, 270500), y=c(5652000, 5652700), pch=c(1:5), 
 legend=levels(Zn.o))
 cat("Burrough & McDonnell p. 107\n")

@@ -27,8 +27,8 @@ rast.put <- function(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE,
 	    else if(length(levels(layer)) != length(col))
 		stop("number of colors must equal number of factor levels")
 	    color <- as.integer(col2rgb(col))
-	    layer.range <- range(na.omit(codes(layer)))
-	        x <- .Call("rastput", G=G, layer=as.integer(codes(layer)),
+	    layer.range <- range(na.omit(unclass(layer)))
+	        x <- .Call("rastput", G=G, layer=as.integer(unclass(layer)),
 		isfactor=TRUE, DCELL=FALSE, check=as.logical(check), 
 		levels=levels(layer), output=lname, title=title, breaks=NULL,
 		color=as.integer(color), nullcolor=as.integer(nullcolor),
@@ -60,26 +60,12 @@ rast.put <- function(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE,
 		PACKAGE="GRASS")
 	}
     } else {
-	list.GRASS <- function(type = "rast") {
-	breakup <- function(chars) {
-	tmp <- unlist(strsplit(chars, split="\t"))
-	tmp1 <- character(0)
-	for (i in 1:length(tmp)) tmp1 <- c(tmp1,
-		 unlist(strsplit(tmp[i], split=" ")))
-	tmp1[nchar(tmp1) > 0]
-	}
-	res <- system(paste("g.list ", type, sep=""), intern=TRUE)
-	G.list <- character(0)
-	for(i in 3:(length(res)-1)) 
-	    if (nchar(res[i]) > 0) G.list <- c(G.list, breakup(res[i]))
-	invisible(G.list)
-	}
 
-	G.list <- list.GRASS(type="rast")
-	res <- lname %in% G.list
+	G.list <- list.grass(type="cell")
+	res <- lname %in% G.list[[match(get.MAPSET(), get.mapsets())]]
 	if (any(res))
-		stop(paste(lname, ": GRASS raster file already exists", 
-			sep=""))
+		stop(paste(lname, ": GRASS raster file already exists ", 
+			"in mapset: ", get.MAPSET(), sep=""))
 	if (length(layer) != G$Ncells)
 		stop("GRASS object metadata do not match layer length")
 	FILE <- tempfile("RtoGR")
@@ -87,7 +73,7 @@ rast.put <- function(G, lname="", layer, title="", cat=FALSE, DCELL=FALSE,
 		G$e, "\nwest:    ", G$w, "\nrows:    ", G$Nrow, 
 		"\ncols:    ", G$Ncol, "\n", sep="")
 	cat(outstr, file=FILE)
-	if (cat) write(t(matrix(as.integer(codes(layer)), nrow=G$Nrow,
+	if (cat) write(t(matrix(as.integer(unclass(layer)), nrow=G$Nrow,
 		ncol=G$Ncol, byrow=TRUE)), file=FILE, append=TRUE,
 		ncolumns=G$Ncol)
 	else write(t(matrix(as.double(layer), nrow=G$Nrow, ncol=G$Ncol, 

@@ -56,12 +56,13 @@ if(any(!inregion))
 require(akima)
 elev.grid <- interp.new.G(G, utm.maas$east, utm.maas$north, utm.maas$elev,
     extrap=TRUE)
-plot(G, elev.grid*maasmask, breaks=c(-10, seq(5.4, 10.6, 0.52), 100),
+brks <- c(-Inf, seq(5.4, 10.6, 0.52), +Inf)
+plot(G, elev.grid*maasmask, breaks=brks,
   col=c("yellow", grey(11:2/11), "red"))
 plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
 title("Bicubic spline interpolation: local elevation")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
-   legend=c("> 10.6", rev(legtext(seq(5.4, 10.6, 0.52))), "< 5.4", "mask=NA"),
+   legend=c(rev(leglabs(brks)), "mask=NA"),
    fill=c("red", rev(grey(11:2/11)), "yellow", "wheat"))
 require(modreg)
 ldist <- loess(d.river ~ east * north, data=utm.maas, span=0.2,
@@ -70,13 +71,14 @@ bank <- predict(ldist, newdata=data.frame(east=east(maas.metadata),
  north=north(maas.metadata)))
 b1 <- bank*maasmask
 b1[b1 < 5] <- 5
-plot(maas.metadata, b1, breaks=c(-10000, seq(0, 1600, 200),
-  10000), col=c("yellow", grey(9:2/9), "red"))
+brks <- c(seq(0, 1000, 200), +Inf)
+cols <- grey(6:2/6)
+plot(maas.metadata, b1, breaks=brks, col=c(cols, "red"))
 plot(maas.metadata, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
 title("Loess predictions of distance from river bank")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
-   legend=c("> 1600", rev(legtext(seq(0, 1600, 200))),
-   "mask=NA"), fill=c("red", rev(grey(9:2/9)), "wheat"))
+   legend=c(rev(leglabs(brks)), "mask=NA"),
+ fill=c("red", rev(cols), "wheat"))
 new <- data.frame(elev=elev.grid*maasmask, d.river=b1)
 pr.mod1 <- predict(mod1, new, se.fit=TRUE)
 rm(new, elev.grid, bank)

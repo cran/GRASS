@@ -3,15 +3,19 @@
 \name{plot.grassmeta}
 \alias{plot.grassmeta}
 \alias{legtext}
+\alias{leglabs}
+\alias{findInterval2}
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Equal scale plots for GRASS raster and site data}
 \description{
-plot.grassmeta provides a simple interface between grass data objects and the \code{image()} function; category layers may be plotted by taking \code{codes()} of the layer, and setting zlim to non-default values. If layer is not set, a blank base map is plotted, for instance for use with \code{points()}.
+plot.grassmeta provides a simple interface between grass data objects and the \code{image()} function; category layers may be plotted by taking \code{unclass()} of the layer, and setting zlim to non-default values. If layer is not set, a blank base map is plotted, for instance for use with \code{points()}.
 }
 \usage{
-plot.grassmeta(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
+plot.grassmeta(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE,
+ breaks=NULL, ...)
 legtext(break.levels)
-}
+leglabs(x1, under="under", over="over", between="-")
+findInterval2(x2, vec, rightmost.closed = FALSE, all.inside = TRUE)}
 
 %- maybe also `usage' for other objects documented here.
 \arguments{
@@ -23,6 +27,15 @@ legtext(break.levels)
  \item{add}{FALSE for new plot, TRUE to overlay layer on prior plot}
  \item{\dots}{parameters passed through to \code{image()}}
  \item{break.levels}{vector of image break levels}
+ \item{breaks}{vector of image break levels}
+ \item{x1}{in leglabs(), a vector of breaks}
+ \item{under}{character value to denote under}
+ \item{over}{character value to denote over}
+ \item{between}{character value to denote between}
+ \item{x2}{see findInterval()}
+ \item{vec}{in findInterval2(), a vector of breaks}
+ \item{rightmost.closed}{see findInterval()}
+ \item{all.inside}{see findInterval()}
 }
 \details{
  The function uses \code{asp=1} from the \code{plot.window()} function to
@@ -48,7 +61,7 @@ Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
 include.lowest=TRUE))
 G <- maas.metadata
 plot(G)
-points(utm.maas$east, utm.maas$north, pch=codes(Zn.o))
+points(utm.maas$east, utm.maas$north, pch=unclass(Zn.o))
 legend(x=c(269800, 270500), y=c(5652300, 5653000), pch=c(1:5),
 legend=levels(Zn.o))
 title("Note equal east and north scales")

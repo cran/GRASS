@@ -1,4 +1,4 @@
-# Copyright 1999-2001 by Roger S. Bivand
+# Copyright 1999-2003 by Roger S. Bivand
 #
 #
 # rast.get moves one or more GRASS 5.0 raster files to a list, returning
@@ -21,22 +21,8 @@ rast.get <- function(G, rlist, catlabels=NULL, debug=FALSE, interp=FALSE)
 	data <- .Call("rastget", G=G, layers=rlist, flayers=catlabels,
 		PACKAGE="GRASS")
     } else {
-	list.GRASS <- function(type = "rast") {
-	breakup <- function(chars) {
-	tmp <- unlist(strsplit(chars, split="\t"))
-	tmp1 <- character(0)
-	for (i in 1:length(tmp)) tmp1 <- c(tmp1,
-		 unlist(strsplit(tmp[i], split=" ")))
-	tmp1[nchar(tmp1) > 0]
-	}
-	res <- system(paste("g.list ", type, sep=""), intern=TRUE)
-	G.list <- character(0)
-	for(i in 3:(length(res)-1)) 
-	    if (nchar(res[i]) > 0) G.list <- c(G.list, breakup(res[i]))
-	invisible(G.list)
-	}
 
-	G.list <- list.GRASS(type="rast")
+	G.list <- unlist(list.grass(type="cell"))
 	res <- rlist %in% G.list
 	if (! all(res)) {
 		warning("The following GRASS data base files were not found:")
