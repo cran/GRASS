@@ -1,9 +1,13 @@
-% Copyright 1999-2003 by Roger S. Bivand
+% Copyright 1999-2004 by Roger S. Bivand
 %
 \name{gmeta}
 \alias{gmeta}
 \alias{east}
 \alias{north}
+\alias{east.default}
+\alias{north.default}
+\alias{east.grassmeta}
+\alias{north.grassmeta}
 \alias{obsno}
 \alias{reverse}
 \alias{make.maas.location}
@@ -14,8 +18,12 @@ GRASS LOCATION metadata are read into a list in R, and processed to provide othe
 }
 \usage{
 gmeta(interp=FALSE)
-east(G)
-north(G)
+east(object)
+north(object)
+east.default(object)
+north.default(object)
+east.grassmeta(object)
+north.grassmeta(object)
 obsno(G)
 reverse(G)
 make.maas.location()
@@ -24,10 +32,11 @@ make.maas.location()
 \arguments{
  \item{interp}{if interp is TRUE, the interface uses text transfer through \code{system()}}
  \item{G}{a grassmeta object returned by \code{gmeta}}
+ \item{object}{a grassmeta object returned by \code{gmeta}}
 }
 %- maybe also `usage' for other objects documented here.
 \details{
-The function retrieves metadata from the GRASS LOCATION from which R was started, and stores it in a list. The metadata is taken from the current, active region, and the implied resolution for raster layers. Next, this is used to create a number of auxilliary objects used by other interface routines. Other auxilliary objects may be constructed using the access functions \code{east}, \code{north}, \code{obsno}, and \code{reverse}. The function returns a list with class \code{grassmeta}:
+The function retrieves metadata from the GRASS LOCATION from which R was started, and stores it in a list. The metadata is taken from the current, active region, and the implied resolution for raster layers. Next, this is used to create a number of auxilliary objects used by other interface routines. Other auxilliary objects may be constructed using the access functions \code{east.grassmeta}, \code{north.grassmeta}, \code{obsno}, and \code{reverse}. The function returns a list with class \code{grassmeta}:
 }
 \value{
   \item{LOCATION}{GRASS LOCATION name}

@@ -36,7 +36,8 @@ krige.G <- function(point.obj, at, var.mod.obj, G, mask=NULL)
     if (!is.null(mask)) {
         if (length(mask) != G$Ncells)
             stop ("mask length does not equal grid size")
-        s <- cbind(east(G)[!is.na(mask)], north(G)[!is.na(mask)])
+        s <- cbind(east(G)[!is.na(mask)], 
+	    north(G)[!is.na(mask)])
     }
     else s <- cbind(east(G), north(G))
     zhat <- prmat2.G(kr.model, s)

@@ -28,9 +28,16 @@ plot.grassmeta <- function(x, layer=NULL, xlab="", ylab="",
 		breaks[length(breaks)] <- .Machine$double.xmax
 	}
         if (is.null(reverse)) reverse <- reverse(G)
+	if (is.null(breaks)) {
 	    image(x=G$xseq, y=G$yseq, z=t(matrix(layer[reverse],
-            nrow=G$Nrow, ncol=G$Ncol, byrow=TRUE)), add=TRUE, ...)
+            	nrow=G$Nrow, ncol=G$Ncol, byrow=TRUE)), add=TRUE, 
+		...)
+	} else {
+	    image(x=G$xseq, y=G$yseq, z=t(matrix(layer[reverse],
+            	nrow=G$Nrow, ncol=G$Ncol, byrow=TRUE)), add=TRUE, 
+		breaks=breaks, ...)
 	}
+    }
 }
 
 legtext <- function(break.levels)

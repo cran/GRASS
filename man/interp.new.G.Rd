@@ -59,7 +59,7 @@ elev.grid <- interp.new.G(G, utm.maas$east, utm.maas$north, utm.maas$elev,
 brks <- c(-Inf, seq(5.4, 10.6, 0.52), +Inf)
 plot(G, elev.grid*maasmask, breaks=brks,
   col=c("yellow", grey(11:2/11), "red"))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
+plot(G, ifelse(is.na(maasmask), 1, NA), breaks=c(0,2), col="wheat", add=TRUE)
 title("Bicubic spline interpolation: local elevation")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
    legend=c(rev(leglabs(brks)), "mask=NA"),
@@ -74,7 +74,7 @@ b1[b1 < 5] <- 5
 brks <- c(seq(0, 1000, 200), +Inf)
 cols <- grey(6:2/6)
 plot(maas.metadata, b1, breaks=brks, col=c(cols, "red"))
-plot(maas.metadata, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
+plot(maas.metadata, ifelse(is.na(maasmask), 1, NA), breaks=c(0,2), col="wheat", add=TRUE)
 title("Loess predictions of distance from river bank")
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
    legend=c(rev(leglabs(brks)), "mask=NA"),

@@ -1,15 +1,21 @@
-# Copyright 2001 by Roger S. Bivand
+# Copyright 2001-4 by Roger S. Bivand
 #
 # east() is an access function to return the eastings coordinates
 # of raster cell centres from a grassmeta object
 #
-east <- function(G)
+
+east <- function(object) UseMethod("east")
+
+east.default <- function(object) stop("no default method for east")
+
+east.grassmeta <- function(object)
 {
-    if (class(G) != "grassmeta") stop("No GRASS metadata object")
+    if (class(object) != "grassmeta") stop("No GRASS metadata object")
     if(is.loaded("eastG", PACKAGE="GRASS")) {
-	east <- .Call("eastG", G, PACKAGE="GRASS")
+	east <- .Call("eastG", object, PACKAGE="GRASS")
     } else {
-        east <- as.numeric(c(matrix(G$xseq, length(G$xseq), length(G$ryseq))))
+        east <- as.numeric(c(matrix(object$xseq, length(object$xseq), 
+	    length(object$ryseq))))
     }
     invisible(east)
 }

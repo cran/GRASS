@@ -8,9 +8,9 @@ summary.grassmeta <- function(object, ...) {
 	if (class(G) != "grassmeta") stop("Data not a grass object")
 	cat("Data from GRASS 5.0 LOCATION ", G$LOCATION, " with ", G$Ncol,
 	" columns and ", G$Nrow, " rows;\n", G$proj, "\nThe west-east range is: ",
-	G$w, ", ", G$e, ", and the south-north: ",
+	G$w, ", ", G$e, ",\nand the south-north: ",
 	G$s, ", ", G$n,
 	";\nWest-east cell sizes are ", G$ewres,
-	" units, and south-north ", G$nsres,
+	" units,\nand south-north ", G$nsres,
 	" units.\n", sep="")
 }

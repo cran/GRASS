@@ -16,7 +16,7 @@ krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
   \item{at}{The string name of the variable in \code{point.obj} to be predicted}
   \item{var.mod.obj}{The chosen fitted variogram model}
   \item{G}{A grassmeta object describing the current GRASS region}
-  \item{mask}{A vector of length \code{east(G)} with NA's in locations for which no prediction is needed}
+  \item{mask}{A vector of length \code{east.grassmeta(G)} with NA's in locations for which no prediction is needed}
 }
 \details{
   The function appears to correspond to Gstat
@@ -69,7 +69,7 @@ res.G1 <- krige.G(maas.pts, "Zn", maas.fit.exp, G, maasmask)
 summary(res.G1$zhat)
 summary(res.G1$sehat)
 plot(G, res.G1$zhat, breaks=round(seq(120,1660,length=9)), col=grey(9:2/9))
-plot(G, ifelse(is.na(maasmask), 1, NA), col="wheat", add=TRUE)
+plot(G, ifelse(is.na(maasmask), 1, NA), breaks=c(0,2), col="wheat", add=TRUE)
 legend(c(269900, 270600), c(5652000, 5652900), bty="n", bg="wheat",
  legend=c(rev(legtext(round(seq(120,1660,length=9)))), "mask=NA"),
  fill=c(rev(grey(9:2/9)), "wheat"))
