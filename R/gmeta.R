@@ -94,8 +94,24 @@ get.GRASSChkGISRC <- function() {
       get("ChkGISRC", env = .GRASS.meta)
 }
 
-GRASS.connect <- function() {
+GRASS.connect <- function(manual=FALSE, gisdbase=NULL, loc=NULL, mapset=NULL) {
       assign("ChkGISRC", FALSE, env = .GRASS.meta)
+      if (manual) {
+	      if (any(c(is.null(gisdbase), is.null(loc), is.null(mapset))))
+                    stop("missing specification values")
+	      z <- .Call("R_G__set_init", as.integer(1), PACKAGE="GRASS")
+	      if (z != 1) stop("Init not set")
+	      if (!file.exists(gisdbase)) stop(paste(gisdbase, "not found"))
+              set.GISDBASE(gisdbase)
+              set.LOCATION(loc)
+              set.MAPSET(mapset)
+              if (class(try(gmeta())) != "grassmeta")
+		    stop("cannot retrieve window metadata from specificed location")
+              assign("ChkGISRC", TRUE, env = .GRASS.meta)
+              assign("gisrc", "faked", env = .GRASS.meta)
+              cat("GRASS environment variables inserted manually\n")
+            return()
+      }
       if (Sys.getenv("GISRC") == "") return()
       gisrc <- .Call("R_G_get_gisrc_file", PACKAGE="GRASS")
       if (class(gisrc) == "gisrc") {  
@@ -108,7 +124,7 @@ GRASS.connect <- function() {
               cat(paste("If GRASS.connect() fails in this way",
               "and you are running under CygWin,\nplease set the",
               "CygWin root file system prefix using:",
-              "set.cygwinstring()\n", "and re-run GRASS.connect()\n"))
+              "set.cygwinstring()", "\nand re-run GRASS.connect()\n"))
       }
 }
 
@@ -125,7 +141,7 @@ make.maas.location <- function() {
 	set.MAPSET("RGRASS")
 	z <- .Call("R_G_make_maas", maas.metadata, PACKAGE="GRASS")
 	if (z != 0) stop("error creating location")
-	if (class(gmeta()) == "grassmeta")
+	if (class(try(gmeta())) == "grassmeta")
 		assign("maas.loc", TRUE, env = .GRASS.meta)
 	z <- get("maas.loc", env = .GRASS.meta)
 	z

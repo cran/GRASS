@@ -6,16 +6,6 @@
 \alias{north}
 \alias{obsno}
 \alias{reverse}
-\alias{get.LOCATION}
-\alias{set.LOCATION}
-\alias{get.MAPSET}
-\alias{set.MAPSET}
-\alias{get.GISDBASE}
-\alias{set.GISDBASE}
-\alias{get.cygwinstring}
-\alias{set.cygwinstring}
-\alias{get.GRASSChkGISRC}
-\alias{GRASS.connect}
 \alias{make.maas.location}
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Reads GRASS metadata from the current LOCATION}
@@ -28,16 +18,6 @@ east(G)
 north(G)
 obsno(G)
 reverse(G)
-get.LOCATION()
-set.LOCATION(loc)
-get.MAPSET()
-set.MAPSET(mapset)
-get.GISDBASE()
-set.GISDBASE(gisdbase)
-get.cygwinstring()
-set.cygwinstring(cygwin)
-get.GRASSChkGISRC()
-GRASS.connect()
 make.maas.location()
 
 }

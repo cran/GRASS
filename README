@@ -21,7 +21,7 @@ name, but under CygWin it may lack a prefix to the CygWin root, defined
 in cygpath --mixed form, such as "c:/cygwin". In this case, a warning will
 be issued, the string should be set using set.cygwinstring(<your cygwin root>),
 and GRASS.connect() re-run to ensure that the file named in GISRC is found
-correctly.
+correctly. See also the GRASS.connect() help page.
 
 > library(GRASS)
 No GRASS environment found

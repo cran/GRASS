@@ -1,3 +1,5 @@
+GRASS.connect           Access to underlying environment variables
+                        within GRASS
 contour.G               Equal scale contour plots for GRASS raster and
                         site data
 gmeta                   Reads GRASS metadata from the current LOCATION
