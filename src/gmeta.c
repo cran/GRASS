@@ -10,6 +10,7 @@ SEXP gmeta() {
 	char chbuf[256];
 	struct Cell_head cellhd;
 	double start;
+	char *errs;
 
 	char *name="gmeta()";
 	R_G_init(name);
@@ -45,7 +46,6 @@ SEXP gmeta() {
 	}
 
 /*	G_get_window(&cellhd); */
-	char *errs;
 	if((errs = (G__get_window (&cellhd,"","WIND",G_mapset())))) {
 	    G_free (errs);
 	    G_fatal_error ("Bad or no region for current mapset");
