@@ -1,6 +1,8 @@
 /* Copyright 2000-3 by Roger S. Bivand. 
 *
 **/
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #include "grassR.h"
 #if defined __MINGW32_VERSION
@@ -56,8 +58,9 @@ SEXP R_G_get_gisrc_file() {
       
       PROTECT(ans=NEW_CHARACTER(1));
       PROTECT(class=NEW_CHARACTER(1));
-      gisrc = G_store(G__get_gisrc_file());
+      gisrc = G__get_gisrc_file();
       if (gisrc) {
+	   gisrc = G_store(gisrc);
            SET_STRING_ELT(ans, 0,
                 COPY_TO_USER_STRING(gisrc));
            SET_STRING_ELT(class, 0, COPY_TO_USER_STRING("gisrc"));

@@ -81,10 +81,10 @@ int G_fatal_error ( char *msg,...)
     va_end(ap);
     print_error (buffer,1);
 
-    exit (1);
 #else /* R_GRASS_INTERFACE */
     error(msg);
 #endif /* R_GRASS_INTERFACE */
+    exit (1);
 }
 
 int G_warning ( char *msg, ...)

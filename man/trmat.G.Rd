@@ -25,7 +25,7 @@ trmat.G(G, obj, east=NULL, north=NULL)
 
 \note{The functions in this package are intended to work with the GRASS geographical information system. The examples for wrapper functions will will work whether or not R is running in GRASS, and whether or not the current location is that of the data set used for the examples. Examples of interface functions will however (from version 0.2-2) only work outside GRASS, to avoid possible overwriting of GRASS database locations and/or files.}
 
-\seealso{\code{\link{trmat}}}
+\seealso{\code{\link[spatial]{trmat}}}
 
 \examples{
 data(utm.maas)

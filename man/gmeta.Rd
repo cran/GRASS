@@ -80,7 +80,7 @@ In addition, a number of internal GRASS environment variables are exposed for re
 
 \note{The functions in this package are intended to work with the GRASS geographical information system. The examples for wrapper functions will will work whether or not R is running in GRASS, and whether or not the current location is that of the data set used for the examples. Examples of interface functions will however (from version 0.2-2) only work outside GRASS, to avoid possible overwriting of GRASS database locations and/or files.}
 
-\seealso{\code{\link{summary.grassmeta}}, \code{\link{east}}, \code{\link{north}}, \code{\link{obsno}}, \code{\link{reverse}}}
+\seealso{\code{\link{summary.grassmeta}}}
 
 \examples{
 if(!get("maas.loc", env = .GRASS.meta)) make.maas.location()

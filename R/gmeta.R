@@ -133,47 +133,51 @@ make.maas.location <- function() {
 
 set.cygwinstring <- function(cygwin) {
       if (!is.character(cygwin)) stop("Character string required")
-      newcygwin <- .Call("R_G_set_cygwinstring", as.character(cygwin)[1])
+      newcygwin <- .Call("R_G_set_cygwinstring", as.character(cygwin)[1],
+	PACKAGE="GRASS")
       newcygwin
 }
 
 get.cygwinstring <- function() {
-      cygwin <- .Call("R_G_get_cygwinstring")
+      cygwin <- .Call("R_G_get_cygwinstring", PACKAGE="GRASS")
       cygwin
 }
 
 
 set.LOCATION <- function(loc) {
       if (!is.character(loc)) stop("Character string required")
-      newloc <- .Call("R_G_set_locstring", as.character(loc)[1])
+      newloc <- .Call("R_G_set_locstring", as.character(loc)[1], 
+	PACKAGE="GRASS")
       newloc
 }
 
 get.LOCATION <- function() {
-      loc <- .Call("R_G_get_location")
+      loc <- .Call("R_G_get_location", PACKAGE="GRASS")
       loc
 }
 
 
 set.GISDBASE <- function(gisdbase) {
       if (!is.character(gisdbase)) stop("Character string required")
-      newgisdbase <- .Call("R_G_set_gisdbasestring", as.character(gisdbase)[1])
+      newgisdbase <- .Call("R_G_set_gisdbasestring", as.character(gisdbase)[1],
+	PACKAGE="GRASS")
       newgisdbase
 }
 
 get.GISDBASE <- function() {
-      gisdbase <- .Call("R_G_get_gisdbase")
+      gisdbase <- .Call("R_G_get_gisdbase", PACKAGE="GRASS")
       gisdbase
 }
 
 set.MAPSET <- function(mapset) {
       if (!is.character(mapset)) stop("Character string required")
-      newmapset <- .Call("R_G_set_mapset", as.character(mapset)[1])
+      newmapset <- .Call("R_G_set_mapset", as.character(mapset)[1], 
+	PACKAGE="GRASS")
       newmapset
 }
 
 get.MAPSET <- function() {
-      mapset <- .Call("R_G_get_mapset")
+      mapset <- .Call("R_G_get_mapset", PACKAGE="GRASS")
       mapset
 }
 

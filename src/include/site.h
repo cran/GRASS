@@ -1,5 +1,8 @@
 /*-
  * $Log: site.h,v $
+ * Revision 1.1  2003/02/18 17:25:12  rsb
+ * new GRASS merged in
+ *
  * Revision 1.7  2000/10/09 01:57:03  eric
  * Added ability to ignore z-value completely using field=SITE_COL_NUL
  *

@@ -1,5 +1,5 @@
 /*
-* $Id: gis.h,v 1.6 2002/02/14 07:22:49 eric Exp $
+* $Id: gis.h,v 1.1 2003/02/18 17:25:12 rsb Exp $
 *
 *****************************************************************************
 *
@@ -26,6 +26,10 @@
 #ifndef FILE
 #include <stdio.h>
 #endif
+
+#ifndef _STDLIB_H
+#include <stdlib.h>
+#endif /* _STDLIB_H */
 
 /* Grass and local include files */
 #if ! defined ( R_GRASS_INTERFACE )

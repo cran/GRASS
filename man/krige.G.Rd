@@ -40,7 +40,9 @@ krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
 \note{The functions in this package are intended to work with the GRASS geographical information system. The examples for wrapper functions will will work whether or not R is running in GRASS, and whether or not the current location is that of the data set used for the examples. Examples of interface functions will however (from version 0.2-2) only work outside GRASS, to avoid possible overwriting of GRASS database locations and/or files.}
 
 
-\seealso{\code{\link{krige}}, \code{\link{surf.gls}}, \code{\link{prmat}}, \code{\link{semat}}, \code{\link{vgram}}, \code{\link{Krig}}, \code{\link{predict.Krig}}, \code{\link{predict.se.Krig}}}
+\seealso{\code{\link[spatial]{surf.gls}}, \code{\link[spatial]{prmat}},
+ \code{\link[spatial]{semat}}, \code{\link[sgeostat]{est.variogram}},
+ \code{\link[sgeostat]{fit.exponential}}}
 
 
 \examples{

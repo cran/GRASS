@@ -77,21 +77,21 @@
  **********************************************************************/
 
 #include "config.h"
-#include <rpc/types.h> /* need this for sgi */
-#include <rpc/xdr.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 
-#if defined __MINGW32_VERSION && defined R_GRASS_INTERFACE
+#if defined R_GRASS_INTERFACE
 #include <stdlib.h>
-#endif /* R_GRASS_INTERFACE && __MINGW32_VERSION */
+#endif /* R_GRASS_INTERFACE */
 
 #include <sys/types.h>
 #include <unistd.h>
 
 #include "G.h"
+#include <rpc/types.h> /* need this for sgi */
+#include <rpc/xdr.h>
 
 #define FCB          G__.fileinfo[fd]
 #define ROW          FCB.cur_row 

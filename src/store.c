@@ -13,7 +13,7 @@ char *G_store (s) char *s;
 {
     char *buf;
 
-    if (s == NULL) return(NULL);
+    if (!s) return(s);
     buf = G_malloc (strlen(s) + 1);
     strcpy (buf, s);
     return buf;

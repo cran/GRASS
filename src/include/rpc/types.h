@@ -60,7 +60,9 @@
 #endif
 
 #if !defined(WIN32) && !defined(macintosh)
+#if !defined(R_GRASS_INTERFACE)
 extern char *malloc();
+#endif /* R_GRASS_INTERFACE */
 #endif
 #define mem_alloc	malloc
 #define mem_free(ptr, bsize)	free(ptr)
@@ -81,11 +83,13 @@ extern char *malloc();
 #define        MAXHOSTNAMELEN  64
 #endif
 
+#ifndef _SYS_TYPES_H
 typedef char *caddr_t;
 #ifndef _GNU_H_WINDOWS32_SOCKETS
 typedef unsigned int u_int;
 typedef unsigned long u_long;
 typedef unsigned short u_short;
 #endif
+#endif /* _SYS_TYPES_H */
 
 #endif /* ndef __TYPES_RPC_HEADER__ */
