@@ -1,4 +1,10 @@
 Package: GRASS
+Version: 0.3-1 (2006-01-11)
+Note:	Added configure file to package because implicit linking against 
+	zlib through the R binary may go away at R 2.3.0. The library is 
+	now linked to GRASS.so directly. How this will leave Windows is 
+	presently unknown.
+
 Version: 0.2-2
 Author: Interface functions by Roger Bivand <Roger.Bivand@nhh.no>, wrapper
 	and helper functions modified from various originals by interface 

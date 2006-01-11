@@ -6,7 +6,7 @@
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Export GRASS sites file}
 \description{
- \code{sites.put()} moves a single numeric or character vector site to GRASS, using the metadata from \code{gmeta(). \code{sites.put2()}} moves a data frame to a GRASS sites list, and requires the specification of the columns of the data frame to be treated as dimensions.
+ \code{sites.put()} moves a single numeric or character vector site to GRASS, using the metadata from \code{gmeta()}. \code{sites.put2()} moves a data frame to a GRASS sites list, and requires the specification of the columns of the data frame to be treated as dimensions.
 }
 \usage{
 sites.put(G, lname="", east, north, var, debug=FALSE)
