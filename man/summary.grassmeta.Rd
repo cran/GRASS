@@ -8,7 +8,7 @@
  \code{summary.grassmeta()} displays the metadata collected by gmeta().
 }
 \usage{
-summary.grassmeta(object, ...)
+\method{summary}{grassmeta}(object, ...)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{

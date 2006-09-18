@@ -1,13 +1,13 @@
 % Copyright 2001 by Roger S. Bivand
 
-\name{contour.G}
-\alias{contour.G}
+\name{contourG}
+\alias{contourG}
 %- Also NEED an `\alias' for EACH other topic documented here.
 \title{Equal scale contour plots for GRASS raster and site data}
 \description{
 contour.G provides a simple interface between grass data objects and the \code{contour()} function.}
 \usage{
-contour.G(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
+contourG(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE, ...)
 }
 %- maybe also `usage' for other objects documented here.
 \arguments{
@@ -40,12 +40,12 @@ Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
 "medium", "high", "crisis"), breaks=c(100, 200, 400, 700, 1000, 2000), 
 include.lowest=TRUE))
 G <- maas.metadata
-contour.G(G)
+contourG(G)
 points(utm.maas$east, utm.maas$north, pch=unclass(Zn.o))
 legend(x=c(269800, 270500), y=c(5652300, 5653000), pch=c(1:5),
 legend=levels(Zn.o))
 title("Note equal east and north scales")
-contour.G(G, kde2d.G(utm.maas$east, utm.maas$north, h=c(300,300), G=G, Z=utm.maas$Zn)*maasmask)
+contourG(G, kde2d.G(utm.maas$east, utm.maas$north, h=c(300,300), G=G, Z=utm.maas$Zn)*maasmask)
 points(utm.maas$east, utm.maas$north, pch=unclass(Zn.o))
 legend(x=c(269800, 270500), y=c(5652300, 5653000), pch=c(1:5),
 legend=levels(Zn.o))

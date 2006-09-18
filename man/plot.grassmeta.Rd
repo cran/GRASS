@@ -10,7 +10,7 @@
 plot.grassmeta provides a simple interface between grass data objects and the \code{image()} function; category layers may be plotted by taking \code{unclass()} of the layer, and setting zlim to non-default values. If layer is not set, a blank base map is plotted, for instance for use with \code{points()}.
 }
 \usage{
-plot.grassmeta(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE,
+\method{plot}{grassmeta}(x, layer=NULL, xlab="", ylab="", reverse=NULL, add=FALSE,
  breaks=NULL, ...)
 legtext(break.levels)
 leglabs(x1, under="under", over="over", between="-")

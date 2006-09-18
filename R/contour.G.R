@@ -1,7 +1,7 @@
 # Copyright 2001 by Roger S. Bivand
 #
 # contour.G is a wrapper 
-contour.G <- function (x, layer = NULL, xlab = "", ylab = "",
+contourG <- function (x, layer = NULL, xlab = "", ylab = "",
     reverse = NULL, add = FALSE, ...) 
 {
     G <- x

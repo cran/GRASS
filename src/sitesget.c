@@ -27,6 +27,7 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
    int i, k, kk, prot=0;
    double val;
    char *errs;
+   char sitefile1[255];
 
    char *pname="sitesget()";
    R_G_init(pname);
@@ -49,15 +50,16 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
          G_fatal_error("Current GRASS region changed: east");
    }
 
-   mapset = G_find_file("site_lists", CHAR(STRING_ELT(sitefile, 0)), "");  
+   strcpy(sitefile1, CHAR(STRING_ELT(sitefile, 0)));
+
+   mapset = G_find_file("site_lists", sitefile1, "");  
    if (mapset == NULL) {
-      sprintf(msg, "sites file: %s not found", CHAR(STRING_ELT(sitefile, 0)));
+      sprintf(msg, "sites file: %s not found", sitefile1);
       G_fatal_error(msg);
    }
-   fd = G_fopen_sites_old (CHAR(STRING_ELT(sitefile, 0)), mapset);
+   fd = G_fopen_sites_old (sitefile1, mapset);
    if (fd == NULL) {
-      sprintf (msg, "can't open sites file [%s]",
-         CHAR(STRING_ELT(sitefile, 0)));
+      sprintf (msg, "can't open sites file [%s]", sitefile1);
       G_fatal_error(msg);
    }
 
@@ -87,35 +89,35 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
    INTEGER_POINTER(nncols)[3] = str_att;
    PROTECT(names = NEW_CHARACTER(4));
    prot++;
-   SET_VECTOR_ELT(names, 0, COPY_TO_USER_STRING("dims"));
-   SET_VECTOR_ELT(names, 1, COPY_TO_USER_STRING("cattype"));
-   SET_VECTOR_ELT(names, 2, COPY_TO_USER_STRING("dbl.att"));
-   SET_VECTOR_ELT(names, 3, COPY_TO_USER_STRING("str.att"));
+   SET_STRING_ELT(names, 0, COPY_TO_USER_STRING("dims"));
+   SET_STRING_ELT(names, 1, COPY_TO_USER_STRING("cattype"));
+   SET_STRING_ELT(names, 2, COPY_TO_USER_STRING("dbl.att"));
+   SET_STRING_ELT(names, 3, COPY_TO_USER_STRING("str.att"));
    setAttrib(nncols, R_NamesSymbol, names);
 
    setAttrib(ans, install("nncols"), nncols);
    
    if (!(site_info.name == (char *) NULL)) {
       PROTECT(name = NEW_CHARACTER(1));
-      SET_VECTOR_ELT(name, 0, COPY_TO_USER_STRING(site_info.name));
+      SET_STRING_ELT(name, 0, COPY_TO_USER_STRING(site_info.name));
       setAttrib(ans, install("name"), name);
       prot++;
    }
    if (!(site_info.desc == (char *) NULL)) {
       PROTECT(desc = NEW_CHARACTER(1));
-      SET_VECTOR_ELT(desc, 0, COPY_TO_USER_STRING(site_info.desc));
+      SET_STRING_ELT(desc, 0, COPY_TO_USER_STRING(site_info.desc));
       setAttrib(ans, install("desc"), desc);
       prot++;
    }
    if (!(site_info.labels == (char *) NULL)) {
       PROTECT(labels = NEW_CHARACTER(1));
-      SET_VECTOR_ELT(labels, 0, COPY_TO_USER_STRING(site_info.labels));
+      SET_STRING_ELT(labels, 0, COPY_TO_USER_STRING(site_info.labels));
       setAttrib(ans, install("labels"), labels);
       prot++;
    }
    if (!(site_info.stime == (char *) NULL)) {
       PROTECT(stime = NEW_CHARACTER(1));
-      SET_VECTOR_ELT(stime, 0, COPY_TO_USER_STRING(site_info.stime));
+      SET_STRING_ELT(stime, 0, COPY_TO_USER_STRING(site_info.stime));
       setAttrib(ans, install("stime"), stime);
       prot++;
    }
@@ -198,7 +200,7 @@ SEXP sitesget(SEXP G, SEXP sitefile, SEXP all) {
 	          G_fatal_error("Error reading sites file");
 	       }
 	       for (i=0; i < site->str_alloc; i++) {
-	          SET_VECTOR_ELT(VECTOR_ELT(VECTOR_ELT(ans, 3), i), k, 
+	          SET_STRING_ELT(VECTOR_ELT(VECTOR_ELT(ans, 3), i), k, 
 		         COPY_TO_USER_STRING(site->str_att[i]));
 	       }
 	 /*  } */

@@ -10,7 +10,7 @@
 }
 \usage{
 list.grass(type = "cell")
-print.glist(x, ...)
+\method{print}{glist}(x, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -87,27 +87,27 @@ SEXP gmeta() {
 	}
 
 	PROTECT(elnames = NEW_CHARACTER(17));
-	SET_VECTOR_ELT(elnames, 0, COPY_TO_USER_STRING("LOCATION"));
-	SET_VECTOR_ELT(elnames, 1, COPY_TO_USER_STRING("MAPSET"));
-	SET_VECTOR_ELT(elnames, 2, COPY_TO_USER_STRING("proj"));
-	SET_VECTOR_ELT(elnames, 3, COPY_TO_USER_STRING("n"));
-	SET_VECTOR_ELT(elnames, 4, COPY_TO_USER_STRING("s"));
-	SET_VECTOR_ELT(elnames, 5, COPY_TO_USER_STRING("w"));
-	SET_VECTOR_ELT(elnames, 6, COPY_TO_USER_STRING("e"));
-	SET_VECTOR_ELT(elnames, 7, COPY_TO_USER_STRING("nsres"));
-	SET_VECTOR_ELT(elnames, 8, COPY_TO_USER_STRING("ewres"));
-	SET_VECTOR_ELT(elnames, 9, COPY_TO_USER_STRING("Nrow"));
-	SET_VECTOR_ELT(elnames, 10, COPY_TO_USER_STRING("Ncol"));
-	SET_VECTOR_ELT(elnames, 11, COPY_TO_USER_STRING("Ncells"));
-	SET_VECTOR_ELT(elnames, 12, COPY_TO_USER_STRING("xlims"));
-	SET_VECTOR_ELT(elnames, 13, COPY_TO_USER_STRING("ylims"));
-	SET_VECTOR_ELT(elnames, 14, COPY_TO_USER_STRING("xseq"));
-	SET_VECTOR_ELT(elnames, 15, COPY_TO_USER_STRING("yseq"));
-	SET_VECTOR_ELT(elnames, 16, COPY_TO_USER_STRING("ryseq"));
+	SET_STRING_ELT(elnames, 0, COPY_TO_USER_STRING("LOCATION"));
+	SET_STRING_ELT(elnames, 1, COPY_TO_USER_STRING("MAPSET"));
+	SET_STRING_ELT(elnames, 2, COPY_TO_USER_STRING("proj"));
+	SET_STRING_ELT(elnames, 3, COPY_TO_USER_STRING("n"));
+	SET_STRING_ELT(elnames, 4, COPY_TO_USER_STRING("s"));
+	SET_STRING_ELT(elnames, 5, COPY_TO_USER_STRING("w"));
+	SET_STRING_ELT(elnames, 6, COPY_TO_USER_STRING("e"));
+	SET_STRING_ELT(elnames, 7, COPY_TO_USER_STRING("nsres"));
+	SET_STRING_ELT(elnames, 8, COPY_TO_USER_STRING("ewres"));
+	SET_STRING_ELT(elnames, 9, COPY_TO_USER_STRING("Nrow"));
+	SET_STRING_ELT(elnames, 10, COPY_TO_USER_STRING("Ncol"));
+	SET_STRING_ELT(elnames, 11, COPY_TO_USER_STRING("Ncells"));
+	SET_STRING_ELT(elnames, 12, COPY_TO_USER_STRING("xlims"));
+	SET_STRING_ELT(elnames, 13, COPY_TO_USER_STRING("ylims"));
+	SET_STRING_ELT(elnames, 14, COPY_TO_USER_STRING("xseq"));
+	SET_STRING_ELT(elnames, 15, COPY_TO_USER_STRING("yseq"));
+	SET_STRING_ELT(elnames, 16, COPY_TO_USER_STRING("ryseq"));
 	setAttrib(ans, R_NamesSymbol, elnames);
 	
 	PROTECT(class = NEW_CHARACTER(1));
-	SET_VECTOR_ELT(class, 0, COPY_TO_USER_STRING("grassmeta"));
+	SET_STRING_ELT(class, 0, COPY_TO_USER_STRING("grassmeta"));
 	setAttrib(ans, R_ClassSymbol, class);
 
 	UNPROTECT(3);

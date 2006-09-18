@@ -71,7 +71,7 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
    PROTECT(mname = NEW_CHARACTER(1));
 
    for (i = 0; i < nlayers; i++) {
-      SET_VECTOR_ELT(mname, 0, VECTOR_ELT(layers, i));
+      SET_STRING_ELT(mname, 0, STRING_ELT(layers, i));
       mapset = G_find_cell2(CHAR(STRING_ELT(mname, 0)), "");
       if(( mapset ) == NULL) { 
 	 sprintf(msg, "raster map: %s not found", CHAR(STRING_ELT(layers, i)));
@@ -159,16 +159,16 @@ SEXP rastget(SEXP G, SEXP layers, SEXP flayers) {
 	 SET_VECTOR_ELT(ans, i, NEW_INTEGER(ncells));
 	 SET_VECTOR_ELT(anslevels, i, NEW_CHARACTER(ncats[i]));
 	 sprintf(tmp, "%s.f", mname1);
-	 SET_VECTOR_ELT(ansnames, i, COPY_TO_USER_STRING(tmp));
+	 SET_STRING_ELT(ansnames, i, COPY_TO_USER_STRING(tmp));
 	 for (j=0; j<ncats[i]; j++) {
-	   SET_VECTOR_ELT(VECTOR_ELT(anslevels, i), j, 
+	   SET_STRING_ELT(VECTOR_ELT(anslevels, i), j, 
 	      COPY_TO_USER_STRING(G_get_ith_raster_cat(&labels[i], j, 
 		&rast1, &rast2, map_type[i])));
 	 }
       }
       else {
 	 SET_VECTOR_ELT(ans, i, NEW_NUMERIC(ncells));
-	 SET_VECTOR_ELT(ansnames, i, COPY_TO_USER_STRING(mname1));
+	 SET_STRING_ELT(ansnames, i, COPY_TO_USER_STRING(mname1));
       }
 
       for (row = 0; row < GR_nrows; row++) {
