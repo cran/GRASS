@@ -76,8 +76,11 @@ SEXP R_G_get_gisrc_file() {
 
 SEXP R_G_set_gisrc_file(SEXP newgisrc) {
       char *name;
+      char buff[255];
 
-      name = G_store(CHAR(STRING_ELT(newgisrc, 0)));
+/*      name = G_store(CHAR(STRING_ELT(newgisrc, 0)));  ?? */
+      strcpy(buff, CHAR(STRING_ELT(newgisrc, 0)));
+      name = G_store(buff);
       if (G__set_gisrc_file(name) != 0)
               G_fatal_error("R_set_gisrc_file: gisrc not set");
 
@@ -86,8 +89,12 @@ SEXP R_G_set_gisrc_file(SEXP newgisrc) {
 
 void R_G_set_pgm(SEXP pgm) {
       char *name;
+      char buff[255];
 
-      name = G_store(CHAR(STRING_ELT(pgm, 0)));
+/*      name = G_store(CHAR(STRING_ELT(pgm, 0)));  ?? */
+      strcpy(buff, CHAR(STRING_ELT(pgm, 0)));
+      name = G_store(buff);
+
       if (G_set_program_name(name) != 0)
 	      G_fatal_error("R_G_set_pgm: error setting name");
       return;
@@ -104,8 +111,11 @@ SEXP R_G_get_location() {
 
 SEXP R_G_set_locstring(SEXP loc) {
       char *value;
+      char buff[255];
 
-      value = G_store(CHAR(STRING_ELT(loc, 0)));
+/*      value = G_store(CHAR(STRING_ELT(loc, 0)));  ?? */
+      strcpy(buff, CHAR(STRING_ELT(loc, 0)));
+      value = G_store(buff);
       if (G__setenv("LOCATION_NAME", value) != 0)
               G_fatal_error("R_set_locstring: LOCATION_NAME not set");
 
@@ -123,8 +133,11 @@ SEXP R_G_get_gisdbase() {
 
 SEXP R_G_set_gisdbasestring(SEXP gisdbase) {
       char *value;
+      char buff[255];
 
-      value = G_store(CHAR(STRING_ELT(gisdbase, 0)));
+/*      value = G_store(CHAR(STRING_ELT(gisdbase, 0)));  ?? */
+      strcpy(buff, CHAR(STRING_ELT(gisdbase, 0)));
+      value = G_store(buff);
       if (G__setenv("GISDBASE", value) != 0)
               G_fatal_error("R_set_gisdbasestring: GISDBASE not set");
 
@@ -143,8 +156,11 @@ SEXP R_G_get_mapset() {
 
 SEXP R_G_set_mapset(SEXP mapset) {
       char *value;
+      char buff[255];
 
-      value = G_store(CHAR(STRING_ELT(mapset, 0)));
+/*      value = G_store(CHAR(STRING_ELT(mapset, 0)));  ?? */
+      strcpy(buff, CHAR(STRING_ELT(mapset, 0)));
+      value = G_store(buff);
       if (G__setenv("MAPSET", value) != 0)
               G_fatal_error("R_set_gisdbasestring: MAPSET not set");
 

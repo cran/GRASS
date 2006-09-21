@@ -45,6 +45,7 @@ SEXP sitesput(SEXP outlist) {
    char *mapset;
    SEXP ans;
    char *errs;
+   char buff[255];
 
    char *name="sitesput()";
    R_G_init(name);
@@ -75,23 +76,33 @@ SEXP sitesput(SEXP outlist) {
    }
 
 
+   strcpy(buff, CHAR(STRING_ELT(VECTOR_ELT(outlist, 1), 0)));
    if (LOGICAL_POINTER(VECTOR_ELT(outlist, 10))[0]) {
-      if((mapset = G_find_file("site_lists", 
-         CHAR(STRING_ELT(VECTOR_ELT(outlist, 1), 0)), G_mapset())) != NULL) 
-	    G_fatal_error("Output file already exists");
+/*      if((mapset = G_find_file("site_lists", 
+         CHAR(STRING_ELT(VECTOR_ELT(outlist, 1), 0)), G_mapset())) != NULL)  ?? */
+      if((mapset = G_find_file("site_lists", buff, G_mapset())) != NULL)
+	 G_fatal_error("Output file already exists");
    }
 
-   if (G_legal_filename(CHAR(STRING_ELT(VECTOR_ELT(outlist, 1), 0))) < 0)
+/*   if (G_legal_filename(CHAR(STRING_ELT(VECTOR_ELT(outlist, 1), 0))) < 0) ?? */
+   if (G_legal_filename(buff) < 0)
       G_fatal_error("illegal output file name");
 
-   if ((out_fd = G_fopen_sites_new (CHAR(STRING_ELT(VECTOR_ELT(outlist,
-      1), 0)))) == NULL) G_fatal_error("can't create sites file");
+/*   if ((out_fd = G_fopen_sites_new (CHAR(STRING_ELT(VECTOR_ELT(outlist, 
+      1), 0)))) == NULL) G_fatal_error("can't create sites file");?? */
       
-   shead.name = G_store(CHAR(STRING_ELT(VECTOR_ELT(outlist, 1), 0)));
-   shead.desc = G_store(CHAR(STRING_ELT(VECTOR_ELT(outlist, 9), 0)));
+   if ((out_fd = G_fopen_sites_new (buff)) == NULL) 
+      G_fatal_error("can't create sites file");
+/*   shead.name = G_store(CHAR(STRING_ELT(VECTOR_ELT(outlist, 1), 0))); ?? */
+   shead.name = G_store(buff);
+/*   shead.desc = G_store(CHAR(STRING_ELT(VECTOR_ELT(outlist, 9), 0))); ?? */
+   strcpy(buff, CHAR(STRING_ELT(VECTOR_ELT(outlist, 9), 0)));
+   shead.desc = G_store(buff);
    shead.form = shead.stime = (char *) NULL;
    shead.time = (struct TimeStamp*) NULL;
-   shead.labels = G_store(CHAR(STRING_ELT(VECTOR_ELT(outlist, 4), 0)));
+/*   shead.labels = G_store(CHAR(STRING_ELT(VECTOR_ELT(outlist, 4), 0))); ?? */
+   strcpy(buff, CHAR(STRING_ELT(VECTOR_ELT(outlist, 4), 0)));
+   shead.labels = G_store(buff);
 
    G_site_put_head (out_fd, &shead);
    
@@ -119,10 +130,12 @@ SEXP sitesput(SEXP outlist) {
 	 site->dbl_att[j] = NUMERIC_POINTER(VECTOR_ELT(outlist,
 	    7))[i + (j*n)];
       
-      for (j = 0; j < site->str_alloc; j++) 
-	 site->str_att[j] = G_store(CHAR(STRING_ELT(VECTOR_ELT(outlist,
-	    8), (i + (j*n)))));
-
+      for (j = 0; j < site->str_alloc; j++) {
+/*	 site->str_att[j] = G_store(CHAR(STRING_ELT(VECTOR_ELT(outlist,
+	    8), (i + (j*n))))); ?? */
+         strcpy(buff, CHAR(STRING_ELT(VECTOR_ELT(outlist, 8), (i + (j*n)))));
+	 site->str_att[j] = G_store(buff);
+      }
       if (G_site_put_new_R(out_fd, site) != 0) {
 	 G_site_free_struct(site);
 	 fclose (out_fd);

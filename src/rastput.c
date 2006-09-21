@@ -29,6 +29,7 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
    RASTER_MAP_TYPE data_type=CELL_TYPE;
    DCELL x, b1, b2;
    char *errs;
+   char buff[255], buff1[255];
 
    char *name="rastput()";
    R_G_init(name);
@@ -68,9 +69,11 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
     if (INTEGER_POINTER(VECTOR_ELT(G, 10))[0] != cellhd.cols)
 	error("Current GRASS region changed: cols");
 
+    strcpy(buff, CHAR(STRING_ELT(output, 0)));
     if (LOGICAL_POINTER(check)[0]) {
-       if((mapset = G_find_cell(CHAR(STRING_ELT(output, 0)),
-	    G_mapset())) != NULL) G_fatal_error("Output file already exists");
+/*       if((mapset = G_find_cell(CHAR(STRING_ELT(output, 0)),  ?? */
+       if((mapset = G_find_cell(buff, G_mapset())) != NULL) 
+         G_fatal_error("Output file already exists");
     }
 
     GR_nrows = cellhd.rows; GR_ncols = cellhd.cols;
@@ -79,9 +82,12 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
 	G_fatal_error("Input layer of wrong length");
     rast_ptr = G_allocate_raster_buf(data_type);
     rast = rast_ptr;
-    if (G_legal_filename(CHAR(STRING_ELT(output, 0))) < 0)
+/*    if (G_legal_filename(CHAR(STRING_ELT(output, 0))) < 0)   ?? */
+    if (G_legal_filename(buff) < 0)  
 	G_fatal_error("illegal output file name");
-    if((cf = G_open_raster_new(CHAR(STRING_ELT(output, 0)), data_type)) < 0)
+/*    if((cf = G_open_raster_new(CHAR(STRING_ELT(output, 0)), data_type)) < 0)
+	G_fatal_error ("unable to create raster map");   ?? */
+    if((cf = G_open_raster_new(buff, data_type)) < 0)
 	G_fatal_error ("unable to create raster map");
 /* transfer data respecting NAs */
     icell = 0;
@@ -110,8 +116,10 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
        rast_ptr = rast;
     }
     if(G_close_cell (cf) != 1) G_fatal_error ("failure closing cell file");
-    if(G_put_cell_title (CHAR(STRING_ELT(output, 0)),
-	 CHAR(STRING_ELT(title, 0))) != 1)
+/*    if(G_put_cell_title (CHAR(STRING_ELT(output, 0)),  
+	 CHAR(STRING_ELT(title, 0))) != 1)   ?? */
+    strcpy(buff1, CHAR(STRING_ELT(title, 0)));
+    if(G_put_cell_title (buff, buff1) != 1) 
 	    G_fatal_error ("error writing cell title");
 /* create and write ranges */
     if (LOGICAL_POINTER(isfactor)[0]) {
@@ -119,14 +127,16 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
 	G_init_range(&r[0]); 
         G_update_range((CELL) (INTEGER_POINTER(range)[0]), &r[0]);
 	G_update_range((CELL) (INTEGER_POINTER(range)[1]), &r[0]);
-	if(G_write_range(CHAR(STRING_ELT(output, 0)), &r[0]) != 0)
+/* 	if(G_write_range(CHAR(STRING_ELT(output, 0)), &r[0]) != 0)  ?? */
+	if(G_write_range(buff, &r[0]) != 0)  
 		G_fatal_error ("error writing range");
     } else {
         fpr = (struct FPRange *) R_alloc ((long) 1, sizeof(struct FPRange));
         G_init_fp_range(&fpr[0]); 
         G_update_fp_range(NUMERIC_POINTER(range)[0], &fpr[0]);
 	G_update_fp_range(NUMERIC_POINTER(range)[1], &fpr[0]);
-        if(G_write_fp_range(CHAR(STRING_ELT(output, 0)), &fpr[0]) != 0)
+/*      if(G_write_fp_range(CHAR(STRING_ELT(output, 0)), &fpr[0]) != 0)  ?? */
+        if(G_write_fp_range(buff, &fpr[0]) != 0)
 		G_fatal_error ("error writing range");
     }
 /* create and write labels, colours */ 
@@ -135,14 +145,18 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
     colors = (struct Colors *) R_alloc ((long) 1,
 	sizeof(struct Colors));
     
-    G_init_cats((CELL) 1, CHAR(STRING_ELT(title, 0)), &labels[0]);
+/*    G_init_cats((CELL) 1, CHAR(STRING_ELT(title, 0)), &labels[0]); ?? */
+    G_init_cats((CELL) 1, buff1, &labels[0]);
     G_init_colors(&colors[0]);
   
     if (LOGICAL_POINTER(isfactor)[0]) {
         for (i=0; i<GET_LENGTH(levels); i++) {
 	    i1 = i+1;
+            strcpy(buff1, CHAR(STRING_ELT(levels, i)));
+/*            if(G_set_c_raster_cat((CELL *) &i1, (CELL *) &i1,
+		CHAR(STRING_ELT(levels, i)), &labels[0]) < 0) {  ?? */
             if(G_set_c_raster_cat((CELL *) &i1, (CELL *) &i1,
-		CHAR(STRING_ELT(levels, i)), &labels[0]) < 0) {
+		buff1, &labels[0]) < 0) {
 		    G_free_cats(&labels[0]);
 		    G_free_colors(&colors[0]);
 		    G_fatal_error ("error setting category label");
@@ -165,9 +179,13 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
 	    i1 = i+1;
 	    b1 = (DCELL) NUMERIC_POINTER(breaks)[i];
 	    b2 = (DCELL) NUMERIC_POINTER(breaks)[i1];
+            strcpy(buff1, CHAR(STRING_ELT(levels, i)));
+/*            if(G_set_d_raster_cat((DCELL *) &b1,
+	       	(DCELL *) &b2,
+	       	CHAR(STRING_ELT(levels, i)), &labels[0]) < 0) {  ?? */
             if(G_set_d_raster_cat((DCELL *) &b1,
 	       	(DCELL *) &b2,
-	       	CHAR(STRING_ELT(levels, i)), &labels[0]) < 0) {
+	       	buff1, &labels[0]) < 0) {
 		    G_quant_free(&q[0]);
 		    G_free_cats(&labels[0]);
 		    G_free_colors(&colors[0]);
@@ -186,8 +204,9 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
 		(CELL) i1, (CELL) i1);
 	}
 	G__quant_organize_fp_lookup(&q[0]);
-	if (G_write_quant(CHAR(STRING_ELT(output, 0)), G_mapset(),
-	    &q[0]) != 1) {
+/*	if (G_write_quant(CHAR(STRING_ELT(output, 0)), G_mapset(),
+	    &q[0]) != 1) {  ?? */
+	if (G_write_quant(buff, G_mapset(), &q[0]) != 1) { 
 		G_quant_free(&q[0]);
 		G_fatal_error ("error writing quants");
 	}
@@ -200,14 +219,15 @@ SEXP rastput(SEXP G, SEXP layer, SEXP isfactor, SEXP dcell, SEXP check,
 		(int) (INTEGER_POINTER(defcolor)[1]),
 		(int) (INTEGER_POINTER(defcolor)[2]), &colors[0]);
     
-    if(G_write_cats(CHAR(STRING_ELT(output, 0)), &labels[0]) != 1) {
+/*    if(G_write_cats(CHAR(STRING_ELT(output, 0)), &labels[0]) != 1) {  ?? */
+      if(G_write_cats(buff, &labels[0]) != 1) {
 	G_free_cats(&labels[0]);
 	G_free_colors(&colors[0]);
         G_fatal_error ("error writing categories");
     }
     G_free_cats(&labels[0]);
-    if(G_write_colors(CHAR(STRING_ELT(output, 0)), G_mapset(),
-	&colors[0]) != 1) {
+/*    if(G_write_colors(CHAR(STRING_ELT(output, 0)), G_mapset(),  ?? */
+    if(G_write_colors(buff, G_mapset(),	&colors[0]) != 1) {
 	    G_free_colors(&colors[0]);
             G_fatal_error ("error writing colours");
     }
