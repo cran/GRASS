@@ -43,7 +43,12 @@ int G_set_cygwinstring( char *name) {
 SEXP R_G_set_cygwinstring(SEXP cygname) {
       char *name;
 
-      name = G_store(CHAR(STRING_ELT(cygname, 0)));
+      char buff[255];
+
+/*      name = G_store(CHAR(STRING_ELT(cygname, 0)));  ?? */
+      strcpy(buff, CHAR(STRING_ELT(cygname, 0)));
+      name = G_store(buff);
+      
       if (G_set_cygwinstring(name) != 0)
               G_fatal_error("R_set_cygwinstring: cygwinstring not set");
 
