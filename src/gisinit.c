@@ -41,12 +41,12 @@ int G_gisinit( char *pgm)
     case 0:
 	    sprintf(msg,"MAPSET %s - permission denied", mapset);
 	    G_fatal_error (msg);
-	    exit(-1);
+/*	    exit(-1);*/
 	    break;
     default:
 	    sprintf(msg,"MAPSET %s not found", mapset);
 	    G_fatal_error (msg);
-	    exit(-1);
+/*	    exit(-1);*/
 	    break;
     }
 
@@ -69,7 +69,7 @@ int G__check_gisinit()
 #if ! defined __MINGW32_VERSION
     sleep(3);
 #endif /* __MINGW32_VERSION */
-    exit(-1);
+    G_fatal_error ("System not initialized"); /* exit(-1); */
 }
 
 static int gisinit()

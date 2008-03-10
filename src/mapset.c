@@ -47,7 +47,7 @@ G_mapset()
 	    break;
     }
     G_fatal_error (msg);
-    exit(-1);
+    /* exit(-1); */
 }
 
 char *
