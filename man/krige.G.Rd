@@ -42,7 +42,7 @@ krige.G(point.obj, at, var.mod.obj, G, mask=NULL)
 
 \seealso{\code{\link[spatial]{surf.gls}}, \code{\link[spatial]{prmat}},
  \code{\link[spatial]{semat}}, \code{\link[sgeostat]{est.variogram}},
- \code{\link[sgeostat]{fit.exponential}}}
+ \code{\link[sgeostat]{fit.variogram}}}
 
 
 \examples{
