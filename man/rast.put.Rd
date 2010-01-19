@@ -42,20 +42,15 @@ G <- gmeta()
 inregion <- (utm.maas$east >= G$w & utm.maas$east <= G$e) & (utm.maas$north >= G$s & utm.maas$north <= G$n)
 if(all(!inregion)) stop("None of the site locations are inside the current GRASS region")
 if(any(!inregion)) warning("Some site locations are outside the current GRASS region")
-require(akima)
-Zn.grid <- interp.new.G(G, utm.maas$east, utm.maas$north, utm.maas$Zn,
-    extrap=TRUE)*maasmask
 require(spatial)
 s3 <- trmat.G(G, surf.ls(3, utm.maas$east, utm.maas$north,
     utm.maas$Zn))*maasmask
-Zn.grid.o <- as.ordered(cut(Zn.grid, labels=c("insignificant", "low",
+Zn.s3.o <- as.ordered(cut(s3, labels=c("insignificant", "low",
 "medium", "high", "crisis"), breaks=c(-300, 200, 400, 700, 1000, 5000), include.lowest=TRUE))
-nameR <- c("ex.Zn.grid.in", "ex.tr3.in", "ex.Zn.grid.o.in")
-rast.put(G, lname=nameR[1], layer=Zn.grid, title="Akima spline interpolation",
+nameR <- c("ex.tr3.in", "ex.Zn.s3.o.in")
+rast.put(G, lname=nameR[1], layer=s3, title="Cubic trend surface",
  check=FALSE)
-rast.put(G, lname=nameR[2], layer=s3, title="Cubic trend surface",
- check=FALSE)
-rast.put(G, lname=nameR[3], layer=Zn.grid.o, cat=TRUE, 
+rast.put(G, lname=nameR[2], layer=Zn.s3.o, cat=TRUE, 
   title="Interpolated surface categories", check=FALSE)
 }
 \keyword{spatial}

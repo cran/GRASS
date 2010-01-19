@@ -42,17 +42,12 @@ Zn.o <- as.ordered(cut(utm.maas$Zn, labels=c("insignificant", "low",
 include.lowest=TRUE))
 G <- gmeta()
 if(length(ls(pat="nameR"))==0){example(rast.put)}
-exget <- rast.get(G, rlist=c("ex.Zn.grid.in", "ex.tr3.in",
-  "ex.Zn.grid.o.in"), catlabels=as.logical(c(FALSE, FALSE, TRUE)))
-oldpar <- par(mfrow=c(1,2))
-plot(G, exget$ex.Zn.grid.in)
-points(utm.maas$east, utm.maas$north, pch=18)
-title("Bicubic spline interpolation")
+exget <- rast.get(G, rlist=c("ex.tr3.in",
+  "ex.Zn.s3.o.in"), catlabels=as.logical(c(FALSE, TRUE)))
 plot(G, exget$ex.tr3.in)
 points(utm.maas$east, utm.maas$north, pch=18)
 title("Cubic trend surface")
-par(oldpar)
-table(exget$ex.Zn.grid.o.in)
+table(exget$ex.Zn.s3.o.in)
 }
 \keyword{spatial}
 \keyword{IO}

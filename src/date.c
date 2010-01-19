@@ -14,7 +14,7 @@
 char *
 G_date()
 {
-    long clock;
+    time_t clock;
     struct tm *local;
     char *date;
     char *d;

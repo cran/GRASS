@@ -177,7 +177,8 @@ int format_double (double value, char *buf)
 #define PIPE '|'
 
 #define ispipe(c) (c==PIPE)
-#define isnull(c) (c==(char)NULL)
+/* #define isnull(c) (c==(char) NULL) */
+#define isnull(c) (c=='\0')
 #define isquote(c) (c==DQUOTE)
 #define isbslash(c) (c==BSLASH)
 
@@ -252,7 +253,7 @@ int G_site_put_new_R (FILE *fptr, Site *s)
 	    xbuf[k++] = s->str_att[i][j];
 	  j++;
 	}
-	xbuf[k] = (char) NULL;
+	xbuf[k] = '\0' /*(char) NULL*/;
       }
       else
 	G_strcpy (xbuf, s->str_att[i]);

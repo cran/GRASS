@@ -234,7 +234,8 @@
 #define PIPE '|'
 
 #define ispipe(c) (c==PIPE)
-#define isnull(c) (c==(char)NULL)
+/* #define isnull(c) (c==(char)NULL)*/
+#define isnull(c) (c=='\0')
 #define isquote(c) (c==DQUOTE)
 #define isbslash(c) (c==BSLASH)
 
@@ -355,7 +356,7 @@ int G__site_get ( FILE *ptr, Site *s, int fmt)
       return EOF;
 
   if (buf[strlen (buf) - 1] == '\n')
-    buf[strlen (buf) - 1] = (char) NULL;
+    buf[strlen (buf) - 1] = '\0' /*(char) NULL*/;
 
   if (sscanf (buf, "%[^|]|%[^|]|%*[^\n]", ebuf, nbuf) < 2)
   {
@@ -545,7 +546,7 @@ int G__site_put ( FILE *fptr, Site *s, int fmt)
 	    xbuf[k++] = s->str_att[i][j];
 	  j++;
 	}
-	xbuf[k] = (char) NULL;
+	xbuf[k] = '\0' /*(char) NULL*/;
       }
       else
 	G_strcpy (xbuf, s->str_att[i]);
@@ -913,7 +914,7 @@ int cleanse_string (char *buf)
     /* (BSLASHed) DQUOTEs */
     if (*p == DQUOTE)
     {
-      while (*p != (char) NULL)	/* get rid of first DQUOTE */
+      while (*p != '\0' /*(char) NULL*/)	/* get rid of first DQUOTE */
       {
 	*p = *(p + 1);
 	p++;
@@ -929,9 +930,9 @@ int cleanse_string (char *buf)
   while ((p = G_index (p, BSLASH)) != (char *) NULL && p <= stop)
   {
     p2 = p + 1;
-    if (*p2 != (char) NULL && (*p2 == DQUOTE || *p2 == BSLASH))
+    if (*p2 != '\0' /*(char) NULL*/ && (*p2 == DQUOTE || *p2 == BSLASH))
     {
-      while (*p != (char) NULL)
+      while (*p != '\0' /*(char) NULL*/)
       {
 	*p = *(p + 1);
 	p++;
